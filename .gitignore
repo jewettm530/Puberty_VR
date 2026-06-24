@@ -1,0 +1,59 @@
+# =========================
+# Python / macOS / editor clutter
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+.idea/
+
+# =========================
+# Ignore raw data, processed data, analysis data, metadata, and outputs
+# BUT keep the folder structure via .gitkeep files
+# =========================
+
+# Raw subject data
+data/raw/subject_data/**
+!data/raw/subject_data/.gitkeep
+
+# Processed plearning CSVs
+data/processed/plearning/**
+!data/processed/plearning/.gitkeep
+
+# Analysis data
+data/analysis_data/learning_rates/**
+!data/analysis_data/learning_rates/.gitkeep
+
+# Metadata files generated from subject data
+data/metadata/**
+!data/metadata/.gitkeep
+
+# Generated outputs
+outputs/learning_rates/figures/**
+!outputs/learning_rates/figures/.gitkeep
+
+outputs/learning_rates/tables/**
+!outputs/learning_rates/tables/.gitkeep
+
+outputs/learning_rates/reports/**
+!outputs/learning_rates/reports/.gitkeep
+
+# =========================
+# Optional logs / temp files
+# =========================
+*.log
+*.tmp
+*.bak
+
+# =========================
+# Presentations
+# =========================
+*.pptx

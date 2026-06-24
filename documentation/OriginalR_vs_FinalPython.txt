@@ -1,0 +1,39 @@
+Input file naming
+    R: Accepts any JSON filename (e.g., plearning_results_1.json).
+    Python: Expects uniform naming: subject_{id}_plearning_{num}.json.
+
+Subject ID extraction
+    R: From JSON field studyResultId or falls back to filename stem.
+    Python: From filename using regex subject_(\d+)_plearning_(\d+).
+
+Worker ID / REDCapId assignment
+    R: Uses JSON workerId (often "noWorkerId") or falls back to filename stem → inconsistent values.
+    Python: Set uniformly to the full filename stem (e.g., subject_5_plearning_1), ignoring JSON values.
+
+Trial CSV filename
+    R: {REDCapId}-{workerId}.csv (often non‑uniform, e.g., unknown-plearning_results_1.csv).
+    Python: {subject_id}_plearning_{plearning_num}.csv (e.g., 5_plearning_1.csv).
+
+Summary CSV writing behaviour
+    R: Overwrites the file each run (simple write.csv).
+    Python: Appends new rows but removes duplicates based on worker_id to avoid repeats across runs.
+
+Processing multiple files / folders
+    R: Only single JSON files passed as command‑line arguments; no recursion.
+    Python: Accepts folders, and with --recursive flag processes all .json files inside subfolders.
+
+Directory input support
+    R: No.
+    Python: Yes – can pass a folder path, and the script collects all JSON files inside.
+
+Error handling and debug output
+    R: Minimal (basic warnings).
+    Python: Optional debug prints (e.g., for filename matching) and more informative messages.
+
+Dependencies
+    R: jsonlite, dplyr (installs if missing using ensure_package).
+    Python: pandas, numpy (exits with error if missing; user must install manually).
+
+Code structure
+    R: Functions defined, command‑line execution via commandArgs().
+    Python: Similar functions, but uses argparse and pathlib.Path for modern Python practices.
