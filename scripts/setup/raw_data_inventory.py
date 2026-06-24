@@ -2,8 +2,11 @@ from pathlib import Path
 import re
 import csv
 import pandas as pd
+import sys
 
-ROOT = Path("/Users/maddiemac/Puberty_VR/results")  # change this
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from project_paths import RAW_SUBJECT_DIR, METADATA_DIR
+ROOT = RAW_SUBJECT_DIR
 
 FILE_NAME_DICTIONARY = {
     "plearning_1_csv": {
@@ -205,13 +208,15 @@ for subject_dir in sorted(ROOT.glob("sub*")):
     inventory_rows.append(inventory_row)
 
 
-pd.DataFrame(dictionary_rows).to_csv(ROOT / "file_name_dictionary.csv", index=False)
-pd.DataFrame(inventory_rows).to_csv(ROOT / "subject_level_inventory.csv", index=False)
-pd.DataFrame(raw_data_rows).to_csv(ROOT / "all_raw_data.csv", index=False)
-pd.DataFrame(missing_rows).to_csv(ROOT / "missing_raw_data_files.csv", index=False)
+METADATA_DIR.mkdir(parents=True, exist_ok=True)
+
+pd.DataFrame(dictionary_rows).to_csv(METADATA_DIR / "file_name_dictionary.csv", index=False)
+pd.DataFrame(inventory_rows).to_csv(METADATA_DIR / "subject_level_inventory.csv", index=False)
+pd.DataFrame(raw_data_rows).to_csv(METADATA_DIR / "all_raw_data.csv", index=False)
+pd.DataFrame(missing_rows).to_csv(METADATA_DIR / "missing_raw_data_files.csv", index=False)
 
 print("Created:")
-print(f"  {ROOT / 'file_name_dictionary.csv'}")
-print(f"  {ROOT / 'subject_level_inventory.csv'}")
-print(f"  {ROOT / 'all_raw_data.csv'}")
-print(f"  {ROOT / 'missing_raw_data_files.csv'}")
+print(f"  {METADATA_DIR / 'file_name_dictionary.csv'}")
+print(f"  {METADATA_DIR / 'subject_level_inventory.csv'}")
+print(f"  {METADATA_DIR / 'all_raw_data.csv'}")
+print(f"  {METADATA_DIR / 'missing_raw_data_files.csv'}")
