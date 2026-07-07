@@ -63,7 +63,7 @@ for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
     parts = csv_file.stem.split("_")
     if len(parts) < 3:
         continue
-    subj_id = parts[0]
+    subj_id = parts[0].zfill(3)
     try:
         sess = int(parts[2])
     except:
@@ -80,29 +80,48 @@ for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
         props.append(np.mean(vals) if len(vals) > 0 else np.nan)
     all_data.setdefault(subj_id, {})[sess] = props
 
-# Keep only subjects with both sessions
-complete_subjects = [subj for subj in all_data if 1 in all_data[subj] and 2 in all_data[subj]]
-missing = set(all_data.keys()) - set(complete_subjects)
-if missing:
-    print(f"Warning: The following subjects are missing one session and will be excluded: {missing}")
+# Keep all subjects for CSV summaries.
+# Some subjects, such as 014, may only have session 1 data.
+subjects = sorted(all_data.keys())
+
+complete_subjects = [
+    subj for subj in subjects
+    if 1 in all_data[subj] and 2 in all_data[subj]
+]
+
+missing_one_session = sorted(set(subjects) - set(complete_subjects))
+
+if missing_one_session:
+    print(
+        "Warning: The following subjects are missing one session. "
+        "They will be included in CSV summaries where possible, "
+        "but excluded from plots/statistics that require both sessions:"
+    )
+    print(missing_one_session)
+
+if not subjects:
+    raise ValueError("No usable subject data found.")
 
 if not complete_subjects:
-    raise ValueError("No subjects have both session 1 and session 2 data.")
+    print("Warning: No subjects have both sessions. Paired session plots will be skipped.")
 
-all_data = {subj: all_data[subj] for subj in complete_subjects}
-subjects = sorted(all_data.keys())
 n_subj = len(subjects)
+n_complete_subj = len(complete_subjects)
 
 # --- Classify subjects as good/bad using median split of learning_rate_k from learning_rates.csv ---
 learning_rates_csv = LEARNING_ANALYSIS_DATA_DIR / "learning_rates.csv"
 if learning_rates_csv.exists():
     lr_df = pd.read_csv(learning_rates_csv, dtype={'subjectId': str})
-    lr_df = lr_df[lr_df['plearning_num'] == 1].copy()  # use session 1 for classification
+    lr_df["plearning_num"] = lr_df["plearning_num"].astype(str)
+    lr_df = lr_df[lr_df["plearning_num"] == "1"].copy()    
     lr_df = lr_df.dropna(subset=['learning_rate_k'])
-    median_k = lr_df['learning_rate_k'].median()
-    lr_df['group'] = np.where(lr_df['learning_rate_k'] >= median_k, 'good', 'bad')
-    lr_df['subjectId'] = lr_df['subjectId'].str.zfill(3)
-    group_map = lr_df.set_index('subjectId')['group'].to_dict()
+    lr_df["subjectId"] = lr_df["subjectId"].str.zfill(3)
+    if "learner_group" in lr_df.columns:
+        lr_df["group"] = lr_df["learner_group"].astype(str).str.lower()
+    else:
+        median_k = lr_df["learning_rate_k"].median()
+        lr_df["group"] = np.where(lr_df["learning_rate_k"] >= median_k, "good", "bad")
+    group_map = lr_df.set_index("subjectId")["group"].to_dict()
 else:
     # Fallback: use overall mean accuracy from session 1
     print("learning_rates.csv not found. Using overall mean accuracy for classification.")
@@ -141,24 +160,68 @@ rows = []
 subject_aucs = {subj: {} for subj in subjects}  # store for later
 
 for subj in subjects:
-    row = {'subject': subj}
+    row = {"subject": subj}
+
     for sess in sessions:
-        props = all_data[subj][sess]
-        # Store per-trial proportions
-        for t, p in enumerate(props, start=1):
-            row[f'sess{sess}_t{t}'] = p
-        # Median
-        row[f'median_sess{sess}'] = np.nanmedian(props)
-        # AUC = sum of proportions across 18 trials
-        auc = np.nansum(props)
-        row[f'auc_sess{sess}'] = auc
-        subject_aucs[subj][sess] = auc
-    row['diff_s2_minus_s1'] = row['median_sess2'] - row['median_sess1']
-    row['k_sess1'] = np.nan
-    row['k_sess2'] = np.nan
+        if sess in all_data[subj]:
+            props = all_data[subj][sess]
+
+            for t, p in enumerate(props, start=1):
+                row[f"sess{sess}_t{t}"] = p
+
+            row[f"median_sess{sess}"] = np.nanmedian(props)
+
+            auc = np.nansum(props)
+            row[f"auc_sess{sess}"] = auc
+            subject_aucs[subj][sess] = auc
+
+        else:
+            for t in range(1, trials_per_block + 1):
+                row[f"sess{sess}_t{t}"] = np.nan
+
+            row[f"median_sess{sess}"] = np.nan
+            row[f"auc_sess{sess}"] = np.nan
+            subject_aucs[subj][sess] = np.nan
+
+    row["diff_s2_minus_s1"] = (
+        row["median_sess2"] - row["median_sess1"]
+        if pd.notna(row["median_sess1"]) and pd.notna(row["median_sess2"])
+        else np.nan
+    )
+
+    row["k_sess1"] = np.nan
+    row["k_sess2"] = np.nan
+
     rows.append(row)
 
 df_subj = pd.DataFrame(rows)
+# Pull subject-level k values from learning_rates.csv.
+# This fixes the blank individual k_sess1/k_sess2 issue.
+if learning_rates_csv.exists():
+    lr_k = pd.read_csv(learning_rates_csv, dtype={"subjectId": str})
+    lr_k["subject"] = lr_k["subjectId"].str.zfill(3)
+    lr_k["plearning_num"] = lr_k["plearning_num"].astype(int)
+
+    k_wide = (
+        lr_k.pivot_table(
+            index="subject",
+            columns="plearning_num",
+            values="learning_rate_k",
+            aggfunc="first",
+        )
+        .rename(columns={
+            1: "k_sess1_from_lr",
+            2: "k_sess2_from_lr",
+        })
+        .reset_index()
+    )
+
+    df_subj = df_subj.merge(k_wide, on="subject", how="left")
+
+    df_subj["k_sess1"] = df_subj["k_sess1_from_lr"]
+    df_subj["k_sess2"] = df_subj["k_sess2_from_lr"]
+
+    df_subj = df_subj.drop(columns=["k_sess1_from_lr", "k_sess2_from_lr"])
 
 # 2. Compute overall average row (all subjects)
 avg_row = {'subject': 'AVERAGE'}
@@ -191,22 +254,48 @@ for col in df_subj.columns:
 def build_group_row(group_name, subject_list):
     if not subject_list:
         return None
-    row = {'subject': group_name}
+
+    row = {"subject": group_name}
+
     for sess in sessions:
-        # Average per trial across subjects
-        group_curve = np.nanmean([all_data[s][sess] for s in subject_list], axis=0)
+        available_subjects = [
+            s for s in subject_list
+            if s in all_data and sess in all_data[s]
+        ]
+
+        if not available_subjects:
+            for t in range(1, trials_per_block + 1):
+                row[f"sess{sess}_t{t}"] = np.nan
+
+            row[f"median_sess{sess}"] = np.nan
+            row[f"auc_sess{sess}"] = np.nan
+            continue
+
+        group_curve = np.nanmean(
+            [all_data[s][sess] for s in available_subjects],
+            axis=0,
+        )
+
         for t, p in enumerate(group_curve, start=1):
-            row[f'sess{sess}_t{t}'] = p
-        row[f'median_sess{sess}'] = np.nanmedian(group_curve)
-        # Average AUC of subjects in this group
-        aucs = [subject_aucs[s][sess] for s in subject_list]
-        row[f'auc_sess{sess}'] = np.nanmean(aucs) if aucs else np.nan
-    row['diff_s2_minus_s1'] = row['median_sess2'] - row['median_sess1']
-    # Compute k from group's average curve (not from individual ks)
-    group_curve_s1 = [row[f'sess1_t{t}'] for t in range(1, trials_per_block+1)]
-    row['k_sess1'] = get_k_from_curve(x_trials, np.array(group_curve_s1))
-    group_curve_s2 = [row[f'sess2_t{t}'] for t in range(1, trials_per_block+1)]
-    row['k_sess2'] = get_k_from_curve(x_trials, np.array(group_curve_s2))
+            row[f"sess{sess}_t{t}"] = p
+
+        row[f"median_sess{sess}"] = np.nanmedian(group_curve)
+
+        aucs = [subject_aucs[s][sess] for s in available_subjects]
+        row[f"auc_sess{sess}"] = np.nanmean(aucs) if aucs else np.nan
+
+    row["diff_s2_minus_s1"] = (
+        row["median_sess2"] - row["median_sess1"]
+        if pd.notna(row["median_sess1"]) and pd.notna(row["median_sess2"])
+        else np.nan
+    )
+
+    group_curve_s1 = [row[f"sess1_t{t}"] for t in range(1, trials_per_block + 1)]
+    row["k_sess1"] = get_k_from_curve(x_trials, np.array(group_curve_s1))
+
+    group_curve_s2 = [row[f"sess2_t{t}"] for t in range(1, trials_per_block + 1)]
+    row["k_sess2"] = get_k_from_curve(x_trials, np.array(group_curve_s2))
+
     return row
 
 good_row = build_group_row('good_learners', good_subjects)
@@ -324,9 +413,9 @@ def plot_trial1_vs_trial18(session, groups_dict, group_colors):
 
 # Define groups and colours
 groups = {
-    'All subjects': subjects,
-    'Good learners': good_subjects,
-    'Bad learners': bad_subjects
+    "All subjects": complete_subjects,
+    "Good learners": [s for s in good_subjects if s in complete_subjects],
+    "Bad learners": [s for s in bad_subjects if s in complete_subjects],
 }
 group_colors = {
     'All subjects': 'steelblue',
@@ -342,7 +431,7 @@ print(f"Trial 1 vs Trial 18 graphs saved in {T1T18_DIR}")
 
 # ---------- 1. INDIVIDUAL: SESSION 1 vs SESSION 2 ----------
 print("Generating individual graphs (session1 vs session2)...")
-for subj in subjects:
+for subj in complete_subjects:
     props1 = np.array(all_data[subj][1])
     props2 = np.array(all_data[subj][2])
     plt.figure(figsize=(10,6))
@@ -370,7 +459,10 @@ for subj in subjects:
 
 # ---------- 2. INDIVIDUAL + GROUP AVERAGE (combined and per-session) ----------
 print("Generating individual vs group graphs (combined and per-session)...")
-group_avg = {sess: np.nanmean([all_data[s][sess] for s in subjects], axis=0) for sess in sessions}
+group_avg = {
+    sess: np.nanmean([all_data[s][sess] for s in complete_subjects], axis=0)
+    for sess in sessions
+}
 group_fits = {}
 for sess in sessions:
     popt, _ = fit_exponential(x_trials, group_avg[sess])
@@ -380,7 +472,7 @@ for sess in sessions:
 group_colors = {1: 'darkgreen', 2: 'orange'}
 subject_colors = {1: 'blue', 2: 'red'}
 
-for subj in subjects:
+for subj in complete_subjects:
     props1 = np.array(all_data[subj][1])
     props2 = np.array(all_data[subj][2])
     
@@ -450,7 +542,11 @@ print("Generating group average plot...")
 plt.figure(figsize=(10,6))
 for sess, color in [(1,'blue'), (2,'red')]:
     avg = group_avg[sess]
-    sem_vals = sem([all_data[s][sess] for s in subjects], axis=0, nan_policy='omit')
+    sem_vals = sem(
+        [all_data[s][sess] for s in complete_subjects],
+        axis=0,
+        nan_policy='omit'
+    )
     plt.plot(x_trials, avg, 'o', color=color, label=f'Session {sess} observed')
     popt, _ = fit_exponential(x_trials, avg)
     if popt is not None:
@@ -477,10 +573,16 @@ plt.close()
 
 # ---------- 4. PER SUBJECT PER SESSION: with SD error bars ----------
 print("Generating subject vs group average with standard deviation error bars...")
-group_mean = {sess: np.nanmean([all_data[s][sess] for s in subjects], axis=0) for sess in sessions}
-group_std = {sess: np.nanstd([all_data[s][sess] for s in subjects], axis=0) for sess in sessions}
+group_mean = {
+    sess: np.nanmean([all_data[s][sess] for s in complete_subjects], axis=0)
+    for sess in sessions
+}
+group_std = {
+    sess: np.nanstd([all_data[s][sess] for s in complete_subjects], axis=0)
+    for sess in sessions
+}
 
-for subj in subjects:
+for subj in complete_subjects:
     for sess in sessions:
         props = np.array(all_data[subj][sess])
         plt.figure(figsize=(10,6))
@@ -545,21 +647,34 @@ def plot_group_curve(ax, subject_list, session, color, label_prefix, show_points
     else:
         ax.plot(xv, yv, 'o-', color=color, label=f'{label_prefix} (observed)')
     if show_points:
-        # Plot individual subject points (all subjects in the group)
+        # Plot individual subject points in the group
         for s in subject_list:
+            if s not in all_data or session not in all_data[s]:
+                continue
+
             y = np.array(all_data[s][session])
-            ax.plot(x, y, 'o', markersize=3, alpha=0.3, color=color, label='_nolegend_')
+            ax.plot(
+                x,
+                y,
+                'o',
+                markersize=3,
+                alpha=0.3,
+                color=color,
+                label='_nolegend_'
+            )
     # Also plot the group mean points
     ax.scatter(xv, yv, color=color, s=40, edgecolor='black', zorder=5, label='_nolegend_')
 
 # Create output folder for these graphs
 GROUP_COMP_DIR = BASE_OUTPUT_DIR / "group_comparisons"
 GROUP_COMP_DIR.mkdir(exist_ok=True)
+complete_good_subjects = [s for s in good_subjects if s in complete_subjects]
+complete_bad_subjects = [s for s in bad_subjects if s in complete_subjects]
 
 # 1. Good learners: session1 vs session2
 fig, ax = plt.subplots(figsize=(10,6))
-plot_group_curve(ax, good_subjects, 1, 'blue', 'Good learners S1', show_points=True)
-plot_group_curve(ax, good_subjects, 2, 'red', 'Good learners S2', show_points=True)
+plot_group_curve(ax, complete_good_subjects, 1, 'blue', 'Good learners S1', show_points=True)
+plot_group_curve(ax, complete_good_subjects, 2, 'red', 'Good learners S2', show_points=True)
 ax.axhline(0.5, color='gray', linestyle='--', label='Chance')
 ax.set_xlabel('Trial number')
 ax.set_ylabel('Proportion choosing set-winner')
@@ -576,8 +691,8 @@ print("Saved: good_learners_s1_vs_s2.png")
 
 # 2. Bad learners: session1 vs session2
 fig, ax = plt.subplots(figsize=(10,6))
-plot_group_curve(ax, bad_subjects, 1, 'blue', 'Bad learners S1', show_points=True)
-plot_group_curve(ax, bad_subjects, 2, 'red', 'Bad learners S2', show_points=True)
+plot_group_curve(ax, complete_bad_subjects, 1, 'blue', 'Bad learners S1', show_points=True)
+plot_group_curve(ax, complete_bad_subjects, 2, 'red', 'Bad learners S2', show_points=True)
 ax.axhline(0.5, color='gray', linestyle='--', label='Chance')
 ax.set_xlabel('Trial number')
 ax.set_ylabel('Proportion choosing set-winner')
@@ -594,10 +709,12 @@ print("Saved: bad_learners_s1_vs_s2.png")
 
 # 3. Good vs bad learners for session 1 + overall group average (all subjects)
 fig, ax = plt.subplots(figsize=(10,6))
-plot_group_curve(ax, good_subjects, 1, 'green', 'Good learners', show_points=False)
-plot_group_curve(ax, bad_subjects, 1, 'red', 'Bad learners', show_points=False)
+plot_group_curve(ax, complete_good_subjects, 1, 'green', 'Good learners', show_points=False)
+plot_group_curve(ax, complete_bad_subjects, 1, 'red', 'Bad learners', show_points=False)
+plot_group_curve(ax, complete_good_subjects, 2, 'green', 'Good learners', show_points=False)
+plot_group_curve(ax, complete_bad_subjects, 2, 'red', 'Bad learners', show_points=False)
 # Overall group average (all subjects)
-all_subjects_list = subjects
+all_subjects_list = complete_subjects
 plot_group_curve(ax, all_subjects_list, 1, 'gray', 'All subjects (average)', show_points=False)
 ax.axhline(0.5, color='gray', linestyle='--', label='Chance')
 ax.set_xlabel('Trial number')
@@ -649,7 +766,7 @@ for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
     parts = csv_file.stem.split("_")
     if len(parts) < 3:
         continue
-    subj_id = parts[0]
+    subj_id = parts[0].zfill(3)
     try:
         sess = int(parts[2])
     except:
@@ -687,7 +804,7 @@ for sess in sessions:
     # Compute overall proportion correct per trial (average of face and house, weighted by number of trials? Actually each trial position has both a face and a house condition in different blocks, so simple mean is fine)
     # Alternatively, compute from raw data directly:
     all_props = []
-    for subj in subjects:
+    for subj in complete_subjects:
         # Find the CSV file for this subject and session (quick way)
         subj_file = next(RESULTS_DIR.rglob(f"{subj}_plearning_{sess}.csv"), None)
         if subj_file is None:
@@ -730,7 +847,10 @@ for sess in sessions:
     plt.ylim(0,1)
     plt.xlim(0.9, 18.1)
     plt.xticks(range(1, 19))
-    plt.title(f'Group average proportion correct by winner type – Session {sess} (n={len(subjects)})')
+    plt.title(
+        f'Group average proportion correct by winner type – Session {sess} '
+        f'(n={len(complete_subjects)})'
+    )     
     plt.legend()
     plt.grid(alpha=0.3)
     plt.tight_layout()

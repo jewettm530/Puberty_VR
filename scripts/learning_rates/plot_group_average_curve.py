@@ -57,13 +57,16 @@ sessions = [1, 2]
 lr_df = pd.read_csv(learning_rates_csv, dtype={'subjectId': str})
 lr_df = lr_df[lr_df['plearning_num'] == 1].copy()
 lr_df = lr_df.dropna(subset=['learning_rate_k'])
-
-median_k = lr_df['learning_rate_k'].median()
-lr_df['group'] = np.where(lr_df['learning_rate_k'] >= median_k, 'good', 'bad')
-lr_df['subjectId'] = lr_df['subjectId'].str.zfill(3)
-print(f"Median k (session 1) = {median_k:.4f}")
-print(f"Good learners: {len(lr_df[lr_df['group']=='good'])}")
-print(f"Bad learners:  {len(lr_df[lr_df['group']=='bad'])}")
+lr_df["subjectId"] = lr_df["subjectId"].str.zfill(3)
+if "learner_group" in lr_df.columns:
+    lr_df["group"] = lr_df["learner_group"].astype(str).str.lower()
+    print("Using learner_group from learning_rates.csv")
+else:
+    median_k = lr_df["learning_rate_k"].median()
+    lr_df["group"] = np.where(lr_df["learning_rate_k"] >= median_k, "good", "bad")
+    print(f"Median k (session 1) = {median_k:.4f}")
+print(f"Good learners: {len(lr_df[lr_df['group'] == 'good'])}")
+print(f"Bad learners:  {len(lr_df[lr_df['group'] == 'bad'])}")
 
 # ---------- FUNCTION TO LOAD TRIAL DATA FOR A GIVEN SESSION ----------
 def load_session_data(session_num):
@@ -72,7 +75,7 @@ def load_session_data(session_num):
         parts = csv_file.stem.split("_")
         if len(parts) < 3:
             continue
-        subj_id = parts[0]
+        subj_id = parts[0].zfill(3)
         try:
             p_num = int(parts[2])
         except:

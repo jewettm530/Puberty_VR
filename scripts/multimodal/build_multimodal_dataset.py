@@ -13,6 +13,7 @@ from project_paths import (
     HEART_RATE_ANALYSIS_DATA_DIR,
     EEG_ANALYSIS_DATA_DIR,
     MULTIMODAL_ANALYSIS_DATA_DIR,
+    TABLES_DIR,
 )
 
 
@@ -32,9 +33,10 @@ def main():
     MULTIMODAL_ANALYSIS_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     learning_rates_path = LEARNING_ANALYSIS_DATA_DIR / "learning_rates.csv"
-    median_path = LEARNING_ANALYSIS_DATA_DIR / "median_learning_rates_summary.csv"
-    winstay_path = LEARNING_ANALYSIS_DATA_DIR / "winstay_loseswitch_summary.csv"
-    slopes_path = LEARNING_ANALYSIS_DATA_DIR / "learning_slopes.csv"
+
+    median_path = TABLES_DIR / "learning_rate_analysis" / "median_learning_rates_summary.csv"
+    winstay_path = TABLES_DIR / "winstay_loseswitch" / "winstay_loseswitch_summary.csv"
+    slopes_path = LEARNING_ANALYSIS_DATA_DIR / "slope_analysis" / "learning_slopes.csv"
 
     hr_path = HEART_RATE_ANALYSIS_DATA_DIR / "heart_rate_summary_wide.csv"
     eeg_path = EEG_ANALYSIS_DATA_DIR / "eeg_file_summary_wide.csv"
@@ -55,46 +57,56 @@ def main():
 
     multimodal = learning.copy()
 
-    # Subject-level median learning summary
+    # Subject-level learning summary
     median = read_if_exists(median_path)
-    if median is not None:
-        if "subject" in median.columns:
-            median = median[median["subject"].astype(str).str.upper() != "AVERAGE"].copy()
-            median["subject_id"] = clean_subject_id(median["subject"])
-            median = median.drop(columns=["subject"], errors="ignore")
-            multimodal = multimodal.merge(median, on="subject_id", how="left")
+    if median is not None and "subject" in median.columns:
+        median = median.copy()
+
+        # Keep real subject rows only, not AVERAGE/good_learners/bad_learners rows
+        median["subject_id"] = clean_subject_id(median["subject"])
+        median = median.dropna(subset=["subject_id"])
+        median = median.drop(columns=["subject"], errors="ignore")
+
+        multimodal = multimodal.merge(median, on="subject_id", how="left")
 
     # Subject-level win-stay / lose-switch summary
     winstay = read_if_exists(winstay_path)
-    if winstay is not None:
-        if "subject" in winstay.columns:
-            winstay["subject_id"] = clean_subject_id(winstay["subject"])
-            winstay = winstay.drop(columns=["subject"], errors="ignore")
-            multimodal = multimodal.merge(winstay, on="subject_id", how="left")
+    if winstay is not None and "subject" in winstay.columns:
+        winstay = winstay.copy()
+        winstay["subject_id"] = clean_subject_id(winstay["subject"])
+        winstay = winstay.dropna(subset=["subject_id"])
+        winstay = winstay.drop(columns=["subject"], errors="ignore")
 
-    # Subject/session learning slopes
+        multimodal = multimodal.merge(winstay, on="subject_id", how="left")
+
+    # Subject-level learning slopes
     slopes = read_if_exists(slopes_path)
-    if slopes is not None:
-        if "Subject" in slopes.columns:
-            slopes["subject_id"] = clean_subject_id(slopes["Subject"])
-            slopes = slopes.drop(columns=["Subject"], errors="ignore")
-            multimodal = multimodal.merge(slopes, on="subject_id", how="left")
+    if slopes is not None and "Subject" in slopes.columns:
+        slopes = slopes.copy()
+        slopes["subject_id"] = clean_subject_id(slopes["Subject"])
+        slopes = slopes.drop(columns=["Subject"], errors="ignore")
+
+        multimodal = multimodal.merge(slopes, on="subject_id", how="left")
 
     # Heart-rate wide summary
     hr = read_if_exists(hr_path, dtype={"subject_id": str})
     if hr is not None:
+        hr = hr.copy()
         hr["subject_id"] = clean_subject_id(hr["subject_id"])
         multimodal = multimodal.merge(hr, on="subject_id", how="left")
 
-    # EEG availability/file summary
+    # EEG wide summary
     eeg = read_if_exists(eeg_path, dtype={"subject_id": str})
     if eeg is not None:
+        eeg = eeg.copy()
         eeg["subject_id"] = clean_subject_id(eeg["subject_id"])
         multimodal = multimodal.merge(eeg, on="subject_id", how="left")
 
     # Subject info summary
     subject_info = read_if_exists(subject_info_path)
     if subject_info is not None:
+        subject_info = subject_info.copy()
+
         if "subjectId" in subject_info.columns:
             subject_info["subject_id"] = clean_subject_id(subject_info["subjectId"])
         elif "subject_id" in subject_info.columns:
@@ -103,8 +115,14 @@ def main():
             subject_info = None
 
         if subject_info is not None:
+            subject_info = subject_info.dropna(subset=["subject_id"])
             subject_info = subject_info.drop_duplicates(subset=["subject_id"])
-            multimodal = multimodal.merge(subject_info, on="subject_id", how="left", suffixes=("", "_subjectinfo"))
+            multimodal = multimodal.merge(
+                subject_info,
+                on="subject_id",
+                how="left",
+                suffixes=("", "_subjectinfo")
+            )
 
     output_path = MULTIMODAL_ANALYSIS_DATA_DIR / "multimodal_subject_session_summary.csv"
     multimodal.to_csv(output_path, index=False)

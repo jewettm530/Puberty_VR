@@ -30,7 +30,7 @@ def summarize_eeg_file(row):
         return base
 
     try:
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, low_memory=False)
     except Exception as e:
         base["read_error"] = str(e)
         return base

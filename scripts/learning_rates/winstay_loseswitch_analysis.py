@@ -65,7 +65,7 @@ for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
     parts = csv_file.stem.split("_")
     if len(parts) < 3:
         continue
-    subj_id = parts[0]
+    subj_id = parts[0].zfill(3)
     try:
         sess = int(parts[2])
     except:
@@ -310,10 +310,15 @@ if learning_rates_csv.exists():
     lr_df = pd.read_csv(learning_rates_csv, dtype={'subjectId': str})
     lr_df = lr_df[lr_df['plearning_num'] == 1].copy()  # use session1 for classification
     lr_df = lr_df.dropna(subset=['learning_rate_k'])
-    median_k = lr_df['learning_rate_k'].median()
-    lr_df['group'] = np.where(lr_df['learning_rate_k'] >= median_k, 'good', 'bad')
-    lr_df['subjectId'] = lr_df['subjectId'].str.zfill(3)
-    group_map = lr_df.set_index('subjectId')['group'].to_dict()
+    lr_df["subjectId"] = lr_df["subjectId"].str.zfill(3)
+
+    if "learner_group" in lr_df.columns:
+        lr_df["group"] = lr_df["learner_group"].astype(str).str.lower()
+    else:
+        median_k = lr_df["learning_rate_k"].median()
+        lr_df["group"] = np.where(lr_df["learning_rate_k"] >= median_k, "good", "bad")
+
+    group_map = lr_df.set_index("subjectId")["group"].to_dict()
 else:
     # Fallback: use overall win‑stay? Better use overall accuracy? We'll use overall win‑stay (or just accuracy) for simplicity.
     # Here we use overall proportion correct from learning_rate_analysis (but we don't have that here). We'll compute from our data.

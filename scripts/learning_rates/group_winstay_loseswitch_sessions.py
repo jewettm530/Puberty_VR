@@ -33,16 +33,36 @@ if not WINSTAY_CSV.exists():
 df = pd.read_csv(WINSTAY_CSV, dtype={'subject': str})
 df['subject'] = df['subject'].str.zfill(3)
 subjects = df['subject'].tolist()
+required_cols = [
+    "overall_winstay_sess1",
+    "overall_winstay_sess2",
+    "overall_loseswitch_sess1",
+    "overall_loseswitch_sess2",
+]
+
+missing_required = [col for col in required_cols if col not in df.columns]
+
+if missing_required:
+    raise ValueError(
+        f"{WINSTAY_CSV} is missing required columns: {missing_required}"
+    )
+
+complete_df = df.dropna(subset=required_cols).copy()
+complete_subjects = complete_df["subject"].tolist()
 
 # ---------- CLASSIFY GOOD/BAD LEARNERS ----------
 if LEARNING_RATES_CSV.exists():
     lr_df = pd.read_csv(LEARNING_RATES_CSV, dtype={'subjectId': str})
-    lr_df = lr_df[lr_df['plearning_num'] == 1].copy()
+    lr_df["plearning_num"] = lr_df["plearning_num"].astype(str)
+    lr_df = lr_df[lr_df["plearning_num"] == "1"].copy()
     lr_df = lr_df.dropna(subset=['learning_rate_k'])
-    median_k = lr_df['learning_rate_k'].median()
-    lr_df['group'] = np.where(lr_df['learning_rate_k'] >= median_k, 'good', 'bad')
-    lr_df['subjectId'] = lr_df['subjectId'].str.zfill(3)
-    group_map = lr_df.set_index('subjectId')['group'].to_dict()
+    lr_df["subjectId"] = lr_df["subjectId"].str.zfill(3)
+    if "learner_group" in lr_df.columns:
+        lr_df["group"] = lr_df["learner_group"].astype(str).str.lower()
+    else:
+        median_k = lr_df["learning_rate_k"].median()
+        lr_df["group"] = np.where(lr_df["learning_rate_k"] >= median_k, "good", "bad")
+    group_map = lr_df.set_index("subjectId")["group"].to_dict()
 else:
     # Fallback: use overall win‑stay proportion from session 1
     print("learning_rates.csv not found. Using overall win‑stay (session 1) for classification.")
@@ -54,20 +74,31 @@ else:
     group_map = {subj: ('good' if winstay_s1[i] >= median_val else 'bad') for i, subj in enumerate(subjects)}
 
 # Split subjects
-good_subjects = [s for s in subjects if group_map.get(s) == 'good']
-bad_subjects = [s for s in subjects if group_map.get(s) == 'bad']
+good_subjects = [s for s in complete_subjects if group_map.get(s) == "good"]
+bad_subjects = [s for s in complete_subjects if group_map.get(s) == "bad"]
 
 print(f"Good learners (n={len(good_subjects)}): {good_subjects}")
 print(f"Bad learners (n={len(bad_subjects)}): {bad_subjects}")
 
 # ---------- COMPUTE GROUP AVERAGES ----------
 def compute_group_averages(subject_list):
+    if not subject_list:
+        return {
+            "winstay_s1": np.nan,
+            "winstay_s2": np.nan,
+            "loseswitch_s1": np.nan,
+            "loseswitch_s2": np.nan,
+        }
+
     winstay_s1 = []
     winstay_s2 = []
     loseswitch_s1 = []
     loseswitch_s2 = []
     for subj in subject_list:
-        row = df[df['subject'] == subj].iloc[0]
+        matches = df[df["subject"] == subj]
+        if matches.empty:
+            continue
+        row = matches.iloc[0]
         winstay_s1.append(row['overall_winstay_sess1'])
         winstay_s2.append(row['overall_winstay_sess2'])
         loseswitch_s1.append(row['overall_loseswitch_sess1'])
@@ -79,7 +110,7 @@ def compute_group_averages(subject_list):
         'loseswitch_s2': np.nanmean(loseswitch_s2)
     }
 
-all_avg = compute_group_averages(subjects)
+all_avg = compute_group_averages(complete_subjects)
 good_avg = compute_group_averages(good_subjects)
 bad_avg = compute_group_averages(bad_subjects)
 

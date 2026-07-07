@@ -7,6 +7,13 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from project_paths import RAW_SUBJECT_DIR, METADATA_DIR
 ROOT = RAW_SUBJECT_DIR
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+def rel_path(path):
+    try:
+        return str(path.resolve().relative_to(PROJECT_ROOT))
+    except ValueError:
+        return str(path)
 
 FILE_NAME_DICTIONARY = {
     "plearning_1_csv": {
@@ -180,8 +187,7 @@ for subject_dir in sorted(ROOT.glob("sub*")):
         exists = expected_path.exists()
 
         inventory_row[f"{file_key}_exists"] = exists
-        inventory_row[f"{file_key}_path"] = str(expected_path) if exists else ""
-
+        inventory_row[f"{file_key}_path"] = rel_path(expected_path) if exists else ""
         if exists:
             raw_data_rows.append({
                 "subject_id": subject_num,
@@ -191,7 +197,7 @@ for subject_dir in sorted(ROOT.glob("sub*")):
                 "phase": info["phase"],
                 "required": info["required"],
                 "filename": expected_filename,
-                "file_path": str(expected_path),
+                "file_path": rel_path(expected_path),
             })
         else:
             missing_rows.append({
@@ -202,7 +208,7 @@ for subject_dir in sorted(ROOT.glob("sub*")):
                 "phase": info["phase"],
                 "required": info["required"],
                 "expected_filename": expected_filename,
-                "expected_path": str(expected_path),
+                "expected_path": rel_path(expected_path),
             })
 
     inventory_rows.append(inventory_row)
