@@ -1,0 +1,11 @@
+family,hr_variable,learning_variable,n,spearman_rho,spearman_p,pearson_r,pearson_p,spearman_p_fdr,fdr_significant_0_05,spearman_strength,direction
+primary_hr_vs_learning_rate_change,max_stress_reactivity,delta_slope,15,0.35,0.2009453508162933,0.3797411488892539,0.1626850152481164,0.6109506158086687,False,moderate,positive
+primary_hr_vs_learning_rate_change,prep_hr_reactivity,delta_slope,13,0.3681318681318681,0.21585718064938147,0.22516429967181742,0.4595311466198177,0.6109506158086687,False,moderate,positive
+primary_hr_vs_learning_rate_change,mean_stress_reactivity,delta_slope,15,0.3285714285714285,0.23180969720615968,0.4373252071005624,0.10307204374610912,0.6109506158086687,False,moderate,positive
+primary_hr_vs_learning_rate_change,math_hr_reactivity,delta_slope,15,0.2928571428571428,0.289471667212401,0.3181408885607961,0.24784506564624534,0.6109506158086687,False,small,positive
+primary_hr_vs_learning_rate_change,speech_hr_reactivity,delta_slope,15,0.2607142857142857,0.34797945986279355,0.5583973149588397,0.030505198217022477,0.6109506158086687,False,small,positive
+primary_hr_vs_learning_rate_change,max_stress_reactivity,delta_k,15,-0.23928571428571427,0.39037931192023567,-0.18451486830813488,0.5103351220559278,0.6109506158086687,False,small,negative
+primary_hr_vs_learning_rate_change,prep_hr_reactivity,delta_k,13,-0.21978021978021978,0.47061485147214255,-0.08204288763755602,0.7898910786063427,0.6109506158086687,False,small,negative
+primary_hr_vs_learning_rate_change,mean_stress_reactivity,delta_k,15,-0.1714285714285714,0.5412721760996331,-0.1318665598818075,0.639452092101109,0.6109506158086687,False,small,negative
+primary_hr_vs_learning_rate_change,speech_hr_reactivity,delta_k,15,-0.16785714285714282,0.5498555542278019,-0.1985183740583799,0.47816002657317264,0.6109506158086687,False,small,negative
+primary_hr_vs_learning_rate_change,math_hr_reactivity,delta_k,15,-0.13928571428571426,0.6205460876279014,0.05681936747242975,0.8405965960510362,0.6205460876279014,False,small,negative

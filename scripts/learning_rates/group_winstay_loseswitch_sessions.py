@@ -64,14 +64,9 @@ if LEARNING_RATES_CSV.exists():
         lr_df["group"] = np.where(lr_df["learning_rate_k"] >= median_k, "good", "bad")
     group_map = lr_df.set_index("subjectId")["group"].to_dict()
 else:
-    # Fallback: use overall win‑stay proportion from session 1
-    print("learning_rates.csv not found. Using overall win‑stay (session 1) for classification.")
-    winstay_s1 = []
-    for subj in subjects:
-        row = df[df['subject'] == subj].iloc[0]
-        winstay_s1.append(row['overall_winstay_sess1'])
-    median_val = np.median(winstay_s1)
-    group_map = {subj: ('good' if winstay_s1[i] >= median_val else 'bad') for i, subj in enumerate(subjects)}
+    raise FileNotFoundError(
+        f"Missing {LEARNING_RATES_CSV}. Run calculate_learning_rates.py first so all analyses use the same learner classification."
+    )
 
 # Split subjects
 good_subjects = [s for s in complete_subjects if group_map.get(s) == "good"]

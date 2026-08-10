@@ -33,12 +33,12 @@ from scipy.interpolate import interp1d
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR
 
 
 # ---------- MODEL ----------
-def exp_learning(t, a, b, k):
-    return a - b * np.exp(-k * t)
 
 
 def fit_subject_curve(x, y):
@@ -195,19 +195,10 @@ fit_lookup = lr_df.set_index(["subjectId", "plearning_num"])
 all_data_by_session = {sess: [] for sess in sessions}
 
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    if "_plearning_1_eeg" in csv_file.name or "_plearning_2_eeg" in csv_file.name:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
-        continue
-
-    subj_id = parts[0].zfill(3)
-
-    try:
-        sess = int(parts[2])
-    except Exception:
-        continue
+    subj_id, sess = parsed_name
 
     if sess not in sessions:
         continue

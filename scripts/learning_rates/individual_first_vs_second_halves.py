@@ -18,15 +18,14 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathlib import Path
 from scipy.optimize import curve_fit
-from scipy.interpolate import interp1d
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, FIGURES_DIR
 
 # ---------- EXPONENTIAL FUNCTION ----------
-def exp_learning(t, a, b, k):
-    return a - b * np.exp(-k * t)
 
 # ---------- PORTABLE PATHS ----------
 RESULTS_DIR = PLEARNING_DIR
@@ -41,14 +40,10 @@ second_blocks = [6, 7, 8, 9, 10]
 # ---------- LOAD DATA FOR EACH SUBJECT ----------
 all_subjects = []   # each: {'subject': id, 'first': list(18), 'second': list(18)}
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0]
-    try:
-        p_num = int(parts[2])
-    except:
-        continue
+    subj_id, p_num = parsed_name
     if p_num != plearning_session:
         continue
     df = pd.read_csv(csv_file)

@@ -31,11 +31,11 @@ from scipy.interpolate import interp1d
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR
 
 # ---------- EXPONENTIAL FUNCTION ----------
-def exp_learning(t, a, b, k):
-    return a - b * np.exp(-k * t)
 
 # ---------- PATHS ----------
 RESULTS_DIR = PLEARNING_DIR
@@ -51,45 +51,29 @@ second_blocks = [6,7,8,9,10]
 learning_rates_csv = LEARNING_ANALYSIS_DATA_DIR / "learning_rates.csv"
 if learning_rates_csv.exists():
     lr_df = pd.read_csv(learning_rates_csv, dtype={'subjectId': str})
+    lr_df['plearning_num'] = pd.to_numeric(lr_df['plearning_num'], errors='coerce')
     lr_df = lr_df[lr_df['plearning_num'] == plearning_session].copy()
-    lr_df = lr_df.dropna(subset=['learning_rate_k'])
-    median_k = lr_df['learning_rate_k'].median()
-    lr_df['group'] = np.where(lr_df['learning_rate_k'] >= median_k, 'good', 'bad')
-    lr_df['subjectId'] = lr_df['subjectId'].str.zfill(3)
-    group_map = lr_df.set_index('subjectId')['group'].to_dict()
+    lr_df['subjectId'] = lr_df['subjectId'].astype(str).str.zfill(3)
+    if 'learner_group' in lr_df.columns:
+        lr_df['group'] = lr_df['learner_group'].astype(str).str.lower()
+        lr_df = lr_df[lr_df['group'].isin(['good', 'bad'])]
+    else:
+        lr_df = lr_df.dropna(subset=['learning_rate_k'])
+        median_k = lr_df['learning_rate_k'].median()
+        lr_df['group'] = np.where(lr_df['learning_rate_k'] >= median_k, 'good', 'bad')
+    group_map = lr_df.drop_duplicates('subjectId').set_index('subjectId')['group'].to_dict()
 else:
-    # Fallback: compute overall proportion correct for each subject and split
-    group_map = {}
-    for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-        parts = csv_file.stem.split("_")
-        if len(parts) < 3:
-            continue
-        subj_id = parts[0]
-        try:
-            p_num = int(parts[2])
-        except:
-            continue
-        if p_num != plearning_session:
-            continue
-        df = pd.read_csv(csv_file)
-        if 'learned' not in df.columns:
-            continue
-        overall = df['learned'].mean()
-        group_map[subj_id] = overall
-    median_val = np.median(list(group_map.values()))
-    group_map = {k: ('good' if v >= median_val else 'bad') for k, v in group_map.items()}
+    raise FileNotFoundError(
+        f"Missing {learning_rates_csv}. Run calculate_learning_rates.py first so all analyses use the same learner classification."
+    )
 
 # ---------- LOAD DATA AND COMPUTE PROPORTIONS PER HALF ----------
 all_subjects = []   # each: {'subject': id, 'first': list(18), 'second': list(18), 'group': str}
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0]
-    try:
-        p_num = int(parts[2])
-    except:
-        continue
+    subj_id, p_num = parsed_name
     if p_num != plearning_session:
         continue
     df = pd.read_csv(csv_file)
@@ -198,7 +182,7 @@ def plot_all_individuals(half_name, half_data_list, output_filename):
                 popt, _ = curve_fit(exp_learning, xv, yv, p0=p0, bounds=bounds, maxfev=5000)
                 y_smooth = exp_learning(dense_x, *popt)
                 plt.plot(dense_x, y_smooth, linewidth=1, alpha=0.5, label='_nolegend_')
-            except:
+            except (RuntimeError, ValueError, FloatingPointError):
                 pass
         plt.plot(x, y, 'o', markersize=3, alpha=0.5, label='_nolegend_')
     plt.axhline(0.5, color='gray', linestyle='--', label='Chance')

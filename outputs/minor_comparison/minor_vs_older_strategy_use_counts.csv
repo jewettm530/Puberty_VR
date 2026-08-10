@@ -1,0 +1,10 @@
+strategy,session,group,n_with_valid_score,mean_conditional_probability,sd_conditional_probability,n_at_or_above_0_50,percent_at_or_above_0_50
+Win-stay probability,Session 1,Minors,6,0.6901527882466795,0.2102442994765594,4,66.66666666666667
+Win-stay probability,Session 1,Older,12,0.6513177288591832,0.1761361373871818,8,66.66666666666667
+Lose-switch probability,Session 1,Minors,6,0.5159887015602888,0.1435945077888308,3,50
+Lose-switch probability,Session 1,Older,12,0.5291548772093569,0.0847096081411097,7,58.333333333333336
+,,,,,,,
+Win-stay probability,Session 2,Minors,5,0.711382290743283,0.2420786746620438,4,80
+Win-stay probability,Session 2,Older,11,0.5673678932609989,0.1783756622078236,8,72.72727272727273
+Lose-switch probability,Session 2,Minors,5,0.4583848340827746,0.093123231585744,2,40
+Lose-switch probability,Session 2,Older,11,0.4913357120073249,0.0888280311844186,7,63.63636363636363

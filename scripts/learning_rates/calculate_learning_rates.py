@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 calculate_learning_rates.py
 
@@ -38,7 +39,6 @@ Output columns include:
 
 Dependencies: pandas, numpy, scipy.
 """
-#!/usr/bin/env python3
 
 import sys
 from pathlib import Path
@@ -49,18 +49,11 @@ from scipy.optimize import curve_fit
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR
 
 
-def exp_learning(t, a, b, k):
-    """
-    Exponential learning curve:
-    P(t) = a - b * exp(-k*t)
-
-    k = learning rate.
-    Higher k means faster learning.
-    """
-    return a - b * np.exp(-k * t)
 
 
 def clean_learned_column(series):
@@ -141,7 +134,7 @@ def classify_learners(out_df):
     Good learner = Session 1 k >= median Session 1 k.
     Bad learner = Session 1 k < median Session 1 k.
 
-    If a subject's Session 1 k is NaN, fallback to Session 1 mean_accuracy.
+    Subjects without a valid Session 1 k remain unclassified.
     """
     out_df = out_df.copy()
 
@@ -185,26 +178,18 @@ def classify_learners(out_df):
 
 
 def main():
-    csv_files = sorted(PLEARNING_DIR.rglob("*_plearning_*.csv"))
-
-    # Exclude EEG files if they exist in the same folder
     csv_files = [
-        f for f in csv_files
-        if "_plearning_1_eeg" not in f.name
-        and "_plearning_2_eeg" not in f.name
-        and "subject_info_summary" not in f.name
+        path
+        for path in sorted(PLEARNING_DIR.rglob("*_plearning_*.csv"))
+        if parse_plearning_csv_name(path) is not None
     ]
 
     results = []
 
     for csv_file in csv_files:
-        parts = csv_file.stem.split("_")
-
-        if len(parts) < 3:
-            continue
-
-        subject_id = parts[0].zfill(3)
-        plearning_num = parts[2]
+        parsed_name = parse_plearning_csv_name(csv_file)
+        assert parsed_name is not None
+        subject_id, plearning_num = parsed_name
 
         df = pd.read_csv(csv_file)
 

@@ -1,128 +1,116 @@
-Note: In the scripts, learners are classified as “good” or “bad” based on a median split of their individual learning rate (k) derived from an exponential (diminishing‑returns) curve fitted to their proportion of set‑winner choices across the 18 trials (averaged over blocks).
+PUBERTY & VR SCRIPT CATALOG
+===========================
 
-first_half_vs_second_half.py
-    This script compares learning performance during the first half 
-    (blocks 1‑5) and the second half (blocks 6‑10) of the task. It produces ten output graphs:
-    1. boxplot_first_vs_second.png – Boxplot of overall proportions (paired t‑test printed to console).
-    2. group_average_first_half.png – Group average exponential curve for blocks 1‑5.
-    3. group_average_second_half.png – Group average exponential curve for blocks 6‑10.
-    4. overlay_group_average_curves.png – Overlay of the two group average curves (first vs second half).
-    5. all_individuals_first_half.png – All individuals’ curves (points + exponential fits) for blocks 1‑5.
-    6. all_individuals_second_half.png – Same for blocks 6‑10.
-    7. good_vs_bad_first_half.png – Overlay of good vs bad learners during blocks 1‑5.
-    8. good_vs_bad_second_half.png – Overlay of good vs bad learners during blocks 6‑10.
-    9. good_first_vs_second.png – For good learners only: first half vs second half.
-    10. bad_first_vs_second.png – For bad learners only: first half vs second half.
-    All plots use exponential fits with shaded SEM bands. Outputs are saved in outputs/half_comparison/.
+Shared modules
+--------------
+project_paths.py
+    Defines all paths relative to the project directory. Scripts can be run from
+    any working directory.
+
+file_naming.py
+    Parses and generates canonical subject, pLearning CSV, and pLearning JSON
+    names. Learning scripts accept only ###_plearning_[12].csv.
+
+learning_utils.py
+    Contains the shared exponential learning function P(t) = a - b*exp(-k*t).
+
+Setup and validation
+--------------------
+standardize_file_names.py
+    Dry-run by default. Standardizes raw filenames and records every decision in
+    data/metadata/rename_log.csv. Use --apply only after reviewing conflicts.
+
+rename_jsons.py
+    Focused, optional alternative that standardizes pLearning JSON names only.
+
+raw_data_inventory.py
+    Creates the filename dictionary, subject-level inventory, recognized raw-file
+    index, missing-file report, and unrecognized-file report.
+
+validate_raw_data.py
+    Checks EEG/heart-rate schemas, detects exact duplicate content within each
+    subject folder, and carries filename conflicts into
+    data/metadata/raw_data_quality_issues.csv.
+
+process_jatos_python.py
+    Recursively finds pLearning JSON files by default, converts each to a canonical
+    trial-level CSV, and updates subject_info_summary.csv by subject and session.
+    Custom --output-dir and --summary-path arguments are honored.
+
+Modality summaries
+------------------
+summarize_heart_rate.py
+    Parses Polar CSV exports with an embedded HR (bpm) header and produces long and
+    wide heart-rate summaries in data/analysis_data/heart_rate/.
+
+summarize_eeg.py
+    Summarizes Mind Monitor CSV or single-CSV ZIP files. Files without expected EEG
+    columns are marked invalid instead of counted as available.
+
+Behavioral analyses
+-------------------
+calculate_learning_rates.py
+    Fits P(t) = a - b*exp(-k*t) for every subject/session and writes
+    data/analysis_data/learning_rates/learning_rates.csv. Session 1 learner_group is
+    the source of truth for all downstream good/bad comparisons.
 
 all_individuals_with_curve.py
-    This script processes all subjects’ trial‑level CSV files (each containing 10 blocks of 18 trials) 
-    from the Puberty_VR study. For every subject it:
-        - Computes the proportion of set‑winner (correct) choices for each trial position (1‑18) by averaging across all blocks.
-        - Saves a CSV file with columns: subject, trial, proportion_correct.
-        - Plots a single figure showing every subject’s observed proportion (points) and their individually fitted exponential curve (line) on the same graph.
-        - The exponential function used is: P(t) = a - b·exp(-k·t).
-        - The x‑axis shows trial numbers 1‑18, the y‑axis proportion correct (0‑1).
-    Outputs: CSV and PNG in outputs/all_individuals/.
+    Saves trial-wise subject proportions, fitted-versus-observed diagnostics, and
+    all-subject/group-average learning-curve figures.
+
+first_half_vs_second_half.py
+    Compares blocks 1-5 with blocks 6-10 using paired summaries and individual/group
+    curve figures.
 
 individual_first_vs_second_halves.py
-    For each subject individually, this script creates a plot comparing their learning curves from the first half (blocks 1‑5) and the second half (blocks 6‑10) of the task.
-        - Both halves are overlaid on the same axes (trial numbers 1‑18).
-        - Exponential curves are fitted to each half’s data (if enough valid points exist).
-        - Observed proportions are shown as points.
-        - The plot includes a chance line at 0.5 and a legend.
-    Outputs: one PNG per subject in outputs/individual_half_comparison/.
-
-calculate_learning_rates.py
-    Source of truth for learning-rate estimation and learner classification.
-    For each subject/session, it:
-        - Loads pLearning behavioral CSV files.
-        - Aggregates learned/correct responses by trial number 1–18.
-        - Fits the exponential curve P(t) = a - b*exp(-k*t).
-        - Saves learning_rate_k plus fit_a and fit_b.
-        - Classifies learners using Session 1 learning_rate_k median split.
-    Output:
-        data/analysis_data/learning_rates/learning_rates.csv
-
-learning_rate_analysis.py
-    This script computes median learning rates (proportion of set‑winner choices) per trial and per session.
-    It loads all subjects’ trial‑wise proportion correct, keeps all subjects in the CSV summary when possible, including subjects with only one session.
-    Plots and paired session comparisons use complete-session subjects only.
-    Outputs are organised in several subfolders:
-        - individual_s1_vs_s2/ : each subject’s session 1 vs session 2 curves (points + exponential fits).
-        - individual_with_group_avg/ : subject’s own curves overlaid with group averages (combined and per session).
-        - group_average/ : group average curves with SEM bands, plus scatter plots of proportion correct split by winner type (face/house).
-        - subject_vs_group_sd/ : subject vs group average ± standard deviation, with exponential fits.
-        - group_comparisons/ : comparisons between good and bad learners (median split of learning rate k).
-    Uses exponential fits P(t) = a - b·exp(-k·t). Requires learning_rates.csv for classification (fallback uses overall mean accuracy).
-
-winstay_loseswitch_analysis.py
-    This script calculates conditional win‑stay (stay after gain) and lose‑switch (switch after loss) proportions per trial (2‑18) for each subject and session.
-    All proportions are conditional on the preceding feedback, which is the standard approach in reinforcement learning.
-    Outputs a CSV summary and six subfolders:
-        1_subject_bars_per_session/ : bar graphs per subject (overall win‑stay and lose‑switch for each session).
-        2_subject_trial_by_trial/ : bar graphs per subject and session, two bars per trial (win‑stay, lose‑switch).
-        3_group_average_bars_per_session/ : group average bars per session.
-        4_group_average_trial_by_trial/ : group average bar graphs per trial (2‑18).
-        5_good_vs_bad_by_feedback/ : bar plots comparing good and bad learners on “stay after gain” and “switch after loss”.
-        6_subject_vs_group_comparison/ : for each subject, a bar graph comparing subject’s proportions with group averages (both sessions).
-    Classification uses learning_rates.csv (session 1) or falls back to overall win‑stay proportion.
-
-learning_slope_analysis.py
-    1. Loads raw trial data for sessions 1 (Pre) and 2 (Post).
-    2. Creates a trial‑level CSV with columns: Subject, Session, Block, Trial, Correct, LearnerType.
-    3. For each subject and session, estimates a learning slope (linear regression of
-    proportion correct on trial number, using data aggregated across blocks).
-    4. Performs paired t‑tests and Cohen's d on slopes (Pre vs Post) for:
-    - All subjects
-    - Good learners only
-    - Bad learners only
-    5. Fits a linear mixed model (LMM) on the raw trial‑level data:
-    Fixed effects: Trial, Session, Trial × Session
-    Random intercept: Subject
-    Interpretation: negative Trial×Session[Post] coefficient = slower learning after stress.
-    6. Generates graphs: paired slopes, group learning curves, individual learning curves.
-    Dependencies: pandas, numpy, scipy, statsmodels, matplotlib
-
-winstay_loseswitch_analysis.py
-    Compute conditional win‑stay (stay after gain) and lose‑switch (switch after loss) proportions
-    per trial (2‑18), per subject, per session. Produces a CSV summary and graphs:
-    - Subject‑level bar graphs for overall proportions and trial‑by‑trial
-    - Group average bar graphs (overall and trial‑by‑trial)
-    - Good vs bad learner comparisons on stay after gain / switch after loss
-    - Subject vs group comparison bar graphs (subject vs group averages)
-    All proportions are conditional on the preceding feedback.
-    Input: subject CSV files (name pattern: *_{id}_plearning_{session}.csv) in ../results/
-    Output: organised subfolders inside outputs/winstay_loseswitch/
-    Dependencies: pandas, numpy, matplotlib, scipy
+    Creates one first-half versus second-half curve figure per Session 1 subject.
 
 group_average_by_winner.py
-    Create group average learning curves split by set‑winner type (face vs house).
-    For each session (1 and 2), plot two lines:
-    - Proportion correct when the winner was 'face' (chosen='face' and feedback='gain')
-    - Proportion correct when the winner was 'house' (chosen='house' and feedback='gain')
-    Both lines are shown with exponential fits (or linear interpolation if fit fails) and shaded SEM bands.
+    Plots group learning curves split by set-winner type (face versus house).
 
-group_winstay_loseswitch_sessions.py
-    Create bar graphs comparing win‑stay and lose‑switch proportions between Session 1 and Session 2
-    for three groups: all subjects, good learners, and bad learners.
+learning_rate_analysis.py
+    Produces subject/session summaries, AUC values, individual comparisons, group
+    curves, good/bad comparisons, and subject-versus-group figures.
+
+learning_slope_analysis.py
+    Creates trial-level data, subject/session linear slopes, paired slope tests, a
+    Gaussian mixed model, and related figures/reports. See README statistical notes
+    before using the mixed-model p-values for confirmatory inference.
+
+learning_summary_statistics.py
+    Pairs Trial 1 and Trial 18 explicitly by subject and writes descriptive/paired
+    t-test results to outputs/learning_rates/reports/.
+
+plot_group_average_curve.py
+    Generates exponential group-average curves for good, bad, and all learners.
 
 plot_individual_learning_curves.py
-    Merged replacement for individual_plots_with_classification.py and individual_vs_average.py.
+    Generates classified Session 1 individual curves with the group average overlay.
 
-    For Session 1, this script:
-        - Computes observed proportion correct for trials 1–18.
-        - Reads learner_group, session1_learning_rate_k, and classification_basis from learning_rates.csv.
-        - Creates one individual learning curve plot per subject.
-        - Overlays each subject’s observed data and exponential fit.
-        - Overlays the Session 1 group average curve with SEM band.
-        - Saves individual_data_with_classification_sess1.csv.
+winstay_loseswitch_analysis.py
+    Computes conditional P(stay | previous gain) and P(switch | previous loss).
+    Overall subject scores pool all eligible transitions; trial-wise values retain
+    position-specific denominators.
 
-    Output CSV columns:
-        - subject_id
-        - session
-        - trial
-        - proportion_correct
-        - learner_group
-        - session1_learning_rate_k
-        - classification_basis
+group_winstay_loseswitch_sessions.py
+    Compares Session 1 and Session 2 strategy scores for all, good, and bad learners.
+    Run after winstay_loseswitch_analysis.py.
+
+Multimodal
+----------
+build_multimodal_dataset.py
+    Merges behavioral, heart-rate, EEG-availability, and JATOS metadata into one row
+    per subject/session. Session metadata is joined on both subject and session.
+
+compare_minors_to_older.py
+    Reads the first-column N/A Minor labels from Real_Subject_Data_ID.xlsx, joins
+    them to the multimodal dataset, verifies that at least five distinct minor
+    subjects are analyzable, and compares minor with older subjects. Subject-level
+    variables are tested once per person and within-subject variables separately by
+    session. Outputs include cohort mappings, descriptive availability, Welch/Fisher
+    tests, effect sizes, and Benjamini-Hochberg FDR-adjusted p-values.
+
+summarize_minor_comparison.py
+    Creates a focused key-results table, explicit win-stay/lose-switch usage counts,
+    a plain-language major-findings report, and learning, strategy, heart-rate, and
+    standardized-effect figures from the full minor-comparison outputs.

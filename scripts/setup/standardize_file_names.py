@@ -1,258 +1,243 @@
-from pathlib import Path
+#!/usr/bin/env python3
+"""Safely standardize raw subject filenames.
+
+The script performs a dry run by default. Pass ``--apply`` to rename files.
+It supports CSV, JSON, and single-file EEG ZIP archives while preserving ZIP
+compression. A detailed log is written to ``data/metadata/rename_log.csv``.
+"""
+
+from __future__ import annotations
+
+import argparse
 import re
-import csv
+import sys
+from pathlib import Path
 
-ROOT = Path("/Users/maddiemac/Puberty_VR/results")
-DRY_RUN = False
+import pandas as pd
 
-STANDARD_SUFFIXES = {
-    "plearning_1_eeg": "plearning_1_eeg.csv",
-    "plearning_2_eeg": "plearning_2_eeg.csv",
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from file_naming import (  # noqa: E402
+    canonical_plearning_json_name,
+    infer_plearning_json_identity,
+    parse_plearning_csv_name,
+    subject_id_from_folder,
+)
+from project_paths import METADATA_DIR, RAW_SUBJECT_DIR  # noqa: E402
 
-    "baseline_hr": "baseline_hr.csv",
-    "baseline_eeg": "baseline_eeg.csv",
-    "pre_vr_hr": "pre_vr_hr.csv",
-    "pre_vr_eeg": "pre_vr_eeg.csv",
-    "vr_prep_hr": "vr_prep_hr.csv",
-    "vr_prep_eeg": "vr_prep_eeg.csv",
-    "peak_hr": "peak_hr.csv",
-    "post_vr_hr": "post_vr_hr.csv",
-    "post_vr_eeg": "post_vr_eeg.csv",
-    "vr_math_hr": "vr_math_hr.csv",
-    "vr_math_eeg": "vr_math_eeg.csv",
-    "vr_speech_hr": "vr_speech_hr.csv",
-    "vr_speech_eeg": "vr_speech_eeg.csv",
-
-    "recovery_hr": "recovery_hr.csv",
-    "recovery_eeg": "recovery_eeg.csv",
+CANONICAL_STEMS = {
+    "plearning_1_eeg": "plearning_1_eeg",
+    "plearning_2_eeg": "plearning_2_eeg",
+    "baseline_hr": "baseline_hr",
+    "baseline_eeg": "baseline_eeg",
+    "pre_vr_hr": "pre_vr_hr",
+    "pre_vr_eeg": "pre_vr_eeg",
+    "vr_prep_hr": "vr_prep_hr",
+    "vr_prep_eeg": "vr_prep_eeg",
+    "peak_hr": "peak_hr",
+    "post_vr_hr": "post_vr_hr",
+    "post_vr_eeg": "post_vr_eeg",
+    "vr_math_hr": "vr_math_hr",
+    "vr_math_eeg": "vr_math_eeg",
+    "vr_speech_hr": "vr_speech_hr",
+    "vr_speech_eeg": "vr_speech_eeg",
+    "recovery_hr": "recovery_hr",
+    "recovery_eeg": "recovery_eeg",
 }
 
-CORE_EXPECTED = [
-    "plearning_1.csv",
-    "plearning_2.csv",
-    "baseline_hr.csv",
-    "baseline_eeg.csv",
-    "pre_vr_hr.csv",
-    "pre_vr_eeg.csv",
-    "peak_hr.csv",
-    "post_vr_hr.csv",
-    "post_vr_eeg.csv",
-    "vr_math_hr.csv",
-    "vr_math_eeg.csv",
-    "vr_speech_hr.csv",
-    "vr_speech_eeg.csv",
-]
 
-OPTIONAL_EXPECTED = [
-    "plearning_1_eeg.csv",
-    "plearning_2_eeg.csv",
-    "recovery_hr.csv",
-    "recovery_eeg.csv",
-]
-
-def normalize_name(filename):
-    name = filename.lower()
-    name = re.sub(r"\.(csv|json)$", "", name)
+def normalize_name(filename: str) -> str:
+    name = Path(filename).stem.lower()
     name = re.sub(r"[^a-z0-9]+", " ", name)
     return name.strip()
 
-def classify_file(filename):
-    lower = filename.lower()
-    name = normalize_name(filename)
 
-    # Remove subject prefixes
+def classify_measurement_file(filename: str) -> str | None:
+    """Classify a nonbehavioral raw file into a canonical measurement type."""
+    path = Path(filename)
+    if path.suffix.lower() not in {".csv", ".zip"}:
+        return None
+
+    # Canonical behavioral CSVs are handled by the JATOS processor, not renamed here.
+    if parse_plearning_csv_name(path) is not None:
+        return None
+
+    name = normalize_name(filename)
     name = re.sub(r"^sub\s*\d+\s*", "", name)
     name = re.sub(r"^\d+\s*", "", name)
 
-    # Already-standard pLearning behavioral CSV / JSON files
-    if re.match(r"^\d{3}_plearning_[12]\.csv$", lower):
-        return None
-    if re.match(r"^subject_\d{3}_plearning_[12]\.json$", lower):
-        return None
-
+    tokens = set(name.split())
+    is_eeg = "eeg" in tokens or "egg" in tokens
     is_hr = (
-        "heart" in name
-        or "hear rate" in name
-        or "heartrate" in name
-        or "hr" in name
+        "hr" in tokens
+        or "heartrate" in tokens
+        or ("heart" in tokens and "rate" in tokens)
+        or ("hear" in tokens and "rate" in tokens)
     )
-    is_eeg = "eeg" in name or "egg" in name
 
-    # pLearning EEG
-    if is_eeg and "plearning" in name:
-        if "2" in name:
-            return "plearning_2_eeg"
-        return "plearning_1_eeg"
+    if is_eeg and ("plearning" in name or "plearn" in name):
+        session_match = re.search(r"p(?:learning|learn)\s*([12])", name)
+        session = session_match.group(1) if session_match else "1"
+        return f"plearning_{session}_eeg"
 
-    # HR
-    if is_hr:
-        if name.startswith("t1 ") or "baseline" in name:
-            return "baseline_hr"
-        if name.startswith("t2 "):
-            return "pre_vr_hr"
-        if name.startswith("t3 ") or "postvr" in name or ("post" in name and "vr" in name):
-            return "post_vr_hr"
-        if name.startswith("t5 ") or "recovery" in name:
-            return "recovery_hr"
-        if "peak" in name:
-            return "peak_hr"
-        if "vrprep" in name or "prep" in name:
-            return "vr_prep_hr"
-        if ("pre" in name and "vr" in name) or name.startswith("pre "):
-            return "pre_vr_hr"
-        if "math" in name:
-            return "vr_math_hr"
-        if "speech" in name:
-            return "vr_speech_hr"
+    if not (is_hr or is_eeg):
+        return None
 
-    # EEG
-    if is_eeg:
-        if name.startswith("t1 ") or "baseline" in name:
-            return "baseline_eeg"
-        if name.startswith("t2 "):
-            return "pre_vr_eeg"
-        if name.startswith("t3 ") or "postvr" in name or ("post" in name and "vr" in name):
-            return "post_vr_eeg"
-        if name.startswith("t5 ") or "recovery" in name:
-            return "recovery_eeg"
-        if "vrprep" in name or "prep" in name:
-            return "vr_prep_eeg"
-        if ("pre" in name and "vr" in name) or name.startswith("pre "):
-            return "pre_vr_eeg"
-        if "math" in name:
-            return "vr_math_eeg"
-        if "speech" in name:
-            return "vr_speech_eeg"
+    modality = "eeg" if is_eeg else "hr"
 
-    return None
+    if name.startswith("t1 ") or "baseline" in tokens:
+        phase = "baseline"
+    elif name.startswith("t5 ") or "recovery" in tokens:
+        phase = "recovery"
+    elif "peak" in tokens:
+        phase = "peak"
+    elif "math" in tokens:
+        phase = "vr_math"
+    elif "speech" in tokens:
+        phase = "vr_speech"
+    elif "prep" in tokens or "vrprep" in name:
+        phase = "vr_prep"
+    elif name.startswith("t3 ") or "postvr" in name or ("post" in tokens and "vr" in tokens):
+        phase = "post_vr"
+    elif name.startswith("t2 ") or "prevr" in name or ("pre" in tokens and "vr" in tokens):
+        phase = "pre_vr"
+    else:
+        return None
 
-rename_log = []
+    # There is no defined peak EEG file type in the current schema.
+    if phase == "peak" and modality == "eeg":
+        return None
+    return f"{phase}_{modality}"
 
-for subject_dir in sorted(ROOT.glob("sub*")):
-    if not subject_dir.is_dir():
-        continue
 
-    m = re.match(r"sub(\d+)$", subject_dir.name.lower())
-    if not m:
-        continue
+def case_safe_rename(source: Path, target: Path) -> None:
+    """Rename safely even when only filename capitalization changes."""
+    if source == target:
+        return
+    if source.name.lower() == target.name.lower():
+        temporary = source.with_name(source.name + ".rename_tmp")
+        source.rename(temporary)
+        temporary.rename(target)
+    else:
+        source.rename(target)
 
-    subject_num = m.group(1).zfill(3)
-    planned_targets = set()
 
-    print(f"\n{subject_dir.name}/")
+def plan_subject_renames(subject_dir: Path) -> list[dict[str, str]]:
+    subject_id = subject_id_from_folder(subject_dir.name)
+    if subject_id is None:
+        return []
 
-    for file_path in sorted(subject_dir.iterdir()):
-        if file_path.suffix.lower() not in [".csv", ".json"]:
+    rows: list[dict[str, str]] = []
+    reserved_targets: set[str] = set()
+
+    for file_path in sorted(p for p in subject_dir.iterdir() if p.is_file()):
+        target_name: str | None = None
+        category: str | None = None
+
+        if file_path.suffix.lower() == ".json":
+            identity = infer_plearning_json_identity(file_path)
+            if identity is not None:
+                json_subject, session = identity
+                if json_subject != subject_id:
+                    rows.append({
+                        "subject": subject_dir.name,
+                        "category": "plearning_json",
+                        "old_name": file_path.name,
+                        "new_name": "",
+                        "status": "subject_mismatch",
+                        "detail": f"filename implies {json_subject}; folder implies {subject_id}",
+                    })
+                    continue
+                target_name = canonical_plearning_json_name(subject_id, session)
+                category = "plearning_json"
+        else:
+            category = classify_measurement_file(file_path.name)
+            if category is not None:
+                target_name = f"{subject_id}_{CANONICAL_STEMS[category]}{file_path.suffix.lower()}"
+
+        if target_name is None:
             continue
 
-        file_type = classify_file(file_path.name)
+        target_path = file_path.with_name(target_name)
+        target_key = target_name.lower()
 
-        if file_type is None:
-            print(f"  SKIP: {file_path.name}")
-            continue
+        if file_path.name == target_name:
+            status = "already_standard"
+            detail = ""
+        elif file_path.name.lower() == target_name.lower():
+            status = "rename"
+            detail = "case-only normalization"
+            reserved_targets.add(target_key)
+        elif target_key in reserved_targets:
+            status = "duplicate_target_in_plan"
+            detail = "another source file maps to the same target"
+        elif target_path.exists() and target_path != file_path:
+            status = "target_exists"
+            detail = "target file already exists"
+        else:
+            status = "rename"
+            detail = ""
+            reserved_targets.add(target_key)
 
-        new_name = f"{subject_num}_{STANDARD_SUFFIXES[file_type]}"
-        new_path = file_path.with_name(new_name)
-
-        if file_path.name == new_name:
-            print(f"  OK: {file_path.name}")
-            planned_targets.add(new_name)
-            continue
-
-        if new_name in planned_targets:
-            print(f"  DUPLICATE PLAN: {file_path.name} -> {new_name}")
-            continue
-
-        if new_path.exists():
-            print(f"  WARNING: target exists, skipping {file_path.name} -> {new_name}")
-            continue
-
-        print(f"  RENAME: {file_path.name} -> {new_name}")
-        planned_targets.add(new_name)
-
-        rename_log.append({
+        rows.append({
             "subject": subject_dir.name,
+            "category": category or "",
             "old_name": file_path.name,
-            "new_name": new_name,
-            "old_path": str(file_path),
-            "new_path": str(new_path),
+            "new_name": target_name,
+            "status": status,
+            "detail": detail,
         })
 
-        if not DRY_RUN:
-            file_path.rename(new_path)
+    return rows
 
-# Missing-file inventory after planned renames
-print("\n\nMISSING FILE REPORT")
 
-missing_rows = []
-
-for subject_dir in sorted(ROOT.glob("sub*")):
-    if not subject_dir.is_dir():
-        continue
-
-    m = re.match(r"sub(\d+)$", subject_dir.name.lower())
-    if not m:
-        continue
-
-    subject_num = m.group(1).zfill(3)
-
-    existing = {p.name for p in subject_dir.iterdir() if p.is_file()}
-    planned_new = {
-        row["new_name"]
-        for row in rename_log
-        if row["subject"] == subject_dir.name
-    }
-
-    available = existing | planned_new
-
-    expected_core = [
-        f"{subject_num}_{suffix}" for suffix in CORE_EXPECTED
-    ] + [
-        f"subject_{subject_num}_plearning_1.json",
-        f"subject_{subject_num}_plearning_2.json",
-    ]
-
-    expected_optional = [
-        f"{subject_num}_{suffix}" for suffix in OPTIONAL_EXPECTED
-    ]
-
-    missing_core = [f for f in expected_core if f not in available]
-    missing_optional = [f for f in expected_optional if f not in available]
-
-    if missing_core or missing_optional:
-        print(f"\n{subject_dir.name}")
-        if missing_core:
-            print("  Missing core:")
-            for f in missing_core:
-                print(f"    - {f}")
-        if missing_optional:
-            print("  Missing optional/additional:")
-            for f in missing_optional:
-                print(f"    - {f}")
-
-        missing_rows.append({
-            "subject": subject_dir.name,
-            "missing_core": "; ".join(missing_core),
-            "missing_optional": "; ".join(missing_optional),
-        })
-
-# Save logs
-with open(ROOT / "rename_log.csv", "w", newline="") as f:
-    writer = csv.DictWriter(
-        f,
-        fieldnames=["subject", "old_name", "new_name", "old_path", "new_path"]
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=RAW_SUBJECT_DIR,
+        help=f"Subject-data directory (default: {RAW_SUBJECT_DIR})",
     )
-    writer.writeheader()
-    writer.writerows(rename_log)
-
-with open(ROOT / "missing_file_report.csv", "w", newline="") as f:
-    writer = csv.DictWriter(
-        f,
-        fieldnames=["subject", "missing_core", "missing_optional"]
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually rename files. Without this flag, only a dry run is performed.",
     )
-    writer.writeheader()
-    writer.writerows(missing_rows)
+    parser.add_argument(
+        "--log",
+        type=Path,
+        default=METADATA_DIR / "rename_log.csv",
+        help="CSV path for the rename report.",
+    )
+    args = parser.parse_args()
 
-print(f"\nDRY_RUN = {DRY_RUN}")
-print("Saved rename_log.csv")
-print("Saved missing_file_report.csv")
+    root = args.root.expanduser().resolve()
+    if not root.exists() or not root.is_dir():
+        raise FileNotFoundError(f"Subject-data directory not found: {root}")
+
+    rows: list[dict[str, str]] = []
+    for subject_dir in sorted(root.iterdir()):
+        if not subject_dir.is_dir() or subject_id_from_folder(subject_dir.name) is None:
+            continue
+        subject_rows = plan_subject_renames(subject_dir)
+        rows.extend(subject_rows)
+
+        print(f"\n{subject_dir.name}/")
+        for row in subject_rows:
+            print(f"  {row['status'].upper()}: {row['old_name']}" + (f" -> {row['new_name']}" if row["new_name"] else ""))
+            if args.apply and row["status"] == "rename":
+                case_safe_rename(subject_dir / row["old_name"], subject_dir / row["new_name"])
+                row["status"] = "renamed"
+
+    args.log.parent.mkdir(parents=True, exist_ok=True)
+    columns = ["subject", "category", "old_name", "new_name", "status", "detail"]
+    pd.DataFrame(rows, columns=columns).to_csv(args.log, index=False)
+
+    rename_count = sum(row["status"] in {"rename", "renamed"} for row in rows)
+    mode = "APPLY" if args.apply else "DRY RUN"
+    print(f"\n{mode}: {rename_count} file(s) eligible for renaming")
+    print(f"Saved log: {args.log}")
+
+
+if __name__ == "__main__":
+    main()

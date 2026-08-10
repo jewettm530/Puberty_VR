@@ -2,7 +2,7 @@
 """
 Compute conditional win‑stay (stay after gain) and lose‑switch (switch after loss) proportions
 per trial (2‑18), per subject, per session. Produces a CSV summary and graphs:
-- Subject‑level bar graphs for overall proportions and trial‑by‑trial
+- Subject-level bar graphs for the two conditional proportions and trial-by-trial values
 - Group average bar graphs (overall and trial‑by‑trial)
 - Good vs bad learner comparisons on stay after gain / switch after loss
 - Subject vs group comparison bar graphs (subject vs group averages)
@@ -25,10 +25,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathlib import Path
-from scipy.stats import sem
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
+from file_naming import parse_plearning_csv_name
 from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR, TABLES_DIR
 
 # ---------- PATHS ----------
@@ -62,14 +62,10 @@ sessions = [1, 2]
 raw_trial_data = {}   # raw_trial_data[subject][session] = list of blocks, each block: dict with 'choices', 'feedbacks'
 
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0].zfill(3)
-    try:
-        sess = int(parts[2])
-    except:
-        continue
+    subj_id, sess = parsed_name
     if sess not in sessions:
         continue
     df = pd.read_csv(csv_file)
@@ -94,7 +90,31 @@ if not raw_trial_data:
 
 subjects = sorted(raw_trial_data.keys())
 
-# ---------- HELPER: COMPUTE WIN‑STAY AND LOSE‑SWITCH FOR ONE BLOCK ----------
+# ---------- NUMERIC HELPERS ----------
+def safe_nanmean(values, axis=None):
+    arr = np.asarray(values, dtype=float)
+    valid_count = np.sum(~np.isnan(arr), axis=axis)
+    total = np.nansum(arr, axis=axis)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        result = np.divide(total, valid_count, where=np.asarray(valid_count) > 0)
+    if np.ndim(result) == 0:
+        return float(result) if valid_count > 0 else np.nan
+    return np.where(valid_count > 0, result, np.nan)
+
+
+def safe_sem(values, axis=0):
+    arr = np.asarray(values, dtype=float)
+    count = np.sum(~np.isnan(arr), axis=axis)
+    mean = safe_nanmean(arr, axis=axis)
+    expanded_mean = np.expand_dims(mean, axis=axis)
+    squared = np.where(np.isnan(arr), 0.0, (arr - expanded_mean) ** 2)
+    sum_squared = np.sum(squared, axis=axis)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        result = np.sqrt(sum_squared / (count - 1)) / np.sqrt(count)
+    return np.where(count >= 2, result, np.nan)
+
+
+# ---------- HELPER: COMPUTE WIN-STAY AND LOSE-SWITCH FOR ONE BLOCK ----------
 def winstay_loseswitch_block(choices, feedbacks):
     """
     Given lists of length 18 (trial 1..18), returns two arrays of length 18
@@ -135,7 +155,6 @@ for subj in subjects:
             print(f"Subject {subj} missing session {sess}, skipping.")
             continue
         blocks = raw_trial_data[subj][sess]
-        n_blocks = len(blocks)
         # Accumulate winstay and loseswitch counts per trial position (1‑18)
         winstay_counts = np.zeros(trials_per_block)
         loseswitch_counts = np.zeros(trials_per_block)
@@ -163,12 +182,19 @@ for subj in subjects:
         loseswitch_props = np.divide(loseswitch_counts, loseswitch_possible, out=np.full_like(loseswitch_counts, np.nan), where=loseswitch_possible>0)
         # Store per‑trial values in row
         for t in range(2, trials_per_block+1):  # trial numbers 2‑18
-            row_idx = t  # we'll use column names like 'sess1_t2_winstay'
             subj_row[f'sess{sess}_t{t}_winstay'] = winstay_props[t-1]
             subj_row[f'sess{sess}_t{t}_loseswitch'] = loseswitch_props[t-1]
-        # Overall proportions (average over trials 2‑18)
-        overall_winstay = np.nanmean(winstay_props[1:])  # index 1..17 (trials 2‑18)
-        overall_loseswitch = np.nanmean(loseswitch_props[1:])
+        # Overall conditional proportions pool all eligible transitions. This avoids
+        # giving a trial position with one eligible event the same weight as a
+        # position with many eligible events.
+        overall_winstay = (
+            winstay_counts[1:].sum() / winstay_possible[1:].sum()
+            if winstay_possible[1:].sum() > 0 else np.nan
+        )
+        overall_loseswitch = (
+            loseswitch_counts[1:].sum() / loseswitch_possible[1:].sum()
+            if loseswitch_possible[1:].sum() > 0 else np.nan
+        )
         subj_row[f'overall_winstay_sess{sess}'] = overall_winstay
         subj_row[f'overall_loseswitch_sess{sess}'] = overall_loseswitch
         # Also store for group averages
@@ -179,26 +205,32 @@ for subj in subjects:
 
 # Convert results to DataFrame and save CSV
 df_results = pd.DataFrame(results)
+result_rows = df_results.set_index('subject')
 csv_path = WINSTAY_TABLES_DIR / 'winstay_loseswitch_summary.csv'
 df_results.to_csv(csv_path, index=False)
 print(f"Saved CSV: {csv_path}")
 
 # ---------- COMPUTE GROUP AVERAGES ----------
 group_avg = {}
+group_overall = {}
 for sess in sessions:
     if group_data[sess]['n_subj'] == 0:
         continue
     winstay_arr = np.array(group_data[sess]['winstay'])
     loseswitch_arr = np.array(group_data[sess]['loseswitch'])
     group_avg[sess] = {
-        'winstay_mean': np.nanmean(winstay_arr, axis=0),
-        'winstay_sem': sem(winstay_arr, axis=0, nan_policy='omit'),
-        'loseswitch_mean': np.nanmean(loseswitch_arr, axis=0),
-        'loseswitch_sem': sem(loseswitch_arr, axis=0, nan_policy='omit'),
+        'winstay_mean': safe_nanmean(winstay_arr, axis=0),
+        'winstay_sem': safe_sem(winstay_arr, axis=0),
+        'loseswitch_mean': safe_nanmean(loseswitch_arr, axis=0),
+        'loseswitch_sem': safe_sem(loseswitch_arr, axis=0),
         'n': group_data[sess]['n_subj']
     }
+    group_overall[sess] = {
+        'winstay': safe_nanmean(df_results.get(f'overall_winstay_sess{sess}', [])),
+        'loseswitch': safe_nanmean(df_results.get(f'overall_loseswitch_sess{sess}', [])),
+    }
 
-# ---------- 1. ONE GRAPH PER SUBJECT: 3 bars per session (win‑stay, lose‑switch, neither) ----------
+# ---------- 1. ONE GRAPH PER SUBJECT: two conditional bars per session ----------
 print("Generating request 1: subject bar graphs per session...")
 for subj in subjects:
     # Gather data for this subject (may have only one session)
@@ -209,7 +241,7 @@ for subj in subjects:
     for sess in sessions:
         if f'overall_winstay_sess{sess}' not in df_results.columns:
             continue
-        row = df_results[df_results['subject'] == subj].iloc[0]
+        row = result_rows.loc[subj]
         win = row[f'overall_winstay_sess{sess}']
         lose = row[f'overall_loseswitch_sess{sess}']
         sessions_present.append(f'Session {sess}')
@@ -231,10 +263,10 @@ for subj in subjects:
     plt.savefig(OUTPUT_BASE / REQ_FOLDERS[1] / f'subject_{subj}_bars.png', dpi=150)
     plt.close()
 
-# ---------- 2. ONE GRAPH PER SUBJECT PER SESSION: bar graphs for win‑stay, lose‑switch, neither by trial ----------
+# ---------- 2. ONE GRAPH PER SUBJECT PER SESSION: conditional bars by trial ----------
 print("Generating request 2: subject trial‑by‑trial bar graphs...")
 for subj in subjects:
-    row = df_results[df_results['subject'] == subj].iloc[0]
+    row = result_rows.loc[subj]
     for sess in sessions:
         if f'overall_winstay_sess{sess}' not in row.index:
             continue
@@ -261,16 +293,16 @@ for subj in subjects:
         plt.savefig(outfile, dpi=150)
         plt.close()
 
-# ---------- 3. GROUP AVERAGE: bar graph per session (win‑stay, lose‑switch, neither) ----------
+# ---------- 3. GROUP AVERAGE: overall conditional bars per session ----------
 print("Generating request 3: group average bar graphs...")
 for sess in sessions:
     if sess not in group_avg:
         continue
-    win_mean = np.nanmean(group_avg[sess]['winstay_mean'][1:])  # trials 2‑18
-    lose_mean = np.nanmean(group_avg[sess]['loseswitch_mean'][1:])
+    win_mean = group_overall[sess]['winstay']
+    lose_mean = group_overall[sess]['loseswitch']
     # SEM for bars? Not requested, but we can add error bars if desired.
     plt.figure(figsize=(5,5))
-    bars = plt.bar(['Win‑stay', 'Lose‑switch'], [win_mean, lose_mean],
+    plt.bar(['Win‑stay', 'Lose‑switch'], [win_mean, lose_mean],
                    color=['green', 'red'])
     plt.ylim(0,1)
     plt.ylabel('Proportion')
@@ -308,7 +340,8 @@ print("Generating request 5: good vs bad learners by feedback type...")
 learning_rates_csv = LEARNING_ANALYSIS_DATA_DIR / "learning_rates.csv"
 if learning_rates_csv.exists():
     lr_df = pd.read_csv(learning_rates_csv, dtype={'subjectId': str})
-    lr_df = lr_df[lr_df['plearning_num'] == 1].copy()  # use session1 for classification
+    lr_df['plearning_num'] = pd.to_numeric(lr_df['plearning_num'], errors='coerce')
+    lr_df = lr_df[lr_df['plearning_num'] == 1].copy()  # use Session 1 classification
     lr_df = lr_df.dropna(subset=['learning_rate_k'])
     lr_df["subjectId"] = lr_df["subjectId"].str.zfill(3)
 
@@ -320,21 +353,9 @@ if learning_rates_csv.exists():
 
     group_map = lr_df.set_index("subjectId")["group"].to_dict()
 else:
-    # Fallback: use overall win‑stay? Better use overall accuracy? We'll use overall win‑stay (or just accuracy) for simplicity.
-    # Here we use overall proportion correct from learning_rate_analysis (but we don't have that here). We'll compute from our data.
-    overall_acc = {}
-    for subj in subjects:
-        # Use session 1 winstay overall? Actually use mean proportion correct from raw data? Simpler: use overall win‑stay? Not good.
-        # We'll compute mean proportion correct from the raw choice data? But we don't have that easily. Instead, we'll compute overall proportion correct from the learned column? Not available.
-        # Fallback: use overall win‑stay proportion from session 1 as a proxy.
-        row = df_results[df_results['subject'] == subj].iloc[0]
-        if f'overall_winstay_sess1' in row:
-            metric = row['overall_winstay_sess1']
-        else:
-            metric = np.nan
-        overall_acc[subj] = metric
-    median_val = np.median([v for v in overall_acc.values() if not np.isnan(v)])
-    group_map = {s: ('good' if overall_acc[s] >= median_val else 'bad') for s in subjects}
+    raise FileNotFoundError(
+        f"Missing {learning_rates_csv}. Run calculate_learning_rates.py first so all analyses use the same learner classification."
+    )
 
 good_subjs = [s for s in subjects if group_map.get(s) == 'good']
 bad_subjs = [s for s in subjects if group_map.get(s) == 'bad']
@@ -348,22 +369,22 @@ for sess in sessions:
     good_winstay = []
     good_loseswitch = []
     for subj in good_subjs:
-        row = df_results[df_results['subject'] == subj].iloc[0]
+        row = result_rows.loc[subj]
         if f'overall_winstay_sess{sess}' in row:
             good_winstay.append(row[f'overall_winstay_sess{sess}'])
             good_loseswitch.append(row[f'overall_loseswitch_sess{sess}'])
-    good_win_mean = np.nanmean(good_winstay) if good_winstay else 0
-    good_lose_mean = np.nanmean(good_loseswitch) if good_loseswitch else 0
+    good_win_mean = safe_nanmean(good_winstay)
+    good_lose_mean = safe_nanmean(good_loseswitch)
     # For bad learners
     bad_winstay = []
     bad_loseswitch = []
     for subj in bad_subjs:
-        row = df_results[df_results['subject'] == subj].iloc[0]
+        row = result_rows.loc[subj]
         if f'overall_winstay_sess{sess}' in row:
             bad_winstay.append(row[f'overall_winstay_sess{sess}'])
             bad_loseswitch.append(row[f'overall_loseswitch_sess{sess}'])
-    bad_win_mean = np.nanmean(bad_winstay) if bad_winstay else 0
-    bad_lose_mean = np.nanmean(bad_loseswitch) if bad_loseswitch else 0
+    bad_win_mean = safe_nanmean(bad_winstay)
+    bad_lose_mean = safe_nanmean(bad_loseswitch)
     
     # Bar plot: two pairs (stay after gain, switch after loss) each with two bars (good, bad)
     fig, ax = plt.subplots(figsize=(6,5))
@@ -384,7 +405,7 @@ for sess in sessions:
 # ---------- 6. PER SUBJECT: comparison with group averages (subject vs group) for win‑stay and lose‑switch ----------
 print("Generating request 6: subject vs group comparison graphs...")
 for subj in subjects:
-    row = df_results[df_results['subject'] == subj].iloc[0]
+    row = result_rows.loc[subj]
     fig, ax = plt.subplots(figsize=(10,5))
     x = np.arange(2)  # session 1 and 2
     width = 0.2
@@ -392,8 +413,8 @@ for subj in subjects:
     if f'overall_winstay_sess1' in row:
         subj_win1 = row['overall_winstay_sess1']
         subj_lose1 = row['overall_loseswitch_sess1']
-        group_win1 = np.nanmean(group_avg[1]['winstay_mean'][1:]) if 1 in group_avg else np.nan
-        group_lose1 = np.nanmean(group_avg[1]['loseswitch_mean'][1:]) if 1 in group_avg else np.nan
+        group_win1 = group_overall[1]['winstay'] if 1 in group_overall else np.nan
+        group_lose1 = group_overall[1]['loseswitch'] if 1 in group_overall else np.nan
         ax.bar(x[0] - width*1.5, subj_win1, width, label='Subject Win‑stay', color='darkgreen')
         ax.bar(x[0] - width/2, group_win1, width, label='Group Win‑stay', color='lightgreen')
         ax.bar(x[0] + width/2, subj_lose1, width, label='Subject Lose‑switch', color='darkred')
@@ -402,8 +423,8 @@ for subj in subjects:
     if f'overall_winstay_sess2' in row:
         subj_win2 = row['overall_winstay_sess2']
         subj_lose2 = row['overall_loseswitch_sess2']
-        group_win2 = np.nanmean(group_avg[2]['winstay_mean'][1:]) if 2 in group_avg else np.nan
-        group_lose2 = np.nanmean(group_avg[2]['loseswitch_mean'][1:]) if 2 in group_avg else np.nan
+        group_win2 = group_overall[2]['winstay'] if 2 in group_overall else np.nan
+        group_lose2 = group_overall[2]['loseswitch'] if 2 in group_overall else np.nan
         ax.bar(x[1] - width*1.5, subj_win2, width, color='darkgreen')
         ax.bar(x[1] - width/2, group_win2, width, color='lightgreen')
         ax.bar(x[1] + width/2, subj_lose2, width, color='darkred')

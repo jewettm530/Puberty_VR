@@ -1,6 +1,6 @@
 subject_id,baseline_eeg_available,plearning_1_eeg_available,plearning_2_eeg_available,post_vr_eeg_available,pre_vr_eeg_available,recovery_eeg_available,vr_math_eeg_available,vr_speech_eeg_available,baseline_eeg_n_rows,plearning_1_eeg_n_rows,plearning_2_eeg_n_rows,post_vr_eeg_n_rows,pre_vr_eeg_n_rows,recovery_eeg_n_rows,vr_math_eeg_n_rows,vr_speech_eeg_n_rows
 005,1,1,1,1,1,0,1,1,996.0,2469.0,2906.0,819.0,976.0,,1111.0,1322.0
-007,1,0,0,0,1,1,0,0,593.0,,,,355.0,525.0,,
+007,1,0,0,0,0,1,0,0,593.0,,,,,525.0,,
 010,1,0,0,1,1,1,0,0,1029.0,,,676.0,660.0,803.0,,
 012,1,0,0,0,1,1,0,0,489.0,,,,401.0,567.0,,
 013,1,0,0,1,1,1,0,0,1011.0,,,520.0,557.0,635.0,,
@@ -14,3 +14,7 @@ subject_id,baseline_eeg_available,plearning_1_eeg_available,plearning_2_eeg_avai
 023,1,0,0,1,1,1,0,0,712.0,,,969.0,717.0,804.0,,
 024,0,0,0,1,1,1,0,0,,,,86042.0,88725.0,99924.0,,
 025,1,0,0,1,1,1,0,0,79686.0,,,80941.0,88464.0,81208.0,,
+027,1,0,0,1,1,0,0,0,81468.0,,,79352.0,80240.0,,,
+028,1,0,0,0,0,0,0,0,80686.0,,,,,,,
+029,1,0,0,1,1,1,0,0,77066.0,,,78408.0,80945.0,79054.0,,
+030,1,0,0,1,1,1,0,0,80232.0,,,80227.0,80785.0,83292.0,,

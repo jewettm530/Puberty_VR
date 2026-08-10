@@ -36,7 +36,17 @@ import matplotlib.pyplot as plt
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
-from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR, REPORTS_DIR
+from file_naming import parse_plearning_csv_name
+from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR, REPORTS_DIR, PROJECT_ROOT
+
+
+def project_relative(path):
+    path = Path(path).resolve()
+    try:
+        return path.relative_to(PROJECT_ROOT)
+    except ValueError:
+        return path
+
 
 # ---------- PATHS ----------
 BASE_PATH = PLEARNING_DIR
@@ -50,6 +60,7 @@ SESSIONS = {1: "Pre", 2: "Post"}
 
 # ---------- 1. CLASSIFY GOOD / BAD LEARNERS (using Session 1 k) ----------
 lr_df = pd.read_csv(LEARNING_RATES_CSV, dtype={'subjectId': str})
+lr_df['plearning_num'] = pd.to_numeric(lr_df['plearning_num'], errors='coerce')
 lr_df = lr_df[lr_df['plearning_num'] == 1].copy()
 lr_df = lr_df.dropna(subset=['learning_rate_k'])
 lr_df["Subject"] = lr_df["subjectId"].str.zfill(3)
@@ -66,14 +77,10 @@ print(f"Bad learners:  {len(lr_df[lr_df['LearnerType'] == 'bad'])}")
 # ---------- 2. BUILD TRIAL-LEVEL CSV ----------
 all_rows = []
 for csv_file in BASE_PATH.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0].zfill(3)
-    try:
-        session_num = int(parts[2])
-    except:
-        continue
+    subj_id, session_num = parsed_name
     if session_num not in SESSIONS:
         continue
 
@@ -141,7 +148,7 @@ print(f"Saved slopes: {slope_csv}")
 
 # ---------- 4. PAIRED T-TESTS & COHEN'S D ----------
 def cohens_d_paired(x, y):
-    diff = x - y
+    diff = y - x
     return diff.mean() / diff.std(ddof=1)
 
 print("\n" + "="*50)
@@ -230,7 +237,7 @@ for ax, (name, data, color) in zip(axes, groups):
 plt.tight_layout()
 plt.savefig(GRAPH_DIR / 'paired_slopes_all_groups.png', dpi=150)
 plt.close()
-print(f"Saved: {GRAPH_DIR / 'paired_slopes_all_groups.png'}")
+print(f"Saved: {project_relative(GRAPH_DIR / 'paired_slopes_all_groups.png')}")
 
 # 6b. Group learning curves (using aggregated proportions)
 # First aggregate
@@ -322,7 +329,7 @@ for subj in subjects_with_both:
     plt.tight_layout()
     plt.savefig(INDIV_DIR / f'subject_{subj}_learning_curve.png', dpi=150)
     plt.close()
-print(f"Individual subject graphs saved in: {INDIV_DIR}")
+print(f"Individual subject graphs saved in: {project_relative(INDIV_DIR)}")
 
 # ---------- 7. SAVE ALL RESULTS TO A SINGLE TXT FILE ----------
 results_file = REPORTS_DIR / 'learning_slope_analysis_results.txt'
@@ -374,11 +381,11 @@ with open(results_file, 'w') as f:
     f.write("\n" + "="*60 + "\n")
     f.write("SAVED GRAPHS\n")
     f.write("="*60 + "\n")
-    f.write(f"Paired slopes plot (Pre vs Post for all groups):\n  {GRAPH_DIR / 'paired_slopes_all_groups.png'}\n")
+    f.write(f"Paired slopes plot (Pre vs Post for all groups):\n  {project_relative(GRAPH_DIR / 'paired_slopes_all_groups.png')}\n")
     f.write(f"Learning curves with linear fits (group averages):\n")
     for group in ['all', 'good', 'bad']:
-        f.write(f"  {GRAPH_DIR / f'learning_curves_{group}.png'}\n")
-    f.write(f"Individual subject learning curves:\n  {INDIV_DIR}\n")
+        f.write(f"  {project_relative(GRAPH_DIR / f'learning_curves_{group}.png')}\n")
+    f.write(f"Individual subject learning curves:\n  {project_relative(INDIV_DIR)}\n")
     f.write("\nNote: Cohen's d negative indicates lower learning slope after stress.\n")
     f.write("Benchmarks: 0.20 small, 0.50 medium, 0.80 large.\n")
     f.write("delta_slope = slope_post - slope_pre (negative = slower after stress).\n")

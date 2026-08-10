@@ -31,11 +31,11 @@ from scipy.interpolate import interp1d
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR, TABLES_DIR
 
 # ---------- EXPONENTIAL FUNCTION ----------
-def exp_learning(t, a, b, k):
-    return a - b * np.exp(-k * t)
 
 # ---------- PATHS ----------
 RESULTS_DIR = PLEARNING_DIR
@@ -60,14 +60,10 @@ sessions = [1, 2]
 # ---------- LOAD ALL SUBJECT DATA ----------
 all_data = {}
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0].zfill(3)
-    try:
-        sess = int(parts[2])
-    except:
-        continue
+    subj_id, sess = parsed_name
     if sess not in sessions:
         continue
     df = pd.read_csv(csv_file)
@@ -123,14 +119,9 @@ if learning_rates_csv.exists():
         lr_df["group"] = np.where(lr_df["learning_rate_k"] >= median_k, "good", "bad")
     group_map = lr_df.set_index("subjectId")["group"].to_dict()
 else:
-    # Fallback: use overall mean accuracy from session 1
-    print("learning_rates.csv not found. Using overall mean accuracy for classification.")
-    overall_means = {}
-    for subj in subjects:
-        props = np.array(all_data[subj][1])  # session 1
-        overall_means[subj] = np.nanmean(props)
-    median_val = np.median(list(overall_means.values()))
-    group_map = {s: ('good' if overall_means[s] >= median_val else 'bad') for s in subjects}
+    raise FileNotFoundError(
+        f"Missing {learning_rates_csv}. Run calculate_learning_rates.py first so all analyses use the same learner classification."
+    )
 
 good_subjects = [s for s in subjects if group_map.get(s) == 'good']
 bad_subjects = [s for s in subjects if group_map.get(s) == 'bad']
@@ -152,7 +143,7 @@ def get_k_from_curve(x, y):
         bounds = ([0.5,0,0], [1,1,2])
         popt, _ = curve_fit(exp_learning, xv, yv, p0=p0, bounds=bounds, maxfev=5000)
         return popt[2]
-    except:
+    except (RuntimeError, ValueError, FloatingPointError):
         return np.nan
 
 # 1. Build rows for individual subjects
@@ -334,7 +325,7 @@ def fit_exponential(x, y):
         bounds = ([0.5,0,0], [1,1,2])
         popt, _ = curve_fit(exp_learning, xv, yv, p0=p0, bounds=bounds, maxfev=5000)
         return popt, xv
-    except:
+    except (RuntimeError, ValueError, FloatingPointError):
         return None, None
 
 x_trials = np.arange(1, trials_per_block+1)
@@ -763,14 +754,10 @@ face_acc = {sess: [] for sess in sessions}
 house_acc = {sess: [] for sess in sessions}
 
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0].zfill(3)
-    try:
-        sess = int(parts[2])
-    except:
-        continue
+    subj_id, sess = parsed_name
     if sess not in sessions:
         continue
     df = pd.read_csv(csv_file)

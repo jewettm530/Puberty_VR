@@ -41,11 +41,11 @@ from scipy.interpolate import interp1d
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR
 
 # ---------- EXPONENTIAL FUNCTION ----------
-def exp_learning(t, a, b, k):
-    return a - b * np.exp(-k * t)
 
 # ---------- PATHS ----------
 base_path = PLEARNING_DIR
@@ -72,14 +72,10 @@ print(f"Bad learners:  {len(lr_df[lr_df['group'] == 'bad'])}")
 def load_session_data(session_num):
     subject_means = []
     for csv_file in base_path.rglob("*_plearning_*.csv"):
-        parts = csv_file.stem.split("_")
-        if len(parts) < 3:
+        parsed_name = parse_plearning_csv_name(csv_file)
+        if parsed_name is None:
             continue
-        subj_id = parts[0].zfill(3)
-        try:
-            p_num = int(parts[2])
-        except:
-            continue
+        subj_id, p_num = parsed_name
         if p_num != session_num:
             continue
         df = pd.read_csv(csv_file)

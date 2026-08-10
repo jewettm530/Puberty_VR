@@ -1,0 +1,48 @@
+MAJOR FINDINGS: MINORS COMPARED WITH OLDER SUBJECTS
+==================================================
+
+Sample
+------
+The comparison includes 6 minor subjects and 12 older subjects. Session 2
+has 5 minors and 11 older subjects because subjects 027 and 014 are missing
+Session 2, respectively. Results are exploratory because the groups are small.
+
+Learning performance
+--------------------
+Session 1 average learning-rate k was 0.333 for minors and 0.661 for older subjects (minor-minus-older difference -0.328, Hedges' g = -0.542, p = .192).
+Session 2 average learning-rate k was 0.161 for minors and 0.541 for older subjects (difference -0.380, Hedges' g = -0.664, p = .104). Lower k indicates a slower fitted approach to the learning asymptote.
+Despite lower fitted k values, minors had higher mean accuracy: Session 1 0.653 versus 0.573 (difference 0.080, p = .314), and Session 2 0.642 versus 0.538 (difference 0.104, p = .340). This is possible because fitted learning speed and overall accuracy measure different features.
+Average linear slope was 0.0099 for minors versus 0.0038 for older subjects in Session 1, and 0.0066 versus 0.0079 in Session 2.
+
+Win-stay and lose-switch strategy use
+-------------------------------------
+Strategy-use counts below define use as a conditional probability of at least 0.50; the mean probabilities are also reported so the threshold does not hide variation.
+Session 1 win-stay probability, minors: mean 0.690; 4/6 (66.7%) at or above 0.50.
+Session 1 win-stay probability, older: mean 0.651; 8/12 (66.7%) at or above 0.50.
+Session 1 lose-switch probability, minors: mean 0.516; 3/6 (50.0%) at or above 0.50.
+Session 1 lose-switch probability, older: mean 0.529; 7/12 (58.3%) at or above 0.50.
+Session 2 win-stay probability, minors: mean 0.711; 4/5 (80.0%) at or above 0.50.
+Session 2 win-stay probability, older: mean 0.567; 8/11 (72.7%) at or above 0.50.
+Session 2 lose-switch probability, minors: mean 0.458; 2/5 (40.0%) at or above 0.50.
+Session 2 lose-switch probability, older: mean 0.491; 7/11 (63.6%) at or above 0.50.
+
+Heart-rate reactivity
+---------------------
+Math reactivity: minors 7.466 bpm, older subjects 9.158 bpm; difference -1.692 bpm, p = .604.
+Speech reactivity: minors 9.398 bpm, older subjects 7.178 bpm; difference 2.220 bpm, p = .773.
+Preparation reactivity: minors 7.384 bpm, older subjects 11.051 bpm; difference -3.667 bpm, p = .415.
+
+Statistical conclusion
+----------------------
+None of the full set of 160 outcome comparisons was significant after
+Benjamini-Hochberg false-discovery-rate correction. Among the focused key
+results, the smallest unadjusted p-value was for learning rate k (Session 2; p = .104, FDR-adjusted p = 0.937). These data show descriptive group
+differences, not reliable evidence of age-group effects. Larger groups are
+needed for stable effect estimates and confirmatory inference.
+
+Reading the figures
+-------------------
+Bars show group means, error bars show standard errors, and dots show individual
+subjects. The standardized-effect figure shows Hedges' g as minor minus older;
+positive values favor higher values among minors. It intentionally does not show
+confidence intervals, so it should be used as a descriptive overview only.

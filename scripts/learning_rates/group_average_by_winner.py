@@ -22,11 +22,11 @@ from scipy.interpolate import interp1d
 import sys 
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
+from file_naming import parse_plearning_csv_name
+from learning_utils import exp_learning
 from project_paths import PLEARNING_DIR, FIGURES_DIR
 
 # ---------- EXPONENTIAL FUNCTION ----------
-def exp_learning(t, a, b, k):
-    return a - b * np.exp(-k * t)
 
 # ---------- PATHS ----------
 RESULTS_DIR = PLEARNING_DIR
@@ -40,14 +40,10 @@ sessions = [1, 2]
 all_data_by_session = {1: [], 2: []}
 
 for csv_file in RESULTS_DIR.rglob("*_plearning_*.csv"):
-    parts = csv_file.stem.split("_")
-    if len(parts) < 3:
+    parsed_name = parse_plearning_csv_name(csv_file)
+    if parsed_name is None:
         continue
-    subj_id = parts[0]
-    try:
-        sess = int(parts[2])
-    except:
-        continue
+    subj_id, sess = parsed_name
     if sess not in sessions:
         continue
     df = pd.read_csv(csv_file)

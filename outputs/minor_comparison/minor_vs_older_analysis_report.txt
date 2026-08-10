@@ -1,0 +1,39 @@
+MINOR VS OLDER SUBJECT COMPARISON
+=================================
+
+Classification rule
+-------------------
+A subject is classified as minor only when the first workbook column,
+after trimming whitespace and ignoring case, equals 'N/A Minor'.
+All other workbook-matched subjects are classified as older_than_minor.
+
+Cohort coverage
+---------------
+Workbook minor-coded subjects: 8
+Workbook older subjects: 19
+Analyzed distinct minor subjects: 6
+Analyzed distinct older subjects: 12
+Analyzed subject-session rows: 34
+Workbook subjects without multimodal rows: 001, 002, 003, 006, 008, 009, 011, 026, 028
+Multimodal subjects without workbook classification: none
+Workbook label/recorded-age discordances: 011
+
+Statistical audit
+-----------------
+Valid hypothesis tests: 160
+Comparisons significant after Benjamini-Hochberg FDR correction: 0
+Non-outcome, quality-control, all-missing, or constant variables excluded: 50
+Continuous outcomes use Welch t-tests and Hedges' g (minor minus older).
+Binary outcomes use Fisher exact tests and odds ratios.
+Variables repeated unchanged across sessions are analyzed once per subject;
+variables that change within subject are analyzed separately by session.
+EEG/heart-rate row and sample counts and availability flags are audited
+descriptively in a separate 48-row availability table.
+
+Interpretation cautions
+-----------------------
+This is an exploratory observational comparison with a small minor cohort.
+A non-significant result does not establish equivalence, and effect estimates
+may be unstable. The workbook's first-column label is the source of truth even
+when reported age is missing. Subject 028 has no multimodal row and therefore
+does not duplicate subject 029 in the analysis.

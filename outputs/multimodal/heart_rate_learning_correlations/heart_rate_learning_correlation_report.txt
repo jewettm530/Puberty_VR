@@ -1,0 +1,79 @@
+HEART RATE × LEARNING / STRATEGY ANALYSIS
+========================================================
+
+Primary questions:
+1) Does greater VR-stressor HR reactivity predict a change in learning rate?
+2) Does greater VR-stressor HR reactivity predict a change in win-stay or lose-switch behavior?
+
+Subjects in merged dataset: 19
+Subjects with both learning sessions: 16
+
+PRIMARY A: HR REACTIVITY VS LEARNING-RATE CHANGE
+------------------------------------------------
+max_stress_reactivity vs delta_slope: rho=0.350, n=15, p=0.2009, FDR p=0.6110 (moderate positive)
+prep_hr_reactivity vs delta_slope: rho=0.368, n=13, p=0.2159, FDR p=0.6110 (moderate positive)
+mean_stress_reactivity vs delta_slope: rho=0.329, n=15, p=0.2318, FDR p=0.6110 (moderate positive)
+math_hr_reactivity vs delta_slope: rho=0.293, n=15, p=0.2895, FDR p=0.6110 (small positive)
+speech_hr_reactivity vs delta_slope: rho=0.261, n=15, p=0.3480, FDR p=0.6110 (small positive)
+max_stress_reactivity vs delta_k: rho=-0.239, n=15, p=0.3904, FDR p=0.6110 (small negative)
+prep_hr_reactivity vs delta_k: rho=-0.220, n=13, p=0.4706, FDR p=0.6110 (small negative)
+mean_stress_reactivity vs delta_k: rho=-0.171, n=15, p=0.5413, FDR p=0.6110 (small negative)
+speech_hr_reactivity vs delta_k: rho=-0.168, n=15, p=0.5499, FDR p=0.6110 (small negative)
+math_hr_reactivity vs delta_k: rho=-0.139, n=15, p=0.6205, FDR p=0.6205 (small negative)
+
+delta_k and delta_slope are Post - Pre. Positive values mean faster/steeper learning after stress; negative values mean slower/flatter learning after stress.
+
+PRIMARY B: HR REACTIVITY VS STRATEGY CHANGE
+-------------------------------------------
+max_stress_reactivity vs delta_loseswitch: rho=0.404, n=15, p=0.1358, FDR p=0.6023 (moderate positive)
+math_hr_reactivity vs delta_loseswitch: rho=0.389, n=15, p=0.1515, FDR p=0.6023 (moderate positive)
+speech_hr_reactivity vs delta_winstay: rho=0.364, n=15, p=0.1819, FDR p=0.6023 (moderate positive)
+prep_hr_reactivity vs delta_loseswitch: rho=0.341, n=13, p=0.2547, FDR p=0.6023 (moderate positive)
+mean_stress_reactivity vs delta_loseswitch: rho=0.304, n=15, p=0.2714, FDR p=0.6023 (moderate positive)
+prep_hr_reactivity vs delta_winstay: rho=0.319, n=13, p=0.2886, FDR p=0.6023 (moderate positive)
+speech_hr_reactivity vs delta_strategy_bias: rho=0.275, n=15, p=0.3212, FDR p=0.6023 (small positive)
+max_stress_reactivity vs delta_winstay: rho=0.275, n=15, p=0.3212, FDR p=0.6023 (small positive)
+mean_stress_reactivity vs delta_winstay: rho=0.214, n=15, p=0.4431, FDR p=0.7002 (small positive)
+math_hr_reactivity vs delta_strategy_bias: rho=-0.204, n=15, p=0.4668, FDR p=0.7002 (small negative)
+math_hr_reactivity vs delta_winstay: rho=0.143, n=15, p=0.6115, FDR p=0.8339 (small positive)
+max_stress_reactivity vs delta_strategy_bias: rho=-0.093, n=15, p=0.7420, FDR p=0.9276 (negligible negative)
+mean_stress_reactivity vs delta_strategy_bias: rho=-0.068, n=15, p=0.8101, FDR p=0.9347 (negligible negative)
+speech_hr_reactivity vs delta_loseswitch: rho=-0.029, n=15, p=0.9195, FDR p=0.9432 (negligible negative)
+prep_hr_reactivity vs delta_strategy_bias: rho=-0.022, n=13, p=0.9432, FDR p=0.9432 (negligible negative)
+
+delta_winstay and delta_loseswitch are Post - Pre. Positive delta_winstay means a participant became more likely to stay after a gain; positive delta_loseswitch means they became more likely to switch after a loss.
+delta_strategy_bias is descriptive only because win-stay and lose-switch are conditioned on different feedback events.
+
+Learning-rate results surviving BH-FDR: 0
+Strategy results surviving BH-FDR: 0
+
+EXPLORATORY PERFORMANCE / POST-STRESS LEVELS
+--------------------------------------------
+prep_hr_reactivity vs delta_accuracy: rho=0.652, n=13, p=0.0157
+math_hr_reactivity vs loseswitch_post: rho=0.534, n=15, p=0.0401
+recovery_minus_post_hr vs delta_accuracy: rho=0.506, n=11, p=0.1125
+math_hr_reactivity vs accuracy_post: rho=-0.387, n=15, p=0.1536
+recovery_minus_post_hr vs slope_post: rho=-0.409, n=11, p=0.2115
+max_stress_reactivity vs delta_accuracy: rho=0.338, n=15, p=0.2182
+mean_stress_reactivity vs delta_accuracy: rho=0.332, n=15, p=0.2260
+math_hr_reactivity vs strategy_bias_post: rho=-0.321, n=15, p=0.2427
+post_minus_pre_hr vs strategy_bias_post: rho=0.364, n=12, p=0.2453
+mean_stress_reactivity vs k_post: rho=0.314, n=15, p=0.2539
+post_minus_pre_hr vs delta_trial_gain: rho=0.357, n=12, p=0.2551
+mean_stress_reactivity vs delta_trial_gain: rho=-0.304, n=15, p=0.2714
+post_minus_pre_hr vs k_post: rho=-0.343, n=12, p=0.2756
+recovery_minus_post_hr vs delta_trial_gain: rho=-0.355, n=11, p=0.2835
+speech_hr_reactivity vs winstay_post: rho=0.275, n=15, p=0.3212
+speech_hr_reactivity vs delta_accuracy: rho=0.273, n=15, p=0.3240
+math_hr_reactivity vs delta_trial_gain: rho=-0.268, n=15, p=0.3344
+math_hr_reactivity vs k_post: rho=0.257, n=15, p=0.3549
+recovery_minus_post_hr vs k_post: rho=0.309, n=11, p=0.3550
+speech_hr_reactivity vs k_post: rho=0.243, n=15, p=0.3831
+
+INTERPRETATION CAUTIONS
+-----------------------
+* These are exploratory observational associations; correlation does not show HR caused the behavioral change.
+* The current sample is small, so effect estimates can be unstable.
+* Spearman rho is primary because learning-rate k and change scores can be skewed.
+* BH-FDR is applied separately to the learning-rate and strategy hypothesis families.
+* Win-stay and lose-switch are conditional behaviors after different feedback types, not mutually exclusive choices.
