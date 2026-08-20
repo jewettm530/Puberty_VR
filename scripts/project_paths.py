@@ -13,6 +13,7 @@ DOCUMENTATION_DIR = PROJECT_ROOT / "documentation"
 # Raw and processed data
 RAW_DIR = DATA_DIR / "raw"
 RAW_SUBJECT_DIR = RAW_DIR / "subject_data"
+PREVIOUS_SUBJECTS_DIR = RAW_DIR / "previous_subjects"
 
 PROCESSED_DIR = DATA_DIR / "processed"
 PLEARNING_DIR = PROCESSED_DIR / "plearning"
@@ -54,6 +55,7 @@ def ensure_project_directories() -> None:
     """Create the standard directory structure without deleting existing data."""
     folders = [
         RAW_SUBJECT_DIR,
+        PREVIOUS_SUBJECTS_DIR,
         PLEARNING_DIR,
         HEART_RATE_PROCESSED_DIR,
         EEG_PROCESSED_DIR,

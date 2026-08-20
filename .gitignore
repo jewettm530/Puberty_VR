@@ -23,6 +23,8 @@ venv/
 # Raw subject data
 data/raw/subject_data/**
 !data/raw/subject_data/.gitkeep
+data/raw/previous_subjects/**
+!data/raw/previous_subjects/.gitkeep
 
 # Processed plearning CSVs
 data/processed/plearning/**
