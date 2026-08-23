@@ -331,41 +331,89 @@ def fit_one_file(file: Path, dataset: str) -> dict[str, object]:
 
 
 # -----------------------------------------------------------------------------
-# Ages
+# Subject metadata: age and sex
 # -----------------------------------------------------------------------------
 
+def load_subject_metadata() -> pd.DataFrame:
+    """
+    Load participant age and sex metadata.
 
-def load_age_lookup() -> dict[str, float]:
-    """Load subject ages; missing/unknown ages are intentionally left absent."""
+    Missing age or sex values are intentionally preserved as NA.
+    """
 
     if not AGE_LOOKUP_FILE.exists():
         print(
-            f"Warning: age lookup not found at {AGE_LOOKUP_FILE}. "
-            "All ages will be NA."
+            f"Warning: subject metadata lookup not found at "
+            f"{AGE_LOOKUP_FILE}. Age and sex will be NA."
         )
-        return {}
 
-    age_data = pd.read_csv(
+        return pd.DataFrame(
+            columns=[
+                "subject",
+                "age",
+                "sex"
+            ]
+        )
+
+    metadata = pd.read_csv(
         AGE_LOOKUP_FILE,
-        dtype={"subject": str},
+        dtype={
+            "subject": str,
+            "sex": "string"
+        },
         keep_default_na=True,
     )
 
-    required = {"subject", "age"}
-    missing = sorted(required.difference(age_data.columns))
+    required = {
+        "subject",
+        "age",
+        "sex"
+    }
+
+    missing = sorted(
+        required.difference(metadata.columns)
+    )
+
     if missing:
         raise ValueError(
-            f"{AGE_LOOKUP_FILE.name} is missing required columns: {missing}"
+            f"{AGE_LOOKUP_FILE.name} is missing required columns: "
+            f"{missing}"
         )
 
-    age_data["subject"] = age_data["subject"].str.strip()
-    age_data["age"] = pd.to_numeric(age_data["age"], errors="coerce")
+    # Standardize subject IDs
+    metadata["subject"] = (
+        metadata["subject"]
+        .str.strip()
+    )
 
-    return {
-        row.subject: float(row.age)
-        for row in age_data.itertuples(index=False)
-        if pd.notna(row.age)
-    }
+    # Convert age to numeric; invalid/missing values become NA
+    metadata["age"] = pd.to_numeric(
+        metadata["age"],
+        errors="coerce"
+    )
+
+    # Clean sex values while preserving missing values
+    metadata["sex"] = (
+        metadata["sex"]
+        .str.strip()
+    )
+
+    # Keep one metadata row per participant
+    metadata = (
+        metadata[
+            [
+                "subject",
+                "age",
+                "sex"
+            ]
+        ]
+        .drop_duplicates(
+            subset="subject",
+            keep="last"
+        )
+    )
+
+    return metadata
 
 
 # -----------------------------------------------------------------------------
@@ -465,16 +513,22 @@ def main() -> None:
     # Preserve integer sessions while allowing NA for previous-study files.
     rl_results["session"] = pd.array(rl_results["session"], dtype="Int64")
 
-    # Add known ages; unknown ages remain missing and are exported as NA.
-    age_lookup = load_age_lookup()
-    rl_results["age"] = rl_results["subject"].map(age_lookup)
+    # Add participant age and sex metadata.
+    # Unknown values remain missing and are exported as NA.
+    subject_metadata = load_subject_metadata()
 
+    rl_results = rl_results.merge(
+        subject_metadata,
+        on="subject",
+        how="left"
+    )
     # Put age alongside the subject/session identifiers.
     column_order = [
         "subject",
         "dataset",
         "session",
         "age",
+        "sex",
         "usable_trials",
         "alpha_plus",
         "alpha_minus",
