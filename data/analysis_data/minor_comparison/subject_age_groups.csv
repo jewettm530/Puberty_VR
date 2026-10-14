@@ -2,12 +2,12 @@ subject_id,age_group,reported_age,classification_source_row,included_in_multimod
 001,older_than_minor,,2,False
 002,older_than_minor,,3,False
 003,older_than_minor,,4,False
-005,minor,,6,True
+005,minor,17.0,6,True
 006,older_than_minor,,7,False
 007,older_than_minor,19.0,8,True
 008,older_than_minor,18.0,9,False
 009,older_than_minor,18.0,10,False
-010,older_than_minor,,11,True
+010,older_than_minor,18.0,11,True
 011,older_than_minor,17.0,12,False
 012,older_than_minor,19.0,13,True
 013,older_than_minor,18.0,14,True
@@ -22,7 +22,9 @@ subject_id,age_group,reported_age,classification_source_row,included_in_multimod
 024,minor,15.0,23,True
 025,minor,16.0,24,True
 026,minor,,25,False
-027,minor,,26,True
+027,minor,16.0,26,True
 028,minor,14.0,27,False
 029,minor,14.0,28,True
 030,minor,17.0,29,True
+031,minor,17.0,30,True
+032,minor,17.0,31,True

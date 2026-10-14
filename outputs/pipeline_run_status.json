@@ -1,0 +1,159 @@
+{
+  "started_utc": "2026-10-14T19:03:03+00:00",
+  "finished_utc": "2026-10-14T19:04:56+00:00",
+  "project": "/Users/maddiemac/Puberty_VR",
+  "result": "completed",
+  "stages": [
+    {
+      "script": "setup/raw_data_inventory.py",
+      "status": "completed",
+      "duration_seconds": 1.11,
+      "detail": ""
+    },
+    {
+      "script": "setup/validate_raw_data.py",
+      "status": "completed",
+      "duration_seconds": 0.43,
+      "detail": ""
+    },
+    {
+      "script": "setup/process_jatos_python.py",
+      "status": "completed",
+      "duration_seconds": 1.74,
+      "detail": ""
+    },
+    {
+      "script": "heart_rate/summarize_heart_rate.py",
+      "status": "completed",
+      "duration_seconds": 0.97,
+      "detail": ""
+    },
+    {
+      "script": "eeg/summarize_eeg.py",
+      "status": "completed",
+      "duration_seconds": 16.54,
+      "detail": ""
+    },
+    {
+      "script": "eeg/process_all_eeg.py",
+      "status": "completed",
+      "duration_seconds": 25.58,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/calculate_learning_rates.py",
+      "status": "completed",
+      "duration_seconds": 1.36,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/reward_value_alpha.py",
+      "status": "completed",
+      "duration_seconds": 9.98,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/all_individuals_with_curve.py",
+      "status": "completed",
+      "duration_seconds": 2.18,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/learning_summary_statistics.py",
+      "status": "completed",
+      "duration_seconds": 0.92,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/plot_individual_learning_curves.py",
+      "status": "completed",
+      "duration_seconds": 3.91,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/plot_group_average_curve.py",
+      "status": "completed",
+      "duration_seconds": 1.57,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/group_average_by_winner.py",
+      "status": "completed",
+      "duration_seconds": 1.76,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/individual_first_vs_second_halves.py",
+      "status": "completed",
+      "duration_seconds": 3.84,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/first_half_vs_second_half.py",
+      "status": "completed",
+      "duration_seconds": 2.66,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/learning_rate_analysis.py",
+      "status": "completed",
+      "duration_seconds": 14.73,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/learning_slope_analysis.py",
+      "status": "completed",
+      "duration_seconds": 4.61,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/winstay_loseswitch_analysis.py",
+      "status": "completed",
+      "duration_seconds": 7.38,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/group_winstay_loseswitch_sessions.py",
+      "status": "completed",
+      "duration_seconds": 0.95,
+      "detail": ""
+    },
+    {
+      "script": "learning_rates/professor_individual_learning_curves.py",
+      "status": "completed",
+      "duration_seconds": 2.6,
+      "detail": ""
+    },
+    {
+      "script": "multimodal/build_multimodal_dataset.py",
+      "status": "completed",
+      "duration_seconds": 0.45,
+      "detail": ""
+    },
+    {
+      "script": "multimodal/heart_rate_learning_correlations.py",
+      "status": "completed",
+      "duration_seconds": 3.79,
+      "detail": ""
+    },
+    {
+      "script": "multimodal/compare_minors_to_older.py",
+      "status": "completed",
+      "duration_seconds": 1.66,
+      "detail": ""
+    },
+    {
+      "script": "multimodal/summarize_minor_comparison.py",
+      "status": "completed",
+      "duration_seconds": 1.3,
+      "detail": ""
+    }
+  ],
+  "age_comparison": "completed",
+  "age_reason": "",
+  "eeg_spectral_processing": "completed_with_file_level_qc_report",
+  "eeg_file_counts": {
+    "skipped_qc": 50,
+    "processed": 27
+  }
+}

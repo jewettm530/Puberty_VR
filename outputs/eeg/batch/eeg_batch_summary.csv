@@ -1,0 +1,78 @@
+subject,recording,phase,raw_samples,observed_hz,status,reason,AF7_beta_alpha,AF8_beta_alpha
+sub005,005_baseline_eeg.csv,baseline,325,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub005,005_plearning_1_eeg.csv,plearning_1,1866,1.0,SKIPPED,Not approximately 256 Hz RAW EEG,,
+sub005,005_plearning_2_eeg.csv,plearning_2,1675,1.0,SKIPPED,Not approximately 256 Hz RAW EEG,,
+sub005,005_post_vr_eeg.csv,post_vr,312,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub005,005_pre_vr_eeg.csv,pre_vr,326,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub005,005_vr_math_eeg.csv,vr_math,309,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub005,005_vr_speech_eeg.csv,vr_speech,331,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub007,007_baseline_eeg.csv,baseline,373,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub007,007_recovery_eeg.csv,recovery,359,0.99,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub010,010_baseline_eeg.csv,baseline,304,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub010,010_post_vr_eeg.csv,post_vr,310,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub010,010_pre_vr_eeg.csv,pre_vr,325,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub010,010_recovery_eeg.csv,recovery,300,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub012,012_baseline_eeg.csv,baseline,358,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub012,012_pre_vr_eeg.csv,pre_vr,324,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub012,012_recovery_eeg.csv,recovery,376,0.98,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub013,013_baseline_eeg.csv,baseline,428,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub013,013_post_vr_eeg.csv,post_vr,244,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub013,013_pre_vr_eeg.csv,pre_vr,329,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub013,013_recovery_eeg.csv,recovery,315,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub014,014_baseline_eeg.csv,baseline,337,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub014,014_post_vr_eeg.csv,post_vr,313,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub014,014_pre_vr_eeg.csv,pre_vr,340,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub014,014_recovery_eeg.csv,recovery,335,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub015,015_baseline_eeg.csv,baseline,322,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub015,015_post_vr_eeg.csv,post_vr,329,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub015,015_pre_vr_eeg.csv,pre_vr,306,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub015,015_recovery_eeg.csv,recovery,319,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub016,016_baseline_eeg.csv,baseline,319,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub016,016_post_vr_eeg.csv,post_vr,329,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub016,016_pre_vr_eeg.csv,pre_vr,326,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub016,016_recovery_eeg.csv,recovery,329,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub018,018_baseline_eeg.csv,baseline,339,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub018,018_post_vr_eeg.csv,post_vr,333,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub018,018_pre_vr_eeg.csv,pre_vr,283,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub018,018_recovery_eeg.csv,recovery,252,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub019,019_baseline_eeg.csv,baseline,323,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub019,019_post_vr_eeg.csv,post_vr,325,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub019,019_pre_vr_eeg.csv,pre_vr,286,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub020,020_baseline_eeg.csv,baseline,328,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub020,020_post_vr_eeg.csv,post_vr,304,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub020,020_pre_vr_eeg.csv,pre_vr,347,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub020,020_recovery_eeg.csv,recovery,294,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub022,022_baseline_eeg.csv,baseline,311,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub022,022_pre_vr_eeg.csv,pre_vr,312,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub022,022_recovery_eeg.csv,recovery,317,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub023,023_baseline_eeg.csv,baseline,318,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub023,023_post_vr_eeg.csv,post_vr,294,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub023,023_pre_vr_eeg.csv,pre_vr,313,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub023,023_recovery_eeg.csv,recovery,307,1.0,SKIPPED,Fewer than 1024 frontal RAW samples,,
+sub024,024_post_vr_eeg.csv,post_vr,85542,256.68,PROCESSED,,2.530118913074599,1.714831891563403
+sub024,024_pre_vr_eeg.csv,pre_vr,88202,256.64,PROCESSED,,1.4149121059852066,3.7524586147739165
+sub024,024_recovery_eeg.csv,recovery,99586,256.62,PROCESSED,,2.1316667068747344,1.5540364720459123
+sub025,025_baseline_eeg.csv,baseline,79078,256.72,PROCESSED,,4.505926254179088,2.473730291618128
+sub025,025_post_vr_eeg.csv,post_vr,80830,256.6,PROCESSED,,2.55239795136211,1.1526166873018193
+sub025,025_pre_vr_eeg.csv,pre_vr,88446,256.59,PROCESSED,,2.054683377394297,1.8771733811019364
+sub025,025_recovery_eeg.csv,recovery,81170,256.55,PROCESSED,,1.868460235692181,0.6622534614119017
+sub027,027_baseline_eeg.zip,baseline,81368,256.65,PROCESSED,,4.701019305867126,5.208076913414927
+sub027,027_post_vr_eeg.zip,post_vr,79268,256.65,PROCESSED,,2.33384642594367,2.2815748307075965
+sub027,027_pre_vr_eeg.zip,pre_vr,79680,256.65,PROCESSED,,2.3104712846792,3.38332809461096
+sub028,028_baseline_eeg.zip,baseline,80646,256.54,PROCESSED,,2.9757202654835853,4.0065716748673115
+sub029,029_baseline_eeg.zip,baseline,76572,256.64,PROCESSED,,1.6650400542167043,0.8107037009397562
+sub029,029_post_vr_eeg.zip,post_vr,77950,256.55,PROCESSED,,2.0395208757571517,1.8374642086639514
+sub029,029_pre_vr_eeg.zip,pre_vr,80772,256.54,PROCESSED,,1.4828555510469055,1.7287505089735646
+sub029,029_recovery_eeg.zip,recovery,78404,256.55,PROCESSED,,0.8768499903475111,1.3007042512788136
+sub030,030_baseline_eeg.zip,baseline,80156,256.58,PROCESSED,,0.9248068737034787,3.280935747827648
+sub030,030_post_vr_eeg.zip,post_vr,79820,256.55,PROCESSED,,2.391772495211341,2.8772157078781473
+sub030,030_pre_vr_eeg.zip,pre_vr,80282,256.56,PROCESSED,,4.6137321184183895,3.0585546110096553
+sub030,030_recovery_eeg.zip,recovery,82962,256.57,PROCESSED,,4.706020068564265,3.1860090174994817
+sub031,031_baseline_eeg.zip,baseline,80188,256.65,PROCESSED,,2.585232528746839,3.4349127506745845
+sub031,031_post_vr_eeg.zip,post_vr,79562,256.64,PROCESSED,,2.7549217371309975,2.007928128093994
+sub031,031_pre_vr_eeg.zip,pre_vr,80160,256.62,PROCESSED,,2.90171288500579,5.059463341286027
+sub031,031_recovery_eeg.zip,recovery,77060,256.61,PROCESSED,,2.267298428863629,2.258299728168968
+sub032,032_baseline_eeg.zip,baseline,76150,256.69,PROCESSED,,11.256578596482198,8.96843104521455
+sub032,032_post_vr_eeg.zip,post_vr,80128,256.5,PROCESSED,,9.168791720158563,7.829799168877194
+sub032,032_pre_vr_eeg.zip,pre_vr,78526,256.68,PROCESSED,,8.527045603408821,3.1978628009214
+sub032,032_recovery_eeg.zip,recovery,77568,256.5,PROCESSED,,7.738986141818041,10.198664568137046

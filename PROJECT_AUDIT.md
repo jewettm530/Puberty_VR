@@ -175,3 +175,71 @@ Expected warnings only:
 - subjects 014 and 027 have Session 1 but no Session 2 and are excluded from paired-session analyses.
 
 No hard-coded personal filesystem paths, stale `../results` code paths, `unknown` participant outputs, tracebacks, or unexpected runtime warnings remain in the tested pipeline.
+
+## Follow-up audit — 2026-10-14 (new subject update)
+
+A new project ZIP was inspected for pipeline correctness and potential redundant
+artifacts. This section updates the prior audit, which predates some of the new
+EEG and master-runner scripts.
+
+### Verified issues and actions
+
+1. **Mislabeled workbook (blocking age comparisons):**
+   `data/raw/subject_data/Real_Subject_Data_ID.xlsx` is an Apple Numbers archive.
+   It contains `Index/Document.iwa` but no Excel `xl/workbook.xml` or
+   `[Content_Types].xml`. `pd.read_excel` cannot read it. The master runner now
+   checks the actual file structure before loading classifications, skips that
+   stage with a useful message in normal mode, and marks previous results
+   `NOT_CURRENT`. **Manual action:** export genuine Excel from Numbers.
+2. **New-subject classifications:** current analyzed IDs `031`, `032` are
+   missing in the earlier derived age-group table, and manual
+   `data/metadata/rl_subject_ages.csv` has no entries for them. Update both
+   sources appropriately, without inferring anything about their ages.
+3. **Master runner:** records success/failure for each stage and writes
+   `outputs/pipeline_run_status.json`. The EEG stages are independent of the
+   optional age-group stage. Required subprocess failures still stop the run.
+4. **EEG file QC:** `eeg/process_all_eeg.py` screens recordings for a plausible
+   sampling rate before the fixed-256-Hz spectral analysis. Rates outside the
+   accepted range are excluded; the pass is NOT proof of clean signal.
+   Absolute paths in EEG audit reports were replaced with project-relative paths
+   for portability. EEG *availability* in the multimodal table is schema-based,
+   not an assertion of spectral validity.
+5. **Git ignore coverage:** expanded ignored generated paths so new EEG,
+   multimodal, status, or other output files are not accidentally committed.
+   Previously tracked files may still need removal from Git's index.
+
+### Redundancy / retention findings
+
+- `outputs/eeg/batch/`: legacy path, **56 files / about 278 MB**. Current batch
+  runner writes instead to `outputs/eeg/bandpower/` (about 54 files / 259 MB in
+  the uploaded ZIP). All 27 older spectral CSVs have counterparts, but **none
+  match numerically** at the comparison tolerance tested. They are NOT safe to
+  delete automatically or substitute in analyses. An optional archiving tool
+  targets the old folder, without removing the results.
+- `data/processed/plearning/RL_parameter_results.csv`: an older table not
+  consumed by present scripts, unlike
+  `outputs/learning_rates/tables/RL_parameter_results_combined.csv`. Archive
+  rather than delete if no longer needed.
+- `scripts/setup/rename_jsons.py`: overlaps with
+  `standardize_file_names.py`, but is a narrower, legitimate manual utility.
+  Keep; don't include both in the automatic pipeline.
+- `scripts/PreprocessingScript_v1.py`: **not redundant**, as it is imported by
+  the batch EEG processor. `summarize_eeg.py` also serves a distinct purpose
+  (file availability and schema, not spectral processing).
+- `outputs/minor_comparison/`: older age-comparison analyses are stale when
+  the workbook cannot be read; the professor-requested age-filtered learning
+  plots stored under this tree use a **different** manual age source.
+- Subject data and historical plots were **not deleted or modified** as part of
+  the code-only distribution of this update.
+
+### Remaining limits
+
+- Fixing the workbook requires the correct source export; the program cannot
+  infer age-group labels for missing subjects.
+- Existing EEG spectral result versions disagree; differences should be
+  scientifically reviewed before combining methods or comparing beta/alpha
+  ratios. A rate screen does not verify electrode artifacts.
+- Retained outputs may remain from earlier runs after a source subject is
+  deleted, since not every plotting script cleans obsolete per-subject figures.
+- `rl_subject_ages.csv` requires deliberate updates for age-group plots; it is
+  not populated from the misnamed workbook.

@@ -1,0 +1,44 @@
+{
+  "version": "1.0",
+  "fs_assumed": 256.0,
+  "window_s": 4.0,
+  "step_s": 2.0,
+  "bands_hz": {
+    "slow_1_4_warning": [
+      1.0,
+      4.0
+    ],
+    "alpha": [
+      8.0,
+      13.0
+    ],
+    "beta": [
+      13.0,
+      30.0
+    ],
+    "high_beta": [
+      20.0,
+      30.0
+    ],
+    "hf_warning": [
+      35.0,
+      45.0
+    ]
+  },
+  "settings": {
+    "subjects_dir": "data/raw/subject_data",
+    "output_dir": null,
+    "subject": null,
+    "min_average_rate": 180.0,
+    "gap_factor": 3.5,
+    "window_duration_tolerance": 0.08,
+    "flat_std": 0.05,
+    "flat_run_ms": 125.0,
+    "bound_fraction": 0.01,
+    "absolute_limit": 2500.0,
+    "ptp_warning": 500.0,
+    "jump_warning": 300.0,
+    "outlier_mad": 5.0,
+    "filter_change_warning": 0.25
+  }
+}

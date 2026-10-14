@@ -1,39 +1,48 @@
-Input file naming
-    R: Accepts any JSON filename (e.g., plearning_results_1.json).
-    Python: Expects uniform naming: subject_{id}_plearning_{num}.json.
+ORIGINAL R JATOS PROCESSING VS CURRENT PYTHON CONVERTER
+=======================================================
+Updated: 2026-10-14. This reflects scripts/setup/process_jatos_python.py.
 
-Subject ID extraction
-    R: From JSON field studyResultId or falls back to filename stem.
-    Python: From filename using regex subject_(\d+)_plearning_(\d+).
+Input names and subject/session identity
+----------------------------------------
+R: Original conversion accepted JSON paths individually and derived a worker or
+   study identifier from JATOS metadata/filenames.
+Python: The converter uses scripts/file_naming.py to infer a numeric subject
+   and session from a recognized filename and/or parent folder. Its output
+   naming is normalized to three-digit IDs, e.g. 005_plearning_1.csv.
+   Unrecognized names or missing experiment blocks are skipped with a warning.
+   If two JSON files map to the same subject/session, it raises an error rather
+   than silently overwriting one of them.
 
-Worker ID / REDCapId assignment
-    R: Uses JSON workerId (often "noWorkerId") or falls back to filename stem → inconsistent values.
-    Python: Set uniformly to the full filename stem (e.g., subject_5_plearning_1), ignoring JSON values.
+Behavioral trial output
+-----------------------
+R: Output filenames were often based on REDCapId-workerId combinations, and
+   could be inconsistent across participants.
+Python: Canonical output files are saved under data/processed/plearning/ as
+   ###_plearning_1.csv and ###_plearning_2.csv. The workerId field is
+   normalized to subject_###_plearning_N. Session-specific trial columns are
+   retained if present in the source JSON. 'learned' compares chosen vs winner.
 
-Trial CSV filename
-    R: {REDCapId}-{workerId}.csv (often non‑uniform, e.g., unknown-plearning_results_1.csv).
-    Python: {subject_id}_plearning_{plearning_num}.csv (e.g., 5_plearning_1.csv).
+Subject-info metadata summary
+-----------------------------
+R: Original workflow could overwrite the aggregate summary on each execution.
+Python: Uses data/metadata/subject_info_summary.csv. For each newly processed
+   subject/session pair, it replaces that pair's older metadata row, retains
+   other existing rows and de-duplicates on (subjectId, plearning_num).
+   This permits new-subject additions without dropping older subjects.
+   If a subject's raw JSON is permanently deleted, earlier processed CSVs
+   may still exist; review stale derived data manually before future analyses.
 
-Summary CSV writing behaviour
-    R: Overwrites the file each run (simple write.csv).
-    Python: Appends new rows but removes duplicates based on worker_id to avoid repeats across runs.
+Folder input and portability
+----------------------------
+R: Generally called with file paths and depended on R packages.
+Python: Called with no arguments, searches all JSON files recursively below
+   data/raw/subject_data/. Explicit paths and --recursive are also supported.
+   Shared project_paths.py avoids hardcoded user-home absolute paths.
+   Python depends on pandas/numpy and the repository requirements.txt.
 
-Processing multiple files / folders
-    R: Only single JSON files passed as command‑line arguments; no recursion.
-    Python: Accepts folders, and with --recursive flag processes all .json files inside subfolders.
-
-Directory input support
-    R: No.
-    Python: Yes – can pass a folder path, and the script collects all JSON files inside.
-
-Error handling and debug output
-    R: Minimal (basic warnings).
-    Python: Optional debug prints (e.g., for filename matching) and more informative messages.
-
-Dependencies
-    R: jsonlite, dplyr (installs if missing using ensure_package).
-    Python: pandas, numpy (exits with error if missing; user must install manually).
-
-Code structure
-    R: Functions defined, command‑line execution via commandArgs().
-    Python: Similar functions, but uses argparse and pathlib.Path for modern Python practices.
+Master pipeline
+---------------
+Python: scripts/run_all_analyses.py runs the full dependency sequence after
+new subjects are added. It captures stage status in
+outputs/pipeline_run_status.json and runs age comparisons only when a genuine,
+readable Excel workbook contains all analyzed subjects' classifications.
