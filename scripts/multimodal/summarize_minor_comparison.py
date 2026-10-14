@@ -153,7 +153,7 @@ def result_row(key_results: pd.DataFrame, variable: str, session: str) -> pd.Ser
     return match.iloc[0]
 
 
-def write_findings(key_results: pd.DataFrame, strategy_counts: pd.DataFrame, path: Path) -> None:
+def write_findings(key_results: pd.DataFrame, strategy_counts: pd.DataFrame, joined: pd.DataFrame, comparisons: pd.DataFrame, path: Path) -> None:
     lr1 = result_row(key_results, "learning_rate_k", "Session 1")
     lr2 = result_row(key_results, "learning_rate_k", "Session 2")
     acc1 = result_row(key_results, "mean_accuracy", "Session 1")
@@ -161,15 +161,24 @@ def write_findings(key_results: pd.DataFrame, strategy_counts: pd.DataFrame, pat
     slope1 = result_row(key_results, "slope_pre", "Session 1")
     slope2 = result_row(key_results, "slope_post", "Session 2")
 
+    unique_subjects = joined.drop_duplicates("subject_id")
+    n_minor = int(unique_subjects["age_group"].eq("minor").sum())
+    n_older = int(unique_subjects["age_group"].eq("older_than_minor").sum())
+    session2 = joined.loc[joined["session"].eq(2)].drop_duplicates("subject_id")
+    n_minor_s2 = int(session2["age_group"].eq("minor").sum())
+    n_older_s2 = int(session2["age_group"].eq("older_than_minor").sum())
+    n_tests = int(comparisons["p_value"].notna().sum())
+    n_significant = int(comparisons["significant_fdr_0_05"].fillna(False).sum())
+
     lines = [
         "MAJOR FINDINGS: MINORS COMPARED WITH OLDER SUBJECTS",
         "==================================================",
         "",
         "Sample",
         "------",
-        "The comparison includes 6 minor subjects and 12 older subjects. Session 2",
-        "has 5 minors and 11 older subjects because subjects 027 and 014 are missing",
-        "Session 2, respectively. Results are exploratory because the groups are small.",
+        f"The comparison includes {n_minor} minor subjects and {n_older} older subjects.",
+        f"Session 2 includes {n_minor_s2} minors and {n_older_s2} older subjects.",
+        "Results remain exploratory, particularly when group sample sizes are small.",
         "",
         "Learning performance",
         "--------------------",
@@ -238,13 +247,13 @@ def write_findings(key_results: pd.DataFrame, strategy_counts: pd.DataFrame, pat
         "",
         "Statistical conclusion",
         "----------------------",
-        "None of the full set of 160 outcome comparisons was significant after",
+        f"{n_significant} of {n_tests} valid outcome comparisons were significant after",
         "Benjamini-Hochberg false-discovery-rate correction. Among the focused key",
         f"results, the smallest unadjusted p-value was for {smallest.outcome.lower()} "
         f"({smallest.session}; {p_text(smallest.p_value)}, FDR-adjusted "
-        f"p = {fmt(smallest.p_value_fdr_bh)}). These data show descriptive group",
-        "differences, not reliable evidence of age-group effects. Larger groups are",
-        "needed for stable effect estimates and confirmatory inference.",
+        f"p = {fmt(smallest.p_value_fdr_bh)}). These exploratory differences require",
+        "careful interpretation and replication; larger groups improve the stability",
+        "of effect estimates and support confirmatory inference.",
         "",
         "Reading the figures",
         "-------------------",
@@ -400,7 +409,7 @@ def main() -> None:
     MINOR_COMPARISON_OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
     key_results.to_csv(KEY_RESULTS_PATH, index=False)
     strategy_counts.to_csv(STRATEGY_COUNTS_PATH, index=False)
-    write_findings(key_results, strategy_counts, FINDINGS_PATH)
+    write_findings(key_results, strategy_counts, joined, comparisons, FINDINGS_PATH)
     save_figures(joined, key_results)
 
     print(f"Saved table: {KEY_RESULTS_PATH}")

@@ -279,3 +279,104 @@ Repeated participant-level measures are tested once per person, while session-va
 `learning_slope_analysis.py` currently uses a Gaussian linear mixed model for a binary trial-level outcome. This can be useful descriptively, but a binomial mixed-effects model or GEE would be preferable for confirmatory inference.
 
 </details>
+See `PROJECT_AUDIT.md` for the completed code/data audit and remaining manual-review items.
+
+## One-command update after adding subjects (October 2026)
+
+Add new files to the appropriate `data/raw/subject_data/sub###/` folder,
+using the existing phase-specific naming scheme. From the project root:
+
+```bash
+python3 scripts/run_all_analyses.py
+```
+
+This runs raw-data inventory and validation, JATOS JSON conversion,
+heart-rate summaries, EEG file-availability summaries, screened **AF7/AF8**
+beta-to-alpha spectral processing, learning and strategy analyses, multimodal
+merging/correlations, and (if valid classifications are available) the age-group
+comparison and follow-up figures. Do **not** assume the EEG spectral results
+are scientifically reliable just because processing completed: the automatic
+sampling-rate check does **not** detect all motion, electrode or muscle artifacts.
+The schema-based `*_eeg_available` field means the recording can be opened;
+it does **not** mean it has passed spectral QC.
+
+Useful optional commands:
+
+```bash
+python3 scripts/run_all_analyses.py --dry-run            # preview, no changes
+python3 scripts/run_all_analyses.py --no-eeg-plots       # avoid large TIFFs
+python3 scripts/run_all_analyses.py --skip-eeg           # behavioral & other stages only
+python3 scripts/run_all_analyses.py --strict-age-groups  # treat missing ages as failure
+```
+
+`--standardize` **renames raw files**. First preview the standardizer alone
+(`python3 scripts/setup/standardize_file_names.py`) and review `rename_log.csv`.
+`--allow-unverified-eeg` permits unknown-rate recordings, marked unverified;
+it never overrides a known sampling-rate mismatch. It is **not** recommended
+for the primary scientific analysis.
+
+A structured, machine-readable run report is written to
+`outputs/pipeline_run_status.json`, with stage status, durations, optional
+age-comparison status, and (when performed) EEG processing counts. The EEG
+file-by-file QC audit is at
+`data/analysis_data/eeg/eeg_batch_processing_report.csv`. Check these **every
+run** before drawing conclusions, especially if new recordings were added.
+A failed required stage stops the pipeline and returns a nonzero exit code.
+
+### Current age-classification workbook problem
+
+In the October 14 uploaded project, the file named
+`data/raw/subject_data/Real_Subject_Data_ID.xlsx` is actually an **Apple Numbers
+package**, not a genuine Excel workbook. The presence of a ZIP header is *not*
+sufficient evidence for an `.xlsx`: this file contains `Index/Document.iwa`
+rather than `xl/workbook.xml`. **Open it in Apple Numbers and use File > Export
+To > Excel** to create a real `.xlsx` file, then put that export at the same
+path. Merely changing `.numbers` to `.xlsx` does not convert the format.
+
+Check the `Subj #`, `Age` and first-column classification for each newly added
+subject, particularly `031` and `032`. For the existing code, only a first-column
+entry of `N/A Minor` designates the minor group. All analyzed subjects must
+have a workbook match. Do not manufacture group labels, and do not substitute
+missing workbook data with age estimates. Separately,
+`data/metadata/rl_subject_ages.csv` is a **manual** optional age/sex lookup for
+RL and age-filtered learning plots; it currently lacks `031`/`032` and should
+be updated from an approved source if those analyses need their ages.
+
+When age comparisons cannot run, the master runner **does not block other
+analyses**, but creates `outputs/minor_comparison/NOT_CURRENT.txt` to mark
+older age-comparison products as potentially stale. It removes that marker only
+after the age scripts both succeed. In `--strict-age-groups` mode the incomplete
+age comparison makes the overall command fail.
+
+### Keeping derived outputs organized
+
+- **Current EEG spectral results:** `outputs/eeg/bandpower/sub_###/`.
+- **Legacy EEG results:** `outputs/eeg/batch/sub###/` (different numerical
+  results; do not regard them as duplicates for scientific purposes).
+- The old `data/processed/plearning/RL_parameter_results.csv` is not consumed
+  by the current analysis scripts. The active RL output is
+  `outputs/learning_rates/tables/RL_parameter_results_combined.csv`.
+- `rename_jsons.py` is an **optional narrow alternative** to the full filename
+  standardizer, not an additional pipeline step.
+- `PreprocessingScript_v1.py` is the single-file EEG analysis function used by
+  `eeg/process_all_eeg.py`; keep both files.
+- Figures and CSV summaries that examine similar outcomes may have different
+  groupings or interpretations; don't remove them just for having similar names.
+
+You can review the two explicitly identified legacy paths **without deleting
+anything**:
+
+```bash
+python3 scripts/setup/archive_legacy_outputs.py
+```
+
+After reviewing their contents, `--apply` moves them into a timestamped folder
+under `outputs/_archived_legacy/`; it never deletes them. This is optional and
+not part of the one-command pipeline. The master runner will never move or
+rename raw subject data unless you explicitly pass `--standardize`.
+
+If a subject is removed or renamed, review old processed CSVs and per-subject
+figures manually: some older analysis stages update active subjects but do not
+remove unrelated historical files. Archives may contain outputs from earlier
+method versions; do not treat them as comparable without checking methods.
+

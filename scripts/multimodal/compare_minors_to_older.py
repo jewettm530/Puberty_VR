@@ -369,8 +369,8 @@ def write_report(
         "This is an exploratory observational comparison with a small minor cohort.",
         "A non-significant result does not establish equivalence, and effect estimates",
         "may be unstable. The workbook's first-column label is the source of truth even",
-        "when reported age is missing. Subject 028 has no multimodal row and therefore",
-        "does not duplicate subject 029 in the analysis.",
+        "when reported age is missing. Only subjects with eligible multimodal",
+        "observations contribute to the statistical comparisons.",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 

@@ -114,3 +114,27 @@ summarize_minor_comparison.py
     Creates a focused key-results table, explicit win-stay/lose-switch usage counts,
     a plain-language major-findings report, and learning, strategy, heart-rate, and
     standardized-effect figures from the full minor-comparison outputs.
+
+OCTOBER 2026 ONE-COMMAND UPDATE
+-------------------------------
+run_all_analyses.py
+    Executes dependent analysis scripts in order when new subjects are added.
+    All-subject recalculation includes raw inventory, JATOS conversion, HR and
+    EEG summaries, spectral EEG screening, learning outcomes, multimodal analyses,
+    and (when the classification workbook is valid) age comparisons.
+    Writes outputs/pipeline_run_status.json; incomplete age results are labeled
+    by outputs/minor_comparison/NOT_CURRENT.txt. Failed required scripts stop.
+
+eeg/process_all_eeg.py
+    Batch discovery and frontal beta/alpha spectral preprocessing. Supports CSV
+    and single-CSV ZIP archives. Detects likely downsampled exports, logs
+    per-recording skipped/processed/failed status in
+    data/analysis_data/eeg/eeg_batch_processing_report.csv.
+    Imports analyze() from PreprocessingScript_v1.py (retain this module).
+    A sampling-rate pass is NOT artifact/clean-signal validation.
+
+setup/archive_legacy_outputs.py
+    OPTIONAL dry-run-first safe archival tool for two unused historical paths:
+    outputs/eeg/batch and data/processed/plearning/RL_parameter_results.csv.
+    With --apply, moves into outputs/_archived_legacy rather than deleting them.
+    Prior and current EEG numeric results differ; keep an archive.

@@ -293,3 +293,38 @@ Columns:
 --------------------------------------------------------------------------------
 END OF DOCUMENT
 --------------------------------------------------------------------------------
+
+OCTOBER 2026 PIPELINE STATUS AND EEG SPECTRAL OUTPUTS
+------------------------------------------------------
+outputs/pipeline_run_status.json
+    Date/time, stage completion/failure, EEG file-level processing counts and
+    age comparison update status. Review after every master runner invocation.
+
+outputs/minor_comparison/NOT_CURRENT.txt
+    Created if the age comparison is skipped due to an unreadable workbook,
+    missing subject classifications, or explicit --skip-age-comparison. It
+    indicates older age-comparison files are NOT verified as current. Removed
+    only when both age comparison scripts complete successfully.
+
+data/analysis_data/eeg/eeg_batch_processing_report.csv
+    Every recognized EEG recording: project-relative source path, estimated
+    rate, QC status/reason, process status, AF7 and AF8 beta/alpha ratios when
+    processed, and project-relative output path. A sampling-rate pass cannot
+    rule out motion/electrode artifacts. Exclusions are not missing-at-random.
+
+outputs/eeg/bandpower/sub_###/<phase>_eeg_Result.csv
+    Spectral band-power ratio matrix from the current batch pipeline. This is
+    whitespace-delimited numeric data despite its .csv suffix, for MATLAB
+    compatibility. Consult PreprocessingScript_v1.py for exact row order.
+
+outputs/eeg/bandpower/sub_###/<phase>_eeg.tiff
+    Optional 2x4 signal/spectrum/spectrogram figure; omit with --no-eeg-plots.
+
+outputs/eeg/batch/sub###/
+    LEGACY EEG results from a prior version. These differ numerically from
+    current bandpower outputs and are not safe to merge or discard unreviewed.
+    Optional archiver: python3 scripts/setup/archive_legacy_outputs.py --apply.
+
+Note: eeg_file_summary_wide.csv records readable-schema availability, NOT
+verified EEG spectral suitability. The age workbook in the 2026-10-14 ZIP is
+an Apple Numbers file mislabeled .xlsx. Export a genuine Excel file first.
