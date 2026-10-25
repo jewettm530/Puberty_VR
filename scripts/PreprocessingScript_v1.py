@@ -16,7 +16,8 @@ Add --no-show to save the outputs without opening the figure.
 
 Outputs (next to the selected CSV):
     <recording>.tiff        2 x 4 panel analysis figure
-    <recording>_Result.csv  6 x 4, whitespace-delimited numeric matrix
+    <recording>_Result.csv  6 x 4, whitespace-delimited numeric matrix (legacy ratios)
+    <recording>_FrontalLogPower.csv  AF7/AF8 theta, alpha, beta absolute power and log10 power
 
 Important MATLAB compatibility details:
 - Like MATLAB's data{2:end,idx}, the first *data row* is dropped.
@@ -27,6 +28,10 @@ Important MATLAB compatibility details:
   Consequently, filtered signals and band powers may not match exactly.
 - Files shorter than four seconds use a shorter Hamming window, preserving
   NFFT=1024; this produces a single time bin for the spectrogram.
+- Frontal power is the mean across spectrogram windows of integrated PSD,
+  then log10 is applied to the mean POWER (not to individual windows, nor to
+  beta/alpha ratios). Units are log10 of raw-signal-units squared.
+- A zero/nonfinite mean power produces NaN, never -inf or arbitrary flooring.
 """
 
 from __future__ import annotations
@@ -218,53 +223,49 @@ def analyze(csv_path: Path, show_figure: bool = True,
 
     eeg_notch = apply_notch_filter(eeg_filled)
 
-    # Preserve plotting calculations for compatibility with original MATLAB conversion.
-    fig, axes = plt.subplots(2, 4, figsize=(20, 12), dpi=100)
-    axes = axes.flat
+    # Avoid creating eight large figure panels for routine --no-plots runs.
+    make_plot = bool(save_figure or show_figure)
+    fig = None
+    axes = None
+    if make_plot:
+        fig, axes_grid = plt.subplots(2, 4, figsize=(20, 12), dpi=100)
+        axes = axes_grid.flat
 
-    # 1. Original EEG power spectrum (MATLAB subplot(2,4,1)).
-    for ch, channel_name in enumerate(eeg_names):
-        frequencies, power = compute_psd(eeg_filled[:, ch], window, noverlap)
-        with np.errstate(divide="ignore"):
-            axes[0].plot(frequencies, 10 * np.log10(power), label=channel_name)
-    axes[0].set_xlim(1, 120)
-    axes[0].set_xlabel("Frequency (Hz)")
-    axes[0].set_ylabel("Power Spectral Density (dB/Hz)")
-    axes[0].set_title("EEG Power Spectral Density")
-    axes[0].legend(loc="best")
-    axes[0].grid(True)
-
-    # 2. EEG spectrum after 59-61 Hz notch filtering.
-    for ch in range(eeg_notch.shape[1]):
-        frequencies, power = compute_psd(eeg_notch[:, ch], window, noverlap)
-        with np.errstate(divide="ignore"):
-            axes[1].plot(frequencies, 10 * np.log10(power))
-    axes[1].set_xlim(1, 120)
-    axes[1].set_xlabel("Frequency (Hz)")
-    axes[1].set_ylabel("Power Spectral Density (dB/Hz)")
-    axes[1].set_title("EEG Power Spectral Density")
-    axes[1].grid(True)
-
-    # 3-4. AUX is optional: its absence must not prevent frontal power ratios.
-    if aux_names:
-        for ch in range(aux_filled.shape[1]):
-            frequencies, power = compute_psd(aux_filled[:, ch], window, noverlap)
+        for ch, channel_name in enumerate(eeg_names):
+            frequencies, power = compute_psd(eeg_filled[:, ch], window, noverlap)
             with np.errstate(divide="ignore"):
-                axes[2].plot(frequencies, 10 * np.log10(power), label=aux_names[ch])
-        axes[2].set_xlim(1, 120)
-        axes[2].set_xlabel("Frequency (Hz)")
-        axes[2].set_ylabel("Power Spectral Density (dB/Hz)")
-        axes[2].set_title("Movement Power Spectral Density")
-        axes[2].grid(True)
-        aux_detrended = signal.detrend(aux_filled, axis=0, type="linear")
-        movement_mag = np.sqrt(np.sum(aux_detrended ** 2, axis=1))
-        axes[3].plot(np.arange(1, movement_mag.size + 1), movement_mag)
-    else:
-        axes[2].text(0.5, 0.5, "AUX channels not present", ha="center", va="center")
-        axes[3].text(0.5, 0.5, "Movement analysis unavailable", ha="center", va="center")
+                axes[0].plot(frequencies, 10 * np.log10(power), label=channel_name)
+        axes[0].set(xlim=(1, 120), xlabel="Frequency (Hz)",
+                    ylabel="Power Spectral Density (dB/Hz)", title="EEG Power Spectral Density")
+        axes[0].legend(loc="best")
+        axes[0].grid(True)
+
+        for ch in range(eeg_notch.shape[1]):
+            frequencies, power = compute_psd(eeg_notch[:, ch], window, noverlap)
+            with np.errstate(divide="ignore"):
+                axes[1].plot(frequencies, 10 * np.log10(power))
+        axes[1].set(xlim=(1, 120), xlabel="Frequency (Hz)",
+                    ylabel="Power Spectral Density (dB/Hz)", title="Notch-filtered EEG PSD")
+        axes[1].grid(True)
+
+        if aux_names:
+            for ch in range(aux_filled.shape[1]):
+                frequencies, power = compute_psd(aux_filled[:, ch], window, noverlap)
+                with np.errstate(divide="ignore"):
+                    axes[2].plot(frequencies, 10 * np.log10(power), label=aux_names[ch])
+            axes[2].set(xlim=(1, 120), xlabel="Frequency (Hz)",
+                        ylabel="Power Spectral Density (dB/Hz)", title="Movement PSD")
+            axes[2].grid(True)
+            aux_detrended = signal.detrend(aux_filled, axis=0, type="linear")
+            movement_mag = np.sqrt(np.sum(aux_detrended ** 2, axis=1))
+            axes[3].plot(np.arange(1, movement_mag.size + 1), movement_mag)
+        else:
+            axes[2].text(0.5, 0.5, "AUX channels not present", ha="center", va="center")
+            axes[3].text(0.5, 0.5, "Movement analysis unavailable", ha="center", va="center")
 
     # 5-8. Spectrograms and mean of window-by-window power ratios.
     result = np.empty((6, len(eeg_names)), dtype=float)
+    frontal_rows = []
     for ch, channel_name in enumerate(eeg_names):
         frequencies, times, psd = signal.spectrogram(
             eeg_notch[:, ch],
@@ -278,21 +279,30 @@ def analyze(csv_path: Path, show_figure: bool = True,
             mode="psd",
         )
 
-        with np.errstate(divide="ignore"):
-            spectrogram_db = 10 * np.log10(psd)
-
-        ax = axes[4 + ch]
-        heatmap = ax.pcolormesh(times, frequencies, spectrogram_db, shading="auto")
-        ax.set_ylim(1, 100)
-        ax.set_title(channel_name)
-        ax.set_xlabel("Time (s)")
-        ax.set_ylabel("Frequency (Hz)")
-        fig.colorbar(heatmap, ax=ax)
+        if make_plot:
+            with np.errstate(divide="ignore"):
+                spectrogram_db = 10 * np.log10(psd)
+            ax = axes[4 + ch]
+            heatmap = ax.pcolormesh(times, frequencies, spectrogram_db, shading="auto")
+            ax.set_ylim(1, 100)
+            ax.set_title(channel_name)
+            ax.set_xlabel("Time (s)")
+            ax.set_ylabel("Frequency (Hz)")
+            fig.colorbar(heatmap, ax=ax)
 
         powers = {
             name: band_power(frequencies, psd, low, high)
             for name, (low, high) in BANDS.items()
         }
+        if channel_name in ("RAW_AF7", "RAW_AF8"):
+            for band in ("theta", "alpha", "beta"):
+                mean_power = float(np.mean(powers[band]))
+                log_power = (float(np.log10(mean_power))
+                             if np.isfinite(mean_power) and mean_power > 0 else np.nan)
+                frontal_rows.append({"channel": channel_name.removeprefix("RAW_"),
+                                     "band": band, "power": mean_power,
+                                     "log10_power": log_power,
+                                     "n_windows": len(powers[band])})
         with np.errstate(divide="ignore", invalid="ignore"):
             # MATLAB takes the mean of the ratios, NOT ratio of mean powers.
             result[0, ch] = np.mean(powers["theta"] / powers["gamma"])
@@ -302,9 +312,10 @@ def analyze(csv_path: Path, show_figure: bool = True,
             result[4, ch] = np.mean(powers["beta"] / powers["whole"])
             result[5, ch] = np.mean(powers["gamma"] / powers["whole"])
 
-    for extra_axis in range(4 + len(eeg_names), 8):
-        axes[extra_axis].set_visible(False)
-    fig.tight_layout(pad=2)
+    if make_plot:
+        for extra_axis in range(4 + len(eeg_names), 8):
+            axes[extra_axis].set_visible(False)
+        fig.tight_layout(pad=2)
 
     # Same file naming as MATLAB, but next to the chosen CSV.
     folder = output_dir if output_dir is not None else csv_path.parent
@@ -316,16 +327,21 @@ def analyze(csv_path: Path, show_figure: bool = True,
 
     # MATLAB save(..., "-ascii") actually uses whitespace, not commas.
     np.savetxt(results_path, result, fmt="%.8e", delimiter=" ")
+    frontal_path = folder / (csv_path.stem + "_FrontalLogPower.csv")
+    pd.DataFrame(frontal_rows, columns=["channel", "band", "power", "log10_power", "n_windows"]).to_csv(
+        frontal_path, index=False)
 
     if tiff_path is not None:
         print("Saved figure:", tiff_path)
     print("Saved results:", results_path)
+    print("Saved frontal log band power:", frontal_path)
     print("\nResults (rows as in MATLAB; columns in EEG CSV order):")
     print(pd.DataFrame(result, index=RESULT_ROWS, columns=eeg_names).to_string(float_format=lambda x: f"{x:.6g}"))
 
     if show_figure:
         plt.show()
-    plt.close(fig)
+    if fig is not None:
+        plt.close(fig)
     return tiff_path, results_path, result
 
 

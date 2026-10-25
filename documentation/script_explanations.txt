@@ -138,3 +138,21 @@ setup/archive_legacy_outputs.py
     outputs/eeg/batch and data/processed/plearning/RL_parameter_results.csv.
     With --apply, moves into outputs/_archived_legacy rather than deleting them.
     Prior and current EEG numeric results differ; keep an archive.
+
+OCTOBER 25, 2026 — FRONTAL LOG POWER EXTENSION
+---------------------------------------------
+scripts/PreprocessingScript_v1.py
+    Existing spectral preprocessing retained, plus per-file AF7 and AF8
+    absolute theta (4–8), alpha (8–13), beta (13–30) linear power and
+    log10 of mean power, saved in <stem>_FrontalLogPower.csv.
+    --no-plots in the batch runner avoids constructing the large figure.
+
+scripts/eeg/process_all_eeg.py
+    Adds a three-timepoint subject-level long+wide log-power export.
+    pre_vr = anticipation; post_vr = acute_stress_response (POST-stressor),
+    recovery = recovery. Other phases have per-recording power but are not
+    conflated with these three. Existing rate screening still applies.
+
+scripts/run_all_analyses.py
+    Existing default EEG stage automatically runs the above code. No new
+    invocation flag is needed. Recommended: --no-eeg-plots.

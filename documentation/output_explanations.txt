@@ -328,3 +328,29 @@ outputs/eeg/batch/sub###/
 Note: eeg_file_summary_wide.csv records readable-schema availability, NOT
 verified EEG spectral suitability. The age workbook in the 2026-10-14 ZIP is
 an Apple Numbers file mislabeled .xlsx. Export a genuine Excel file first.
+
+OCTOBER 25, 2026 — FRONTAL LOG BAND-POWER OUTPUTS
+------------------------------------------------
+data/analysis_data/eeg/eeg_frontal_log_bandpower_long.csv
+    Each processed, rate-screen-eligible EEG with a mapped timepoint contributes
+    six rows: two frontal channels (AF7/AF8) × three bands (theta/alpha/beta).
+    Contains subject_id, timepoint, recording_phase, measurement_timing,
+    channel, band, linear power, log10_power, n_windows, processing/QC fields.
+
+data/analysis_data/eeg/eeg_frontal_log_bandpower_wide.csv
+    One subject per row; 18 log10_power features for anticipation/pre_vr,
+    acute_stress_response/post_vr, and recovery/recovery. Missing features
+    remain blank instead of using outdated historical results.
+
+outputs/eeg/bandpower/sub_###/###_<phase>_eeg_FrontalLogPower.csv
+    Per-recording absolute mean band power and log10 band power for AF7/AF8.
+    Generated also for eligible baseline and miscellaneous EEG phases.
+
+data/analysis_data/eeg/eeg_batch_processing_report.csv
+    Adds six columns: af7_theta_log10_power, af7_alpha_log10_power,
+    af7_beta_log10_power, af8_theta_log10_power,
+    af8_alpha_log10_power, af8_beta_log10_power.
+
+Log = log10(mean linear spectral power), NOT log of ratio, mean of logarithms,
+or dB. Outputs do not by themselves indicate clean data or a stress effect.
+POST-VR is not a direct EEG measurement made during VR stress.

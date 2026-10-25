@@ -2,7 +2,8 @@
 """Batch-run the existing EEG preprocessing for recognized EEG files per subject.
 
 Output is separated from raw data. Processes CSV and single-CSV ZIP archives.
-Each recording gets a status in eeg_batch_processing_report.csv. Quality checks
+Each recording gets a status in eeg_batch_processing_report.csv. Frontal log10
+theta/alpha/beta power is saved by timepoint in long + wide tables. Quality checks
 are screening aids, NOT a validation of EEG signal quality or artefact rejection.
 """
 from __future__ import annotations
@@ -23,6 +24,18 @@ from PreprocessingScript_v1 import FS, analyze  # noqa: E402
 
 EEG_NAME = re.compile(r"(?P<id>\d+)_(?P<phase>.+)_eeg\.(?:csv|zip)$", re.I)
 RAW_CHANNELS = ("RAW_AF7", "RAW_AF8")
+# Filename phases are explicitly distinguished from within-VR EEG.
+# 'post_vr' is POST-stressor, not a direct measurement during the stressor.
+PHASE_TIMEPOINT = {
+    "pre_vr": "anticipation",
+    "post_vr": "acute_stress_response",
+    "recovery": "recovery",
+}
+LOG_BANDS = ("theta", "alpha", "beta")
+FRONTAL_CHANNELS = ("AF7", "AF8")
+FRONTAL_VALUE_COLS = tuple(f"{ch.lower()}_{band}_log10_power"
+                           for ch in FRONTAL_CHANNELS for band in LOG_BANDS)
+
 
 
 def portable_path(path: Path) -> str:
@@ -103,12 +116,14 @@ def run_batch(root: Path, *, allow_unverified: bool = False, save_plots: bool = 
         raise FileNotFoundError(f"Subject folder not found: {root}")
     files = discover_files(root)
     rows = []
+    frontal_rows = []
     for i, (subject, phase, path) in enumerate(files, 1):
         print(f"\nEEG {i}/{len(files)}: subject {subject}, {phase}: {path.name}", flush=True)
         row = {"subject_id": subject, "phase": phase, "file_path": portable_path(path),
                "sampling_rate_est_hz": np.nan, "qc_status": "", "qc_reason": "",
                "processing_status": "", "af7_beta_alpha": np.nan,
                "af8_beta_alpha": np.nan, "result_path": "", "error": ""}
+        row.update({key: np.nan for key in FRONTAL_VALUE_COLS})
         try:
             qc, reason, sample_rate = basic_quality_check(path)
             row["qc_status"], row["qc_reason"] = qc, reason
@@ -129,9 +144,36 @@ def run_batch(root: Path, *, allow_unverified: bool = False, save_plots: bool = 
                 row["af8_beta_alpha"] = float(matrix[1, channel_order.index("RAW_AF8")])
                 row["result_path"] = portable_path(results_path)
                 row["processing_status"] = "processed" if qc == "rate_screen_pass" else "processed_unverified"
+                # Per-recording CSV was produced alongside the legacy ratio CSV.
+                power_path = results_path.with_name(path.stem + "_FrontalLogPower.csv")
+                power = pd.read_csv(power_path)
+                if (len(power) != 6 or set(zip(power.channel, power.band)) !=
+                        {(channel, band) for channel in FRONTAL_CHANNELS for band in LOG_BANDS}):
+                    raise ValueError("Expected exactly six AF7/AF8 × theta/alpha/beta power rows")
+                if not np.isfinite(power["log10_power"].to_numpy(dtype=float)).all():
+                    raise ValueError("Non-positive or non-finite frontal band power; log10 result is invalid")
+                new_frontal_rows = []
+                for point in power.itertuples(index=False):
+                    key = f"{point.channel.lower()}_{point.band}_log10_power"
+                    row[key] = float(point.log10_power)
+                    if phase in PHASE_TIMEPOINT:
+                        new_frontal_rows.append({
+                            "subject_id": subject,
+                            "timepoint": PHASE_TIMEPOINT[phase],
+                            "recording_phase": phase,
+                            "measurement_timing": "post_vr" if phase == "post_vr" else phase,
+                            "channel": point.channel, "band": point.band,
+                            "power": float(point.power),
+                            "log10_power": float(point.log10_power),
+                            "n_windows": int(point.n_windows),
+                            "qc_status": qc, "processing_status": row["processing_status"],
+                            "file_path": portable_path(path),
+                        })
+                frontal_rows.extend(new_frontal_rows)
         except Exception as exc:
             row["processing_status"] = "failed"
             row["error"] = f"{type(exc).__name__}: {exc}"
+            row.update({key: np.nan for key in FRONTAL_VALUE_COLS})
             print(f"  FAILED: {row['error']}", flush=True)
         rows.append(row)
 
@@ -139,12 +181,39 @@ def run_batch(root: Path, *, allow_unverified: bool = False, save_plots: bool = 
     report = EEG_ANALYSIS_DATA_DIR / "eeg_batch_processing_report.csv"
     pd.DataFrame(rows, columns=["subject_id", "phase", "file_path", "sampling_rate_est_hz",
                                 "qc_status", "qc_reason", "processing_status", "af7_beta_alpha",
-                                "af8_beta_alpha", "result_path", "error"]).to_csv(report, index=False)
+                                "af8_beta_alpha", *FRONTAL_VALUE_COLS, "result_path", "error"]).to_csv(report, index=False)
+
+    # Write fresh aggregate tables on every run. Skipped/failed recordings
+    # NEVER borrow old measurements from a previous analysis.
+    long_cols = ["subject_id", "timepoint", "recording_phase", "measurement_timing",
+                 "channel", "band", "power", "log10_power", "n_windows", "qc_status",
+                 "processing_status", "file_path"]
+    long_path = EEG_ANALYSIS_DATA_DIR / "eeg_frontal_log_bandpower_long.csv"
+    wide_path = EEG_ANALYSIS_DATA_DIR / "eeg_frontal_log_bandpower_wide.csv"
+    long_df = pd.DataFrame(frontal_rows, columns=long_cols)
+    long_df.to_csv(long_path, index=False)
+    wide_columns = ["subject_id"] + [f"{timepoint}_{channel.lower()}_{band}_log10_power"
+        for timepoint in PHASE_TIMEPOINT.values()
+        for channel in FRONTAL_CHANNELS for band in LOG_BANDS]
+    if long_df.empty:
+        wide_df = pd.DataFrame(columns=wide_columns)
+    else:
+        # One measurement per subject/timepoint/channel/band: do not average
+        # duplicate experimental recordings or invent missing timepoints.
+        wide_df = long_df.pivot(
+            index="subject_id", columns=["timepoint", "channel", "band"],
+            values="log10_power")
+        wide_df.columns = [f"{tp}_{ch.lower()}_{band}_log10_power"
+                           for tp, ch, band in wide_df.columns]
+        wide_df = wide_df.reset_index().reindex(columns=wide_columns)
+    wide_df.to_csv(wide_path, index=False)
     done = sum(r["processing_status"] in {"processed", "processed_unverified"} for r in rows)
     flagged = sum(r["processing_status"] == "skipped_qc" for r in rows)
     failed = sum(r["processing_status"] == "failed" for r in rows)
     print(f"\nEEG batch: {done} processed, {flagged} skipped QC, {failed} failed, {len(files)} discovered.")
     print(f"Audit report: {report}")
+    print(f"Log power (long): {long_path}")
+    print(f"Log power (wide): {wide_path}")
     print("A rate-screen pass does not establish artifact-free EEG. Review quality before inference.")
     return 0  # File-level issues are captured in report; do not block other modalities.
 
