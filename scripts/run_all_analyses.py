@@ -3,8 +3,9 @@
 
 From project root: python3 scripts/run_all_analyses.py
 
-All required stages stop on failure. EEG individual-file exclusions are audited by
-process_all_eeg.py. Age comparisons are optional when the required classification
+All required stages stop on failure. EEG_Audit.py runs preprocessing and records
+individual-file exclusions before process_all_eeg.py collects the power tables.
+Age comparisons are optional when the required classification
 workbook is missing, unreadable, or missing subjects; they are NEVER silently
 performed using guessed ages. See outputs/pipeline_run_status.json for status.
 
@@ -37,7 +38,6 @@ STEPS_BEFORE_EEG = [
     "setup/validate_raw_data.py",
     "setup/process_jatos_python.py",
     "heart_rate/summarize_heart_rate.py",
-    "eeg/summarize_eeg.py",  # Schema/availability only; NOT a spectral QC pass.
 ]
 STEPS_AFTER_EEG = [
     "learning_rates/calculate_learning_rates.py",
@@ -120,8 +120,9 @@ def main() -> int:
     parser.add_argument("--skip-eeg", action="store_true", help="Do not run spectral EEG preprocessing.")
     parser.add_argument("--eeg", action="store_true", help="Compatibility flag; EEG already runs by default.")
     parser.add_argument("--allow-unverified-eeg", action="store_true",
-                        help="Process EEGs with unknown rate but label them unverified (does not bypass known mismatch).")
-    parser.add_argument("--no-eeg-plots", action="store_true", help="Skip large per-recording TIFF figures.")
+                        help="Allow the collector to include exports without confirmed preprocessing completion.")
+    parser.add_argument("--no-eeg-plots", action="store_true",
+                        help="Skip optional EEG audit review galleries.")
     parser.add_argument("--strict-age-groups", action="store_true",
                         help="Return a nonzero code if age comparison cannot be updated.")
     parser.add_argument("--skip-age-comparison", action="store_true",
@@ -189,12 +190,11 @@ def main() -> int:
         for script in STEPS_BEFORE_EEG:
             run(script)
         if not args.skip_eeg:
-            eeg_options = []
-            if args.allow_unverified_eeg:
-                eeg_options.append("--allow-unverified")
-            if args.no_eeg_plots:
-                eeg_options.append("--no-plots")
-            run("eeg/process_all_eeg.py", *eeg_options)
+            audit_options = ["--skip-review-figures"] if args.no_eeg_plots else []
+            collect_options = ["--include-unverified"] if args.allow_unverified_eeg else []
+            run("eeg/EEG_Audit.py", *audit_options)
+            run("eeg/process_all_eeg.py", *collect_options)
+            run("eeg/summarize_eeg.py")
             status["eeg_spectral_processing"] = "completed_with_file_level_qc_report"
             report = PROJECT / "data" / "analysis_data" / "eeg" / "eeg_batch_processing_report.csv"
             if report.exists():

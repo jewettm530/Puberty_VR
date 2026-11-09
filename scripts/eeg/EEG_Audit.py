@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Conservative, reproducible AF7/AF8 raw-EEG audit for Puberty_VR.
 
-Run: python3 scripts/EEG_Audit.py
+Run: python3 scripts/eeg/EEG_Audit.py
 Dependencies: numpy pandas scipy matplotlib
 
 This script flags possible artifacts; it cannot prove neural origin or diagnose stress.
@@ -9,6 +9,9 @@ No synthetic waveform reconstruction, ICA, or interpolation across missing EEG s
 """
 from __future__ import annotations
 import argparse
+import importlib.util
+import shutil
+import tempfile
 import io
 import json
 import re
@@ -29,7 +32,8 @@ RAW=('RAW_AF7','RAW_AF8')
 WINDOW_SEC=4.0
 STEP_SEC=2.0
 BANDS={'slow_1_4_warning':(1.,4.),'alpha':(8.,13.),'beta':(13.,30.),'high_beta':(20.,30.),'hf_warning':(35.,45.)}
-VERSION='2.0'
+VERSION='3.0-shared-preprocessing'
+PREPROCESSOR = None  # loaded once by main(); owns filtering and PSD calculations
 
 
 def discover(root:Path):
@@ -82,30 +86,64 @@ def identify_spans(t, gap_factor=3.5):
     return [(int(s),int(e)) for s,e in zip(np.r_[0,jump],np.r_[jump,len(t)])], int(len(jump))
 
 
-def band_integral(f,p,lo,hi):
-    # Integrate with interpolated boundaries to avoid overlapping 13 Hz bins.
-    sel=(f>lo)&(f<hi)
-    x=np.r_[lo,f[sel],hi]
-    y=np.interp(x,f,p)
-    return float(np.trapezoid(y,x))
+def powers(filtered):
+    """Use the PSD and band integration routines from preprocessing.py.
+
+    The audit runs on 4-s QC windows rather than the preprocessor's whole-recording
+    average. Therefore the selected window population can differ, but the
+    spectral processing implementation is identical.
+    """
+    if PREPROCESSOR is None:
+        raise RuntimeError('preprocessing.py has not been loaded')
+    n = len(filtered)
+    frequencies, psd = PREPROCESSOR.compute_psd(
+        np.asarray(filtered, dtype=float), np.hamming(n), 0
+    )
+    psd_2d = np.asarray(psd)[:, None]
+    bands = {
+        'theta': PREPROCESSOR.BANDS['theta'],
+        'alpha': PREPROCESSOR.BANDS['alpha'],
+        'beta': PREPROCESSOR.BANDS['beta'],
+        'high_beta': (20., 30.),
+        'hf_warning': (35., 45.),
+        'slow_1_4_warning': (1., 4.),
+    }
+    values = {
+        name: float(PREPROCESSOR.band_power(frequencies, psd_2d, lo, hi)[0])
+        for name, (lo, hi) in bands.items()
+    }
+    values['ratio'] = (values['beta'] / values['alpha']
+                       if values['alpha'] > 0 else np.nan)
+    values['hf_beta_indicator'] = (
+        values['hf_warning'] / values['beta'] if values['beta'] > 0 else np.nan
+    )
+    return values, frequencies, psd
 
 
-def powers(x, hp=0.5):
-    # epoch has no missing values. The window is 4s and periodogram uses Hann taper.
-    # 1s padding outside epoch is intentionally NOT applied.
-    f,p=signal.welch(x,fs=FS,window='hann',nperseg=len(x),noverlap=0,
-                    detrend='constant',scaling='density')
-    vals={n:band_integral(f,p,*b) for n,b in BANDS.items()}
-    vals['ratio']=vals['beta']/vals['alpha'] if vals['alpha']>0 else np.nan
-    vals['hf_beta_indicator']=vals['hf_warning']/vals['beta'] if vals['beta']>0 else np.nan
-    return vals,f,p
+def prefilter_valid_spans(raw, spans):
+    """Filter once per contiguous valid channel span, never across NaNs/gaps.
 
-
-def preprocess_epoch(raw, hp=0.5, lp=45.0):
-    # Zero-phase Butterworth; notch is unnecessary when low-pass is 45 Hz and
-    # the 60Hz component is excluded. Optional 60Hz notch would be redundant.
-    sos=signal.butter(4,[hp,lp],btype='bandpass',fs=FS,output='sos')
-    return signal.sosfiltfilt(sos,raw)
+    The original raw EEG is retained for QC; the preprocessor's interpolating
+    whole-recording analysis MUST NOT conceal dropout/artifacts here.
+    """
+    if PREPROCESSOR is None:
+        raise RuntimeError('preprocessing.py has not been loaded')
+    filtered = np.full(raw.shape, np.nan, dtype=float)
+    for a, b in spans:
+        for ci in range(raw.shape[1]):
+            channel = raw[a:b, ci]
+            finite = np.isfinite(channel)
+            edges = np.r_[0, np.flatnonzero(np.diff(finite.astype(int))) + 1, len(channel)]
+            for left, right in zip(edges[:-1], edges[1:]):
+                if not finite[left] or right - left < 32:
+                    continue
+                try:
+                    filtered[a+left:a+right, ci] = PREPROCESSOR.apply_notch_filter(
+                        channel[left:right, None]
+                    )[:, 0]
+                except (ValueError, FloatingPointError):
+                    continue
+    return filtered
 
 
 def quality(raw, filtered, params, baseline):
@@ -152,6 +190,7 @@ def audit_one(path:Path,outdir:Path, args):
         if not is_full:return info,[],[]
         spans,ngaps=identify_spans(t)
         info['timestamp_gaps']=ngaps
+        filtered_eeg = prefilter_valid_spans(x, spans)
         steps=int(STEP_SEC*FS); win=int(WINDOW_SEC*FS)
         rows=[];raw_cache=[]
         for s,e in spans:
@@ -172,19 +211,17 @@ def audit_one(path:Path,outdir:Path, args):
                     clean=None
                     if not why:
                         try:
-                            clean=preprocess_epoch(r)
+                            clean=filtered_eeg[start:end,ci]
+                            if not np.isfinite(clean).all():
+                                raise ValueError('Notch filtering failed or input contains missing samples')
                             why,caution=quality(r,clean,args,{ 'ptp_limit':args.ptp_warning,
                                                                'jump_limit':args.jump_warning})
                             metrics,_,_=powers(clean)
                             row.update(metrics)
-                            # Sensitivity: slightly different accepted passband.
-                            alternate=preprocess_epoch(r,hp=1.0,lp=40.0)
-                            alt_metrics,_,_=powers(alternate)
-                            row['alternate_beta_alpha_ratio']=alt_metrics['ratio']
-                            if np.isfinite(metrics['ratio']) and metrics['ratio']>0:
-                                row['relative_filter_sensitivity']=abs(alt_metrics['ratio']/metrics['ratio']-1)
-                                if row['relative_filter_sensitivity']>args.filter_change_warning:
-                                    caution.append('filter_sensitive_ratio')
+                            # The historical alternate 1-40 Hz sensitivity measure
+                            # used a different independent filter; no longer computed.
+                            row['alternate_beta_alpha_ratio']=np.nan
+                            row['relative_filter_sensitivity']=np.nan
                         except (ValueError,FloatingPointError) as exc:why.append('filter_error:'+str(exc))
                     if len(r):
                         finite=r[np.isfinite(r)]
@@ -236,7 +273,7 @@ def audit_one(path:Path,outdir:Path, args):
                 if not rr.hard_pass:axs[ci].axvspan(rr.start_s,rr.end_s,color='red',alpha=.09)
             for band,sty in [('alpha','-'),('beta','--')]:
                 axs[2+ci].plot(part.start_s+WINDOW_SEC/2,part[band].where(part.hard_pass),sty,lw=.9,label=band+' (hard-pass only)')
-            axs[2+ci].set(title=f'{ch} filtered 4-s epoch band powers (hard-pass only)',xlabel='Elapsed seconds',ylabel='Power (raw units squared)',yscale='log')
+            axs[2+ci].set(title=f'{ch} notch-filtered 4-s band powers (hard-pass only)',xlabel='Elapsed seconds',ylabel='Power (raw units squared)',yscale='log')
             axs[2+ci].legend()
         fig.suptitle(f'{subject} | {phase} | red shaded = hard rejected windows',fontsize=14)
         fig.savefig(outdir/(path.stem+'_audit.png'),dpi=130)
@@ -433,6 +470,95 @@ def create_second_pass(out,args,root):
     print('Second-pass reports: thresholds, priorities, manual-review template, candidate power and pre/post tables.')
 
 
+
+
+def load_preprocessing_module(project: Path):
+    """Load the existing preprocessing module without changing its source."""
+    candidates = [
+        project / 'scripts' / 'preprocessing.py',
+        project / 'scripts' / 'eeg' / 'preprocessing.py',
+    ]
+    source = next((p for p in candidates if p.is_file()), None)
+    if source is None:
+        raise FileNotFoundError(
+            'Cannot find preprocessing.py under scripts/ or scripts/eeg/. '
+            'Preprocessing has not been run; audit stopped.'
+        )
+    spec = importlib.util.spec_from_file_location('eeg_existing_preprocessing', source)
+    if spec is None or spec.loader is None:
+        raise ImportError(f'Cannot import preprocessing script: {source}')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    if not hasattr(module, 'analyze'):
+        raise AttributeError(f'{source} does not define analyze()')
+    print(f'Using unchanged preprocessing script: {source}', flush=True)
+    return module
+
+
+def run_preprocessing_first(path: Path, project: Path, preprocessor,
+                            min_average_rate: float, save_figures: bool = False):
+    """Run existing analyze() on each eligible recording BEFORE its audit.
+
+    The whole-recording exports include a spectrogram PNG for each recording.
+    These exports and the audit's gap-aware QC windows
+    share the spectral processing routines in preprocessing.py.
+    """
+    result = {'preprocessing_status': 'NOT_RUN', 'preprocessing_error': '',
+              'preprocessing_result_path': ''}
+    # Use the audit's raw timing eligibility to avoid processing ~1-Hz exports.
+    try:
+        t, x, _, _ = load(path)
+        if len(t) < 4 * int(FS) or t[-1] <= t[0]:
+            result['preprocessing_status'] = 'SKIPPED_LOW_RATE'
+            return result
+        dt = np.diff(t)
+        positive = dt[dt > 0]
+        median_hz = 1.0 / np.median(positive) if len(positive) else np.nan
+        observed_hz = (len(t) - 1) / (t[-1] - t[0])
+        if not (230 <= median_hz <= 290 and observed_hz >= min_average_rate):
+            result['preprocessing_status'] = 'SKIPPED_LOW_RATE'
+            return result
+    except Exception as exc:
+        result['preprocessing_status'] = 'INPUT_ERROR'
+        result['preprocessing_error'] = f'{type(exc).__name__}: {exc}'
+        return result
+
+    subject = next((part for part in path.parts
+                    if re.fullmatch(r'sub\d+', part, re.I)), path.parent.name)
+    sid = re.search(r'\d+', subject)
+    output_folder = project / 'outputs' / 'eeg' / 'bandpower' / (
+        f'sub_{sid.group()}' if sid else subject)
+    output_folder.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # Existing analyze() expects an ordinary CSV. Use temporary extraction
+        # for ZIP inputs; never write extracted data back to the raw folder.
+        if path.suffix.lower() == '.zip':
+            with tempfile.TemporaryDirectory(prefix='eeg_preprocess_') as temp:
+                temp_csv = Path(temp) / (path.stem + '.csv')
+                with zipfile.ZipFile(path) as archive:
+                    members = [m for m in archive.namelist()
+                               if m.lower().endswith('.csv') and not m.endswith('/')
+                               and not Path(m).name.startswith('._')
+                               and not m.startswith('__MACOSX/')]
+                    if len(members) != 1:
+                        raise ValueError(f'Expected one CSV inside ZIP, found {len(members)}')
+                    with archive.open(members[0]) as source, temp_csv.open('wb') as target:
+                        shutil.copyfileobj(source, target)
+                _, saved_path, _ = preprocessor.analyze(
+                    temp_csv, show_figure=False, output_dir=output_folder,
+                    save_figure=save_figures, save_spectrogram=True)
+        else:
+            _, saved_path, _ = preprocessor.analyze(
+                path, show_figure=False, output_dir=output_folder,
+                save_figure=save_figures, save_spectrogram=True)
+        result['preprocessing_status'] = 'COMPLETED'
+        result['preprocessing_result_path'] = str(saved_path)
+    except Exception as exc:
+        result['preprocessing_status'] = 'FAILED'
+        result['preprocessing_error'] = f'{type(exc).__name__}: {exc}'
+    return result
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--subjects-dir',type=Path,default=None)
@@ -451,6 +577,7 @@ def main():
     p.add_argument('--filter-change-warning',type=float,default=.25)
     p.add_argument('--manual-review',type=Path,default=None,help='Optional reviewer decisions CSV; do not edit original raw data')
     p.add_argument('--skip-review-figures',action='store_true',help='Skip detailed per-recording review galleries')
+    p.add_argument('--preprocessing-figures',action='store_true',help='Export combined preprocessing TIFFs in addition to the default spectrogram PNGs')
     a=p.parse_args()
     # Works whether installed in scripts/ or scripts/eeg/.
     parents=Path(__file__).resolve().parents
@@ -462,15 +589,37 @@ def main():
     paths=list(discover(root))
     if a.subject:paths=[f for f in paths if f'sub{a.subject.zfill(3)}' in f.parts]
     if not paths:p.error('No EEG CSV/ZIP inputs were discovered.')
+    global PREPROCESSOR
+    PREPROCESSOR = load_preprocessing_module(project)
+    preprocessor = PREPROCESSOR
     infos=[];windows=[];summary=[]
     out.mkdir(parents=True,exist_ok=True)
     for i,path in enumerate(paths,1):
         sub=next((v for v in path.parts if re.fullmatch(r'sub\d+',v)),path.parent.name)
         print(f'[{i}/{len(paths)}] {sub}/{path.name}',flush=True)
-        info,window_rows,summaries=audit_one(path,out/'figures'/sub,a)
+        pre_result = run_preprocessing_first(
+            path, project, preprocessor, a.min_average_rate,
+            save_figures=a.preprocessing_figures)
+        print('  Preprocessing:', pre_result['preprocessing_status'], flush=True)
+        if pre_result['preprocessing_error']:
+            print('    Reason:', pre_result['preprocessing_error'], flush=True)
+        if preprocessor is not None and pre_result['preprocessing_status'] == 'FAILED':
+            info = {'subject':sub, 'phase':re.sub(r'^\d+_', '', path.stem).replace('_eeg',''),
+                    'recording':path.name, 'source':str(path), 'audit_version':VERSION,
+                    'status':'PREPROCESSING_FAILED', 'error':pre_result['preprocessing_error']}
+            window_rows, summaries = [], []
+        else:
+            info,window_rows,summaries=audit_one(path,out/'figures'/sub,a)
+        info.update(pre_result)
         infos.append(info);windows.extend(window_rows);summary.extend(summaries)
         print('  ->',info['status'],f"({info.get('paired_pass_windows','-')} paired windows)",flush=True)
     pd.DataFrame(infos).to_csv(out/'eeg_recording_qc.csv',index=False)
+    pd.DataFrame([{'subject': i.get('subject'), 'phase': i.get('phase'),
+                   'recording': i.get('recording'),
+                   'preprocessing_status': i.get('preprocessing_status'),
+                   'preprocessing_error': i.get('preprocessing_error'),
+                   'preprocessing_result_path': i.get('preprocessing_result_path')}
+                  for i in infos]).to_csv(out/'eeg_preprocessing_execution_report.csv', index=False)
     pd.DataFrame(windows).to_csv(out/'eeg_window_qc_and_power.csv',index=False)
     pd.DataFrame(summary).to_csv(out/'eeg_frontal_band_summary.csv',index=False)
     # Explicit pairing only; no inferential tests on windows as independent observations.
@@ -480,8 +629,9 @@ def main():
         prim=prim[['subject','phase','recording','accepted_windows']]
         prim.to_csv(out/'eeg_paired_windows_inventory.csv',index=False)
     settings={k:(str(v) if isinstance(v,Path) else v) for k,v in vars(a).items()}
-    (out/'audit_settings.json').write_text(json.dumps({'version':VERSION,'fs_assumed':FS,'window_s':WINDOW_SEC,'step_s':STEP_SEC,'bands_hz':BANDS,'settings':settings},indent=2))
+    (out/'audit_settings.json').write_text(json.dumps({'version':VERSION,'fs_assumed':FS,'window_s':WINDOW_SEC,'step_s':STEP_SEC,'bands_hz':{**BANDS,'theta':list(PREPROCESSOR.BANDS['theta'])},'preprocessor_source':str(Path(PREPROCESSOR.__file__)), 'audit_spectral_method':'preprocessing.py PSD and band integration on notch-filtered QC windows', 'settings':settings},indent=2))
     create_second_pass(out, a, root)
+    print('Audit QC powers use preprocessing.py filtering/PSD on QC windows; whole-recording preprocessor powers may differ.', flush=True)
     print('\nReports saved in:',out)
     print(pd.DataFrame(infos).status.value_counts().to_string())
 

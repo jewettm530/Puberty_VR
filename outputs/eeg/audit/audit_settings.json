@@ -1,5 +1,5 @@
 {
-  "version": "2.0",
+  "version": "3.0-shared-preprocessing",
   "fs_assumed": 256.0,
   "window_s": 4.0,
   "step_s": 2.0,
@@ -23,8 +23,14 @@
     "hf_warning": [
       35.0,
       45.0
+    ],
+    "theta": [
+      4.0,
+      8.0
     ]
   },
+  "preprocessor_source": "/Users/maddiemac/Puberty_VR/scripts/eeg/preprocessing.py",
+  "audit_spectral_method": "preprocessing.py PSD and band integration on notch-filtered QC windows",
   "settings": {
     "subjects_dir": null,
     "output_dir": null,
@@ -41,6 +47,7 @@
     "outlier_mad": 5.0,
     "filter_change_warning": 0.25,
     "manual_review": null,
-    "skip_review_figures": false
+    "skip_review_figures": false,
+    "preprocessing_figures": false
   }
 }

@@ -24,8 +24,10 @@ restricted to rows where blocktype == "experiment". If a file instead contains a
 
 Output
 ------
-A single combined CSV is written to:
+The fitted parameter table is written to:
     outputs/learning_rates/tables/RL_parameter_results_combined.csv
+Trial-level signed RPEs from the selected fits are written to:
+    outputs/learning_rates/tables/RL_trial_reward_prediction_errors.csv
 
 The output includes an age column. Ages are read from:
     data/metadata/rl_subject_ages.csv
@@ -70,6 +72,12 @@ CURRENT_DATA_DIR = PLEARNING_DIR
 PREVIOUS_DATA_DIR = PREVIOUS_SUBJECTS_DIR
 AGE_LOOKUP_FILE = METADATA_DIR / "rl_subject_ages.csv"
 OUTPUT_FILE = TABLES_DIR / "RL_parameter_results_combined.csv"
+TRIAL_OUTPUT_FILE = TABLES_DIR / "RL_trial_reward_prediction_errors.csv"
+TRIAL_COLUMNS = [
+    "subject", "dataset", "session", "blockNumber", "trialNumber", "chosen",
+    "reward", "expected_reward_before_feedback", "reward_prediction_error",
+    "fit_convergence", "fit_at_boundary",
+]
 
 CURRENT_FILENAME_PATTERN = re.compile(
     r"^(?P<subject>\d+)_plearning_(?P<session>\d+)\.csv$",
@@ -101,62 +109,80 @@ BOUNDS = [
 # -----------------------------------------------------------------------------
 
 
-def prepare_rl_blocks(data: pd.DataFrame) -> list[tuple[np.ndarray, np.ndarray]]:
-    """Convert a prepared dataframe into ordered block arrays for fitting."""
-
-    blocks: list[tuple[np.ndarray, np.ndarray]] = []
+def ordered_blocks(data: pd.DataFrame):
     for block_number in data["blockNumber"].unique():
-        block_data = (
+        yield (
             data.loc[data["blockNumber"] == block_number]
             .sort_values("trialNumber")
         )
-        choices = (block_data["chosen"].to_numpy() == "face").astype(np.int8)
-        rewards = block_data["reward"].to_numpy(dtype=float)
-        blocks.append((choices, rewards))
-    return blocks
+
+
+def block_inputs(block: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
+    choices = (block["chosen"].to_numpy() == "face").astype(np.int8)
+    rewards = block["reward"].to_numpy(dtype=float)
+    return choices, rewards
+
+
+def prepare_rl_blocks(data: pd.DataFrame) -> list[tuple[np.ndarray, np.ndarray]]:
+    """Convert a prepared dataframe into ordered block arrays for fitting."""
+    return [block_inputs(block) for block in ordered_blocks(data)]
+
+
+def iter_trial_states(choices, rewards, alpha_plus, alpha_minus):
+    """Yield each trial's pre-feedback values and signed prediction error."""
+    q_face = q_house = 0.5
+    for choice_is_face, reward in zip(choices, rewards):
+        expected_reward = q_face if choice_is_face else q_house
+        rpe = reward - expected_reward
+        yield choice_is_face, q_face - q_house, expected_reward, rpe
+
+        learning_rate = alpha_plus if rpe >= 0 else alpha_minus
+        updated_value = expected_reward + learning_rate * rpe
+        if choice_is_face:
+            q_face = updated_value
+        else:
+            q_house = updated_value
 
 
 def rl_nll(par: np.ndarray, blocks: list[tuple[np.ndarray, np.ndarray]]) -> float:
     """Return negative log likelihood for the asymmetric RL model."""
-
     alpha_plus, alpha_minus, beta = par
     nll = 0.0
-
-    # Each tuple contains one experimental block in trial order.
     for choices, rewards in blocks:
-        # Reset expected values at the beginning of every block.
-        Q_face = 0.5
-        Q_house = 0.5
-
-        for choice_is_face, reward_t in zip(choices, rewards):
-            # Probability of choosing face.
-            p_face = 1.0 / (1.0 + np.exp(-beta * (Q_face - Q_house)))
+        for choice_is_face, value_gap, _, _ in iter_trial_states(
+            choices, rewards, alpha_plus, alpha_minus
+        ):
+            p_face = 1.0 / (1.0 + np.exp(-beta * value_gap))
             p_face = float(np.clip(p_face, 1e-10, 1.0 - 1e-10))
-
-            # Likelihood of the participant's actual choice.
-            if choice_is_face:
-                nll -= np.log(p_face)
-                Q_chosen = Q_face
-            else:
-                nll -= np.log(1.0 - p_face)
-                Q_chosen = Q_house
-
-            # Reward prediction error: observed reward - expected reward.
-            rpe = reward_t - Q_chosen
-
-            # Asymmetric learning-rate update.
-            if rpe >= 0:
-                Q_new = Q_chosen + alpha_plus * rpe
-            else:
-                Q_new = Q_chosen + alpha_minus * rpe
-
-            # Only the chosen option is updated.
-            if choice_is_face:
-                Q_face = Q_new
-            else:
-                Q_house = Q_new
-
+            nll -= np.log(p_face if choice_is_face else 1.0 - p_face)
     return float(nll)
+
+
+def trial_rpe_rows(data: pd.DataFrame, fit) -> list[dict[str, object]]:
+    """Replay the trials with the selected model parameters."""
+    alpha_plus, alpha_minus = fit["alpha_plus"], fit["alpha_minus"]
+    if not np.isfinite([alpha_plus, alpha_minus, fit["beta"]]).all():
+        return []
+
+    rows = []
+    for block in ordered_blocks(data):
+        choices, rewards = block_inputs(block)
+        states = iter_trial_states(choices, rewards, alpha_plus, alpha_minus)
+        for trial, (_, _, expected_reward, rpe) in zip(block.itertuples(index=False), states):
+            rows.append({
+                "subject": fit["subject"],
+                "dataset": fit["dataset"],
+                "session": fit["session"],
+                "blockNumber": trial.blockNumber,
+                "trialNumber": trial.trialNumber,
+                "chosen": trial.chosen,
+                "reward": trial.reward,
+                "expected_reward_before_feedback": expected_reward,
+                "reward_prediction_error": rpe,
+                "fit_convergence": fit["convergence"],
+                "fit_at_boundary": fit["any_boundary"],
+            })
+    return rows
 
 
 # -----------------------------------------------------------------------------
@@ -245,11 +271,14 @@ def prepare_behavior_data(file: Path) -> pd.DataFrame:
 # -----------------------------------------------------------------------------
 
 
-def fit_one_file(file: Path, dataset: str) -> dict[str, object]:
+def fit_one_file(
+    file: Path, dataset: str, *, data: pd.DataFrame | None = None
+) -> dict[str, object]:
     """Fit one subject/session file and return model parameters/statistics."""
 
     subject, session = parse_input_file(file, dataset)
-    data = prepare_behavior_data(file)
+    if data is None:
+        data = prepare_behavior_data(file)
     blocks = prepare_rl_blocks(data)
 
     fits = []
@@ -504,9 +533,13 @@ def main() -> None:
     print(f"  previous: {previous_count}")
 
     results = []
+    trial_rows = []
     for file, dataset in files:
         print(f"Fitting [{dataset}] {file.name}...")
-        results.append(fit_one_file(file, dataset))
+        data = prepare_behavior_data(file)
+        fit = fit_one_file(file, dataset, data=data)
+        results.append(fit)
+        trial_rows.extend(trial_rpe_rows(data, fit))
 
     rl_results = pd.DataFrame(results)
 
@@ -567,8 +600,12 @@ def main() -> None:
 
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     rl_results.to_csv(OUTPUT_FILE, index=False, na_rep="NA")
+    trial_results = pd.DataFrame(trial_rows, columns=TRIAL_COLUMNS)
+    trial_results["session"] = pd.array(trial_results["session"], dtype="Int64")
+    trial_results.to_csv(TRIAL_OUTPUT_FILE, index=False, na_rep="NA")
 
     print(f"\nCombined CSV saved to:\n{OUTPUT_FILE}")
+    print(f"\nSaved {len(trial_results):,} trial-level RPEs to:\n{TRIAL_OUTPUT_FILE}")
     print("\nRL model fitting complete.")
 
 

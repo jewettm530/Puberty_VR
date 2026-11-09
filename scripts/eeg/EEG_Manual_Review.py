@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Manually inspect all four Muse/Mind Monitor raw EEG channels with MNE.
+"""Manually inspect AF7 and AF8 Muse/Mind Monitor raw EEG channels with MNE.
 
 Run from the Puberty_VR project directory:
   python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel ALL
@@ -17,8 +17,6 @@ samples (not the visual scaling) are unchanged.
 from __future__ import annotations
 
 import argparse
-import io
-import re
 import zipfile
 from pathlib import Path
 
@@ -27,9 +25,9 @@ import numpy as np
 import pandas as pd
 
 FS = 256.0  # Nominal Muse raw EEG sample rate; do not infer from rounded timestamp dt.
-CHANNEL_COLUMNS = {'TP9': 'RAW_TP9', 'AF7': 'RAW_AF7', 'AF8': 'RAW_AF8', 'TP10': 'RAW_TP10'}
+CHANNEL_COLUMNS = {'AF7': 'RAW_AF7', 'AF8': 'RAW_AF8'}
 CHANNEL_ORDER = list(CHANNEL_COLUMNS)
-TARGET_CHANNELS = ('AF7', 'AF8')
+LEGACY_TIMELINE_COLUMNS = ('RAW_TP9', 'RAW_TP10')
 
 
 def project_dir():
@@ -82,8 +80,10 @@ def load_full_rate(source):
     if missing:
         raise ValueError(f'Missing columns: {missing}')
     values = df[list(CHANNEL_COLUMNS.values())].apply(pd.to_numeric, errors='coerce')
-    # Some Mind Monitor rows carry auxiliary signals rather than raw EEG.
-    mask = values.notna().any(axis=1)
+    # Keep legacy sample/span coordinates when temporal columns are present so
+    # existing single-channel annotations still align. Only frontal values enter MNE.
+    timeline = list(values.columns) + [c for c in LEGACY_TIMELINE_COLUMNS if c in df]
+    mask = df[timeline].apply(pd.to_numeric, errors='coerce').notna().any(axis=1)
     values = values.loc[mask].reset_index(drop=True)
     times = pd.to_datetime(df.loc[mask, 'TimeStamp'], errors='coerce').reset_index(drop=True)
     valid = times.notna().to_numpy()
@@ -99,6 +99,8 @@ def load_full_rate(source):
     times = times.loc[good].reset_index(drop=True)
     values = values.loc[good].reset_index(drop=True)
     seconds -= seconds[0]
+    if len(seconds) < 1024:
+        raise ValueError('Fewer than 1024 RAW EEG samples after timestamp screening')
 
     observed_rate = (len(seconds) - 1) / (seconds[-1] - seconds[0])
     positive_dt = np.diff(seconds)
@@ -125,25 +127,6 @@ def select_span(spans, times, start):
     return max(range(len(spans)), key=lambda i: spans[i][1] - spans[i][0])
 
 
-def fill_for_display(samples):
-    """Only display interpolation; annotate every missing run as BAD_missing_raw."""
-    arr = np.asarray(samples, dtype=float)
-    annotations = []
-    for chan, col in enumerate(arr):
-        missing = ~np.isfinite(col)
-        if not missing.any():
-            continue
-        if np.isfinite(col).sum() < 2:
-            raise ValueError(f'{CHANNEL_ORDER[chan]} has insufficient values in selected span')
-        starts = np.flatnonzero(np.diff(np.r_[False, missing, False].astype(int)) == 1)
-        ends = np.flatnonzero(np.diff(np.r_[False, missing, False].astype(int)) == -1)
-        for s, e in zip(starts, ends):
-            annotations.append((max(0, (s - 1) / FS), (e - s + 2) / FS,
-                                'BAD_missing_raw_sample'))
-        arr[chan] = pd.Series(col).interpolate(limit_direction='both').to_numpy()
-    return arr, annotations
-
-
 def print_audit_flags(project, source, channel, audit_windows=None, limit=20):
     if audit_windows is not None:
         audit_path = audit_windows
@@ -156,8 +139,8 @@ def print_audit_flags(project, source, channel, audit_windows=None, limit=20):
         return
     df = pd.read_csv(audit_path, low_memory=False)
     f = df[df['recording'].astype(str) == source.name].copy()
-    if channel not in ('ALL', 'BOTH'):
-        f = f[f.channel == channel]
+    channels = CHANNEL_ORDER if channel in ('ALL', 'BOTH') else [channel]
+    f = f[f.channel.isin(channels)]
     if f.empty:
         print(f'No audit window entries for {source.name} / {channel}')
         return
@@ -173,20 +156,83 @@ def print_audit_flags(project, source, channel, audit_windows=None, limit=20):
     print('\nTo view one, use --start <start_s>. These are automated SUSPECTED artifacts.')
 
 
+def export_annotation_pdf(raw, annotations, output_pdf, source_name, subject, phase,
+                          channels, recording_seconds, original_start_index, fs=256):
+    """Write one PDF page per annotation, retaining neighboring signal context.
+
+    The displayed signal is the MNE in-memory, DC-centered raw trace (not filtered).
+    Elapsed recording times are derived from the original recording timestamps.
+    """
+    from matplotlib.backends.backend_pdf import PdfPages
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    values_uv = raw.get_data() * 1e6
+    sample_count = values_uv.shape[1]
+    with PdfPages(output_pdf) as pdf:
+        if not len(annotations):
+            fig, ax = plt.subplots(figsize=(11, 5))
+            ax.axis('off')
+            ax.text(0.08, 0.8, f'{subject} | {phase} | {source_name}', fontsize=15)
+            ax.text(0.08, 0.65, 'No annotations saved for this review.', fontsize=12)
+            ax.text(0.08, 0.52, 'This does not certify the recording as artifact-free.', fontsize=11)
+            pdf.savefig(fig, bbox_inches='tight')
+            plt.close(fig)
+            return
+
+        for number, (entry, channel_names) in enumerate(zip(annotations, annotations.ch_names), 1):
+            onset = float(entry['onset'])
+            duration = float(entry['duration'])
+            finish = onset + duration
+            # At least two seconds of surrounding context where available.
+            padding = max(1.5, min(3.0, duration))
+            plot_start = max(0.0, onset - padding)
+            plot_end = min((sample_count - 1) / fs, finish + padding)
+            start_idx = max(0, int(np.floor(plot_start * fs)))
+            stop_idx = min(sample_count, int(np.ceil(plot_end * fs)) + 1)
+            times = np.arange(start_idx, stop_idx) / fs
+            absolute_start_idx = min(len(recording_seconds)-1, original_start_index + min(sample_count-1, int(round(onset * fs))))
+            absolute_end_idx = min(len(recording_seconds)-1, original_start_index + min(sample_count-1, int(round(finish * fs))))
+            original_begin = float(recording_seconds[absolute_start_idx])
+            original_end = float(recording_seconds[absolute_end_idx])
+            affected = list(channel_names) if channel_names else ['Global annotation (all loaded channels)']
+            fig, axes = plt.subplots(len(channels), 1, sharex=True, figsize=(12, 2.1 * len(channels) + 2.8), squeeze=False)
+            axes = axes.ravel()
+            for i, (channel, ax) in enumerate(zip(channels, axes)):
+                trace = values_uv[i, start_idx:stop_idx]
+                # Center the plot display without changing the stored data.
+                trace = trace - np.nanmedian(trace)
+                ax.plot(times, trace, lw=0.75, color='#253545', rasterized=True)
+                ax.axvspan(onset, finish, color='#e7ad68', alpha=0.30)
+                ax.axvline(onset, color='#aa5925', lw=0.8, ls='--')
+                ax.axvline(finish, color='#aa5925', lw=0.8, ls='--')
+                ax.set_ylabel(f'{channel}\nµV*', rotation=0, ha='right', va='center', labelpad=35)
+                ax.grid(alpha=0.15)
+            axes[-1].set_xlabel('Time within selected continuous span (seconds)')
+            fig.suptitle(f'{subject} | {phase} | annotation {number}/{len(annotations)}', y=.995, fontsize=13, fontweight='bold')
+            fig.text(.10, .955, f'{entry["description"]} | Scope: {", ".join(affected)}', fontsize=10)
+            fig.text(.10, .930, f'Selected span: {onset:.3f}–{finish:.3f} s | Original recording elapsed: {original_begin:.3f}–{original_end:.3f} s', fontsize=9)
+            fig.text(.10, .906, f'Source: {source_name} | Shading = reviewer-selected interval (suspected, not independently confirmed)', fontsize=8)
+            fig.text(.10, .025, '*Amplitude assumes source units are µV; verify hardware scaling. Waveforms shown for review, not cleaned or validated.', fontsize=8)
+            fig.subplots_adjust(top=.86, bottom=.09, left=.15, right=.97, hspace=.22)
+            pdf.savefig(fig)
+            plt.close(fig)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--subject', default='029', help='e.g. 029')
     p.add_argument('--phase', default='pre_vr', choices=['baseline','pre_vr','post_vr','recovery'])
     p.add_argument('--input', type=Path, help='Optional exact input CSV/ZIP path; overrides subject/phase lookup')
-    p.add_argument('--channel', choices=['ALL', 'BOTH', 'TP9', 'AF7', 'AF8', 'TP10'], default='ALL',
-                   help='ALL (default) shows four channels; BOTH is a legacy alias for ALL; individual channels can be reviewed separately')
+    p.add_argument('--channel', choices=['ALL', 'BOTH', 'AF7', 'AF8'], default='ALL',
+                   help='ALL (default) and BOTH show AF7 and AF8; choose AF7 or AF8 to review one channel')
     p.add_argument('--start', type=float, default=None, help='Elapsed seconds since first valid RAW sample (audit coordinates)')
-    p.add_argument('--duration', type=float, default=1.5, help='Visible time span in MNE browser, seconds')
+    p.add_argument('--duration', type=float, default=5.0, help='Visible time span in MNE browser, seconds')
     p.add_argument('--list-flags', action='store_true', help='Print representative audit flags and exit')
     p.add_argument('--audit-windows', type=Path, default=None, help='Path to EEG Audit v2 eeg_window_qc_and_power.csv')
     p.add_argument('--dry-run', action='store_true', help='Validate loading and paths without opening GUI')
     p.add_argument('--output-dir', type=Path, default=None)
-    p.add_argument('--scale-uv', type=float, default=800., help='Display scaling in assumed microvolts (default 1600; original 250 made saturated traces illegible). Try 600 for AF7/AF8-only views.')
+    p.add_argument('--scale-uv', type=float, default=800, help='Display scaling in assumed microvolts (default 800). Try 600 for AF7/AF8-only views.')
     args = p.parse_args()
 
     project = project_dir()
@@ -233,7 +279,8 @@ def main():
     raw = mne.io.RawArray(clean * 1e-6, info, verbose=False)
     output = args.output_dir or project / 'outputs' / 'eeg' / 'manual_annotations' / f'sub{args.subject.zfill(3)}'
     output.mkdir(parents=True, exist_ok=True)
-    channel_suffix = 'ALL' if args.channel == 'BOTH' else args.channel
+    # Keep the frontal pair separate from earlier four-channel _ALL reviews.
+    channel_suffix = 'AF7_AF8' if len(channels) == 2 else channels[0]
     stem = f'{source.stem}_{channel_suffix}_span{span_idx+1}'
     fif_path = output / f'{stem}-annot.fif'
     csv_path = output / f'{stem}_intervals.csv'
@@ -284,14 +331,14 @@ def main():
         )
     reviewed.save(fif_path, overwrite=True)
     rows = []
-    for annotation in reviewed:
+    for annotation, annotation_channels in zip(reviewed, reviewed.ch_names):
         i0 = min(max(round(annotation['onset'] * FS), 0), (b-a)-1)
         i1 = min(max(round((annotation['onset']+annotation['duration']) * FS), 0), (b-a)-1)
         rows.append({
             'subject':f'sub{args.subject.zfill(3)}',
             'recording':source.name, 'channel_scope':args.channel,
             'span_number':span_idx+1, 'label':annotation['description'],
-            'affected_channels': '|'.join(annotation['ch_names']) if annotation['ch_names'] else '|'.join(channels),
+            'affected_channels': '|'.join(annotation_channels) if annotation_channels else '|'.join(channels),
             'display_start_s':round(float(annotation['onset']),4),
             'display_end_s':round(float(annotation['onset']+annotation['duration']),4),
             'recording_start_s':round(float(seconds[a+i0]),4),
@@ -316,10 +363,15 @@ def main():
                 lambda r: notes.get((r['label'], round(float(r['display_start_s']),4),
                                      round(float(r['display_end_s']),4)), ''), axis=1)
     result.to_csv(csv_path, index=False)
+    pdf_path = output / f'{stem}_annotated_traces.pdf'
+    export_annotation_pdf(raw, reviewed, pdf_path, source.name,
+                          f'sub{args.subject.zfill(3)}', args.phase,
+                          channels, seconds, a, fs=FS)
+    print('  Annotated waveform PDF:', pdf_path)
     print(f'Saved {len(rows)} annotated intervals:')
     print('  MNE annotations:', fif_path)
     print('  Shareable review CSV:', csv_path)
-    print('Scope: annotations made in ALL view affect all four channels; individual-channel runs save explicit channel scope.')
+    print('Scope: global annotations in the paired view cover AF7 and AF8. Individual-channel runs save explicit scope.')
     print('Note: Existing EEG_Audit.py does NOT automatically apply these manual annotations. They must be incorporated into the final spectral analysis before calling results manually validated.')
 
 
