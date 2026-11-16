@@ -28,9 +28,9 @@ Session 2 lose-switch probability, older: mean 0.458; 16/27 (59.3%) at or above 
 
 Heart-rate reactivity
 ---------------------
-Math reactivity: minors 7.389 bpm, older subjects 8.832 bpm; difference -1.443 bpm, p = .606.
-Speech reactivity: minors 10.947 bpm, older subjects 6.869 bpm; difference 4.078 bpm, p = .535.
-Preparation reactivity: minors 13.330 bpm, older subjects 9.840 bpm; difference 3.490 bpm, p = .640.
+Math reactivity: minors 7.389 bpm, older subjects 4.637 bpm; difference 2.752 bpm, p = .312.
+Speech reactivity: minors 10.947 bpm, older subjects 4.589 bpm; difference 6.358 bpm, p = .345.
+Preparation reactivity: minors 13.330 bpm, older subjects 4.910 bpm; difference 8.420 bpm, p = .267.
 
 Statistical conclusion
 ----------------------

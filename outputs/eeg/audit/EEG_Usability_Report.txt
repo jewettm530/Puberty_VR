@@ -1,6 +1,6 @@
 PUBERTY & VR - EEG AUTOMATED QC USABILITY REPORT
 =================================================================
-Generated: 2026-11-16 09:24:27
+Generated: 2026-11-16 15:00:54
 Subjects in audit: 41
 Recordings in audit: 151
 Full-rate audited recordings: 100

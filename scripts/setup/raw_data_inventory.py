@@ -84,7 +84,7 @@ FILE_NAME_DICTIONARY = {
         "required": True,
     },
     "vr_math_hr": {
-        "filename_patterns": ["{sub}_vr_math_hr.csv"],
+        "filename_patterns": ["{sub}_vr_math_hr.csv", "{sub}_math_hr.csv"],
         "modality": "heart_rate",
         "phase": "vr_math",
         "required": True,
@@ -93,10 +93,10 @@ FILE_NAME_DICTIONARY = {
         "filename_patterns": ["{sub}_vr_math_eeg.csv", "{sub}_vr_math_eeg.zip"],
         "modality": "eeg",
         "phase": "vr_math",
-        "required": True,
+        "required": False,
     },
     "vr_speech_hr": {
-        "filename_patterns": ["{sub}_vr_speech_hr.csv"],
+        "filename_patterns": ["{sub}_vr_speech_hr.csv", "{sub}_speech_hr.csv"],
         "modality": "heart_rate",
         "phase": "vr_speech",
         "required": True,
@@ -105,7 +105,7 @@ FILE_NAME_DICTIONARY = {
         "filename_patterns": ["{sub}_vr_speech_eeg.csv", "{sub}_vr_speech_eeg.zip"],
         "modality": "eeg",
         "phase": "vr_speech",
-        "required": True,
+        "required": False,
     },
     "plearning_1_eeg": {
         "filename_patterns": ["{sub}_plearning_1_eeg.csv", "{sub}_plearning_1_eeg.zip"],
@@ -132,7 +132,7 @@ FILE_NAME_DICTIONARY = {
         "required": False,
     },
     "vr_prep_hr": {
-        "filename_patterns": ["{sub}_vr_prep_hr.csv"],
+        "filename_patterns": ["{sub}_vr_prep_hr.csv", "{sub}_prep_hr.csv"],
         "modality": "heart_rate",
         "phase": "vr_prep",
         "required": False,
@@ -154,10 +154,14 @@ def rel_path(path: Path) -> str:
 
 
 def first_existing(subject_dir: Path, patterns: list[str], subject_id: str) -> Path | None:
+    """Match filename variants case-insensitively and accept unpadded IDs."""
+    files = {p.name.casefold(): p for p in subject_dir.iterdir() if p.is_file()}
+    variants = (subject_id, str(int(subject_id)))
     for pattern in patterns:
-        candidate = subject_dir / pattern.format(sub=subject_id)
-        if candidate.exists():
-            return candidate
+        for sub in variants:
+            found = files.get(pattern.format(sub=sub).casefold())
+            if found is not None:
+                return found
     return None
 
 

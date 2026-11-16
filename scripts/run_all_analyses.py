@@ -56,6 +56,7 @@ STEPS_AFTER_EEG = [
     "learning_rates/professor_individual_learning_curves.py",
     "multimodal/build_multimodal_dataset.py",
     "multimodal/heart_rate_learning_correlations.py",
+    "multimodal/multimodal_associations.py",
 ]
 AGE_STEPS = [
     "multimodal/compare_minors_to_older.py",

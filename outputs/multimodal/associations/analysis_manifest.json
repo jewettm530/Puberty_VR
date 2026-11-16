@@ -1,0 +1,19 @@
+{
+  "n_subjects": 41,
+  "available": {
+    "subjects_any": 41,
+    "hr": 38,
+    "learning_change": 33,
+    "eeg": 28,
+    "hr_eeg_learning": 20
+  },
+  "notes": [
+    "Associations, not causal effects",
+    "FDR within family and priority",
+    "No missing data imputed",
+    "EEG anticipation=preVR and acute_stress_response=postVR; no EEG recorded during prep/speech/math",
+    "HR recovery_mean_hr is recovery; Plearn1 before preVR, Plearn2 after postVR",
+    "EEG frontal averages require both AF7 and AF8",
+    "No interaction models fitted due to sample-size concerns"
+  ]
+}

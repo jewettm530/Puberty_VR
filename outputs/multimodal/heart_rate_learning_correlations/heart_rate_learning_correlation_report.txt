@@ -10,36 +10,36 @@ Subjects with both learning sessions: 33
 
 PRIMARY A: HR REACTIVITY VS LEARNING-RATE CHANGE
 ------------------------------------------------
-math_hr_reactivity vs delta_slope: rho=0.314, n=17, p=0.2201, FDR p=0.9330 (moderate positive)
-mean_stress_reactivity vs delta_slope: rho=0.186, n=17, p=0.4741, FDR p=0.9330 (small positive)
-max_stress_reactivity vs delta_slope: rho=0.174, n=17, p=0.5041, FDR p=0.9330 (small positive)
-prep_hr_reactivity vs delta_slope: rho=0.171, n=15, p=0.5413, FDR p=0.9330 (small positive)
-math_hr_reactivity vs delta_k: rho=-0.147, n=17, p=0.5733, FDR p=0.9330 (small negative)
-speech_hr_reactivity vs delta_slope: rho=0.130, n=17, p=0.6192, FDR p=0.9330 (small positive)
-max_stress_reactivity vs delta_k: rho=-0.086, n=17, p=0.7434, FDR p=0.9330 (negligible negative)
-mean_stress_reactivity vs delta_k: rho=-0.061, n=17, p=0.8153, FDR p=0.9330 (negligible negative)
-prep_hr_reactivity vs delta_k: rho=-0.032, n=15, p=0.9095, FDR p=0.9330 (negligible negative)
-speech_hr_reactivity vs delta_k: rho=-0.022, n=17, p=0.9330, FDR p=0.9330 (negligible negative)
+max_stress_reactivity vs delta_k: rho=-0.240, n=32, p=0.1863, FDR p=0.6150 (small negative)
+speech_hr_reactivity vs delta_k: rho=-0.223, n=32, p=0.2209, FDR p=0.6150 (small negative)
+mean_stress_reactivity vs delta_k: rho=-0.218, n=32, p=0.2312, FDR p=0.6150 (small negative)
+math_hr_reactivity vs delta_k: rho=-0.207, n=32, p=0.2545, FDR p=0.6150 (small negative)
+math_hr_reactivity vs delta_slope: rho=0.186, n=32, p=0.3075, FDR p=0.6150 (small positive)
+prep_hr_reactivity vs delta_k: rho=-0.124, n=30, p=0.5141, FDR p=0.7786 (small negative)
+mean_stress_reactivity vs delta_slope: rho=0.111, n=32, p=0.5451, FDR p=0.7786 (small positive)
+prep_hr_reactivity vs delta_slope: rho=0.059, n=30, p=0.7588, FDR p=0.8619 (negligible positive)
+speech_hr_reactivity vs delta_slope: rho=-0.052, n=32, p=0.7757, FDR p=0.8619 (negligible negative)
+max_stress_reactivity vs delta_slope: rho=-0.019, n=32, p=0.9175, FDR p=0.9175 (negligible negative)
 
 delta_k and delta_slope are Post - Pre. Positive values mean faster/steeper learning after stress; negative values mean slower/flatter learning after stress.
 
 PRIMARY B: HR REACTIVITY VS STRATEGY CHANGE
 -------------------------------------------
-max_stress_reactivity vs delta_loseswitch: rho=0.402, n=17, p=0.1097, FDR p=0.7813 (moderate positive)
-mean_stress_reactivity vs delta_loseswitch: rho=0.321, n=17, p=0.2089, FDR p=0.7813 (moderate positive)
-prep_hr_reactivity vs delta_loseswitch: rho=0.332, n=15, p=0.2265, FDR p=0.7813 (moderate positive)
-math_hr_reactivity vs delta_loseswitch: rho=0.306, n=17, p=0.2317, FDR p=0.7813 (moderate positive)
-math_hr_reactivity vs delta_strategy_bias: rho=-0.208, n=17, p=0.4223, FDR p=0.7813 (small negative)
-max_stress_reactivity vs delta_strategy_bias: rho=-0.196, n=17, p=0.4507, FDR p=0.7813 (small negative)
-speech_hr_reactivity vs delta_winstay: rho=0.172, n=17, p=0.5103, FDR p=0.7813 (small positive)
-prep_hr_reactivity vs delta_strategy_bias: rho=-0.164, n=15, p=0.5585, FDR p=0.7813 (small negative)
-mean_stress_reactivity vs delta_strategy_bias: rho=-0.147, n=17, p=0.5733, FDR p=0.7813 (small negative)
-speech_hr_reactivity vs delta_strategy_bias: rho=0.132, n=17, p=0.6126, FDR p=0.7813 (small positive)
-max_stress_reactivity vs delta_winstay: rho=0.098, n=17, p=0.7082, FDR p=0.7813 (negligible positive)
-math_hr_reactivity vs delta_winstay: rho=0.093, n=17, p=0.7222, FDR p=0.7813 (negligible positive)
-prep_hr_reactivity vs delta_winstay: rho=0.100, n=15, p=0.7229, FDR p=0.7813 (negligible positive)
-mean_stress_reactivity vs delta_winstay: rho=0.091, n=17, p=0.7292, FDR p=0.7813 (negligible positive)
-speech_hr_reactivity vs delta_loseswitch: rho=0.025, n=17, p=0.9256, FDR p=0.9256 (negligible positive)
+max_stress_reactivity vs delta_loseswitch: rho=0.461, n=32, p=0.0079, FDR p=0.1184 (moderate positive)
+max_stress_reactivity vs delta_strategy_bias: rho=-0.379, n=32, p=0.0322, FDR p=0.2172 (moderate negative)
+mean_stress_reactivity vs delta_loseswitch: rho=0.354, n=32, p=0.0470, FDR p=0.2172 (moderate positive)
+prep_hr_reactivity vs delta_loseswitch: rho=0.343, n=30, p=0.0636, FDR p=0.2172 (moderate positive)
+math_hr_reactivity vs delta_loseswitch: rho=0.322, n=32, p=0.0724, FDR p=0.2172 (moderate positive)
+mean_stress_reactivity vs delta_strategy_bias: rho=-0.297, n=32, p=0.0993, FDR p=0.2334 (small negative)
+speech_hr_reactivity vs delta_strategy_bias: rho=-0.276, n=32, p=0.1267, FDR p=0.2334 (small negative)
+math_hr_reactivity vs delta_strategy_bias: rho=-0.268, n=32, p=0.1387, FDR p=0.2334 (small negative)
+speech_hr_reactivity vs delta_loseswitch: rho=0.267, n=32, p=0.1401, FDR p=0.2334 (small positive)
+prep_hr_reactivity vs delta_strategy_bias: rho=-0.249, n=30, p=0.1846, FDR p=0.2770 (small negative)
+speech_hr_reactivity vs delta_winstay: rho=-0.223, n=32, p=0.2202, FDR p=0.3002 (small negative)
+max_stress_reactivity vs delta_winstay: rho=-0.203, n=32, p=0.2650, FDR p=0.3312 (small negative)
+mean_stress_reactivity vs delta_winstay: rho=-0.155, n=32, p=0.3968, FDR p=0.4578 (small negative)
+prep_hr_reactivity vs delta_winstay: rho=-0.108, n=30, p=0.5704, FDR p=0.5789 (small negative)
+math_hr_reactivity vs delta_winstay: rho=-0.102, n=32, p=0.5789, FDR p=0.5789 (small negative)
 
 delta_winstay and delta_loseswitch are Post - Pre. Positive delta_winstay means a participant became more likely to stay after a gain; positive delta_loseswitch means they became more likely to switch after a loss.
 delta_strategy_bias is descriptive only because win-stay and lose-switch are conditioned on different feedback events.
@@ -49,26 +49,26 @@ Strategy results surviving BH-FDR: 0
 
 EXPLORATORY PERFORMANCE / POST-STRESS LEVELS
 --------------------------------------------
+math_hr_reactivity vs strategy_bias_post: rho=-0.457, n=32, p=0.0086
+math_hr_reactivity vs winstay_post: rho=-0.418, n=32, p=0.0173
+math_hr_reactivity vs accuracy_post: rho=-0.416, n=32, p=0.0179
+max_stress_reactivity vs loseswitch_post: rho=0.393, n=32, p=0.0261
+max_stress_reactivity vs strategy_bias_post: rho=-0.384, n=32, p=0.0299
+max_stress_reactivity vs slope_post: rho=-0.374, n=32, p=0.0352
 post_minus_pre_hr vs k_post: rho=-0.391, n=29, p=0.0359
-math_hr_reactivity vs loseswitch_post: rho=0.435, n=17, p=0.0807
-math_hr_reactivity vs accuracy_post: rho=-0.374, n=17, p=0.1393
-prep_hr_reactivity vs delta_accuracy: rho=0.359, n=15, p=0.1885
-mean_stress_reactivity vs k_post: rho=0.333, n=17, p=0.1911
-speech_hr_reactivity vs winstay_post: rho=0.319, n=17, p=0.2126
-recovery_minus_post_hr vs k_post: rho=0.263, n=23, p=0.2256
-speech_hr_reactivity vs k_post: rho=0.309, n=17, p=0.2278
-math_hr_reactivity vs strategy_bias_post: rho=-0.304, n=17, p=0.2356
-post_minus_pre_hr vs delta_accuracy: rho=0.224, n=29, p=0.2429
-recovery_minus_post_hr vs slope_post: rho=-0.240, n=23, p=0.2698
-mean_stress_reactivity vs delta_trial_gain: rho=-0.282, n=17, p=0.2731
-speech_hr_reactivity vs strategy_bias_post: rho=0.255, n=17, p=0.3235
-math_hr_reactivity vs winstay_post: rho=-0.252, n=17, p=0.3283
-max_stress_reactivity vs k_post: rho=0.252, n=17, p=0.3283
-math_hr_reactivity vs k_post: rho=0.233, n=17, p=0.3685
-prep_hr_reactivity vs k_post: rho=0.243, n=15, p=0.3831
-math_hr_reactivity vs delta_trial_gain: rho=-0.218, n=17, p=0.4003
-speech_hr_reactivity vs accuracy_post: rho=0.210, n=17, p=0.4191
-post_minus_pre_hr vs loseswitch_post: rho=-0.149, n=29, p=0.4406
+math_hr_reactivity vs loseswitch_post: rho=0.346, n=32, p=0.0522
+mean_stress_reactivity vs strategy_bias_post: rho=-0.346, n=32, p=0.0526
+max_stress_reactivity vs winstay_post: rho=-0.343, n=32, p=0.0545
+math_hr_reactivity vs slope_post: rho=-0.336, n=32, p=0.0600
+mean_stress_reactivity vs winstay_post: rho=-0.314, n=32, p=0.0799
+prep_hr_reactivity vs slope_post: rho=-0.317, n=30, p=0.0878
+math_hr_reactivity vs trial_gain_post: rho=-0.301, n=32, p=0.0940
+mean_stress_reactivity vs loseswitch_post: rho=0.299, n=32, p=0.0966
+speech_hr_reactivity vs loseswitch_post: rho=0.292, n=32, p=0.1047
+speech_hr_reactivity vs delta_trial_gain: rho=-0.292, n=32, p=0.1054
+max_stress_reactivity vs accuracy_post: rho=-0.290, n=32, p=0.1077
+mean_stress_reactivity vs accuracy_post: rho=-0.286, n=32, p=0.1124
+mean_stress_reactivity vs slope_post: rho=-0.278, n=32, p=0.1231
 
 INTERPRETATION CAUTIONS
 -----------------------
