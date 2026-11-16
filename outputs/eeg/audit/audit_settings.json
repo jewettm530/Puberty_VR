@@ -48,6 +48,6 @@
     "filter_change_warning": 0.25,
     "manual_review": null,
     "skip_review_figures": false,
-    "preprocessing_figures": false
+    "preprocessing_figures": true
   }
 }

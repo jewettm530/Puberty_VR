@@ -5,8 +5,8 @@ Primary questions:
 1) Does greater VR-stressor HR reactivity predict a change in learning rate?
 2) Does greater VR-stressor HR reactivity predict a change in win-stay or lose-switch behavior?
 
-Subjects in merged dataset: 33
-Subjects with both learning sessions: 26
+Subjects in merged dataset: 41
+Subjects with both learning sessions: 33
 
 PRIMARY A: HR REACTIVITY VS LEARNING-RATE CHANGE
 ------------------------------------------------
@@ -49,26 +49,26 @@ Strategy results surviving BH-FDR: 0
 
 EXPLORATORY PERFORMANCE / POST-STRESS LEVELS
 --------------------------------------------
-post_minus_pre_hr vs k_post: rho=-0.415, n=22, p=0.0548
+post_minus_pre_hr vs k_post: rho=-0.391, n=29, p=0.0359
 math_hr_reactivity vs loseswitch_post: rho=0.435, n=17, p=0.0807
 math_hr_reactivity vs accuracy_post: rho=-0.374, n=17, p=0.1393
 prep_hr_reactivity vs delta_accuracy: rho=0.359, n=15, p=0.1885
 mean_stress_reactivity vs k_post: rho=0.333, n=17, p=0.1911
 speech_hr_reactivity vs winstay_post: rho=0.319, n=17, p=0.2126
+recovery_minus_post_hr vs k_post: rho=0.263, n=23, p=0.2256
 speech_hr_reactivity vs k_post: rho=0.309, n=17, p=0.2278
 math_hr_reactivity vs strategy_bias_post: rho=-0.304, n=17, p=0.2356
+post_minus_pre_hr vs delta_accuracy: rho=0.224, n=29, p=0.2429
+recovery_minus_post_hr vs slope_post: rho=-0.240, n=23, p=0.2698
 mean_stress_reactivity vs delta_trial_gain: rho=-0.282, n=17, p=0.2731
 speech_hr_reactivity vs strategy_bias_post: rho=0.255, n=17, p=0.3235
 math_hr_reactivity vs winstay_post: rho=-0.252, n=17, p=0.3283
 max_stress_reactivity vs k_post: rho=0.252, n=17, p=0.3283
-post_minus_pre_hr vs delta_trial_gain: rho=0.215, n=22, p=0.3360
 math_hr_reactivity vs k_post: rho=0.233, n=17, p=0.3685
 prep_hr_reactivity vs k_post: rho=0.243, n=15, p=0.3831
 math_hr_reactivity vs delta_trial_gain: rho=-0.218, n=17, p=0.4003
-recovery_minus_post_hr vs k_post: rho=0.198, n=20, p=0.4015
 speech_hr_reactivity vs accuracy_post: rho=0.210, n=17, p=0.4191
-mean_stress_reactivity vs loseswitch_post: rho=0.191, n=17, p=0.4620
-recovery_minus_post_hr vs delta_accuracy: rho=0.173, n=20, p=0.4656
+post_minus_pre_hr vs loseswitch_post: rho=-0.149, n=29, p=0.4406
 
 INTERPRETATION CAUTIONS
 -----------------------

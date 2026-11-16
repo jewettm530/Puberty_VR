@@ -577,7 +577,13 @@ def main():
     p.add_argument('--filter-change-warning',type=float,default=.25)
     p.add_argument('--manual-review',type=Path,default=None,help='Optional reviewer decisions CSV; do not edit original raw data')
     p.add_argument('--skip-review-figures',action='store_true',help='Skip detailed per-recording review galleries')
-    p.add_argument('--preprocessing-figures',action='store_true',help='Export combined preprocessing TIFFs in addition to the default spectrogram PNGs')
+    p.add_argument(
+        '--preprocessing-figures',
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help='Export combined preprocessing TIFFs (default: enabled). '
+             'Spectrogram PNGs are always exported for eligible recordings.',
+    )
     a=p.parse_args()
     # Works whether installed in scripts/ or scripts/eeg/.
     parents=Path(__file__).resolve().parents

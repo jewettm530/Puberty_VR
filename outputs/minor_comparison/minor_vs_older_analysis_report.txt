@@ -10,10 +10,10 @@ All other workbook-matched subjects are classified as older_than_minor.
 Cohort coverage
 ---------------
 Workbook minor-coded subjects: 9
-Workbook older subjects: 32
+Workbook older subjects: 40
 Analyzed distinct minor subjects: 7
-Analyzed distinct older subjects: 25
-Analyzed subject-session rows: 58
+Analyzed distinct older subjects: 33
+Analyzed subject-session rows: 73
 Workbook subjects without multimodal rows: 001, 002, 003, 006, 008, 009, 011, 026, 028
 Multimodal subjects without workbook classification: none
 Workbook label/recorded-age discordances: 011

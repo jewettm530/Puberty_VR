@@ -40,3 +40,11 @@ subject_id,age_group,reported_age,classification_source_row,included_in_multimod
 042,older_than_minor,18.0,43,True
 043,older_than_minor,19.0,44,True
 044,older_than_minor,19.0,45,True
+045,older_than_minor,18.0,46,True
+046,older_than_minor,18.0,47,True
+047,older_than_minor,18.0,48,True
+048,older_than_minor,18.0,49,True
+049,older_than_minor,18.0,50,True
+050,older_than_minor,18.0,51,True
+051,older_than_minor,19.0,52,True
+052,older_than_minor,18.0,53,True

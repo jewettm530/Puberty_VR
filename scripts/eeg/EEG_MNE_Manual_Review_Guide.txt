@@ -16,10 +16,6 @@ its Python environment. From the Puberty_VR project root:
   python3 -c "import mne; print(mne.__version__)"
   python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr
 
-Four channels now appear in order TP9, AF7, AF8, TP10. --channel ALL is the
-explicit four-channel option. The legacy --channel BOTH acts as an alias for
-ALL. You can review one channel alone with --channel AF7 / AF8 / TP9 / TP10.
-
   python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel ALL --start 20 --duration 12
   python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --list-flags
   python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel AF8 --start 20
