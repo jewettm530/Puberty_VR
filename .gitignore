@@ -60,3 +60,4 @@ outputs/learning_rates/reports/**
 # =========================
 *.pptx
 /Archive.zip
+outputs/eeg/bandpower.zip
