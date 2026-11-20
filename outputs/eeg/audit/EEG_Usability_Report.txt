@@ -1,18 +1,21 @@
 PUBERTY & VR - EEG AUTOMATED QC USABILITY REPORT
 =================================================================
-Generated: 2026-11-16 15:00:54
-Subjects in audit: 41
-Recordings in audit: 151
-Full-rate audited recordings: 100
-Provisional passing recordings: 81
-Subjects with passing pre/post pairs: 029, 032, 034, 035, 036, 038, 039, 040, 041, 042, 043, 044, 045, 046, 047, 048, 049, 050, 052
+Generated: 2026-11-20 16:43:19
+Subjects in audit: 49
+Recordings in audit: 174
+Full-rate audited recordings: 123
+Provisional passing recordings: 93
+Subjects with passing pre/post pairs: 029, 035, 036, 038, 039, 040, 041, 042, 043, 044, 045, 046, 047, 048, 049, 050, 051, 052, 053, 054, 055, 056, 057
 
 PASS CRITERIA
   >=50% paired AF7/AF8 hard-pass window retention
-  AND >=5 paired passing 4-second windows
+  AND >=5 paired passing 2-second windows
 
 IMPORTANT:
-  These are automated, provisional results.
+  Fixed 2-s Hann Welch epochs, 1-s step, nominal 256 Hz, +/-200 µV rejection.
+  Subjects 039-052 use only the second half of each recording.
+  Matching BAD intervals from preprocessed manual reviews apply on audit rerun.
+  Check preprocessing IDs and reviewer decisions before final interpretation.
   Hard-pass does NOT mean artifact-free EEG.
   Manual neuroscientist review is still required.
 
@@ -23,1557 +26,1856 @@ INDIVIDUAL RECORDING RESULTS
 Subject 005 | BASELINE
   Recording: 005_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 005 | PRE-VR
   Recording: 005_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 005 | POST-VR
   Recording: 005_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 005 | PLEARNING-1
   Recording: 005_plearning_1_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 005 | PLEARNING-2
   Recording: 005_plearning_2_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 005 | VR-MATH
   Recording: 005_vr_math_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 005 | VR-SPEECH
   Recording: 005_vr_speech_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 007 | BASELINE
   Recording: 007_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 007 | RECOVERY
   Recording: 007_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 010 | BASELINE
   Recording: 010_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 010 | PRE-VR
   Recording: 010_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 010 | POST-VR
   Recording: 010_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 010 | RECOVERY
   Recording: 010_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 012 | BASELINE
   Recording: 012_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 012 | PRE-VR
   Recording: 012_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 012 | RECOVERY
   Recording: 012_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 013 | BASELINE
   Recording: 013_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 013 | PRE-VR
   Recording: 013_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 013 | POST-VR
   Recording: 013_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 013 | RECOVERY
   Recording: 013_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 014 | BASELINE
   Recording: 014_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 014 | PRE-VR
   Recording: 014_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 014 | POST-VR
   Recording: 014_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 014 | RECOVERY
   Recording: 014_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 015 | BASELINE
   Recording: 015_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 015 | PRE-VR
   Recording: 015_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 015 | POST-VR
   Recording: 015_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 015 | RECOVERY
   Recording: 015_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 016 | BASELINE
   Recording: 016_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 016 | PRE-VR
   Recording: 016_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 016 | POST-VR
   Recording: 016_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 016 | RECOVERY
   Recording: 016_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 018 | BASELINE
   Recording: 018_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 018 | PRE-VR
   Recording: 018_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 018 | POST-VR
   Recording: 018_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 018 | RECOVERY
   Recording: 018_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 019 | BASELINE
   Recording: 019_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 019 | PRE-VR
   Recording: 019_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 019 | POST-VR
   Recording: 019_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 020 | BASELINE
   Recording: 020_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 020 | PRE-VR
   Recording: 020_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 020 | POST-VR
   Recording: 020_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 020 | RECOVERY
   Recording: 020_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 022 | BASELINE
   Recording: 022_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 022 | PRE-VR
   Recording: 022_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 022 | RECOVERY
   Recording: 022_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 023 | BASELINE
   Recording: 023_baseline_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 023 | PRE-VR
   Recording: 023_pre_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 023 | POST-VR
   Recording: 023_post_vr_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 023 | RECOVERY
   Recording: 023_recovery_eeg.csv
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: SKIPPED_LOW_RATE. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: SKIPPED_RATE_OR_LENGTH. Recording did not complete full-rate EEG artifact QC.
 
 Subject 024 | PRE-VR
   Recording: 024_pre_vr_eeg.csv
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 171
-  AF7 hard passes: 169/171 (98.8%)
-  AF8 hard passes: 121/171 (70.8%)
-  Paired hard passes: 121/171 (70.8%)
-  AF7 hard-rejection reasons: boundary_values (2), constant_run (2)
-  AF8 hard-rejection reasons: boundary_values (50), constant_run (2)
-  Overall hard flags: boundary_values:52, constant_run:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:179, abrupt_step_possible_contact_artifact:173, unusual_beta:11, possible_ocular_or_slow_artifact:9, unusual_alpha:8
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 343
+  AF7 hard passes: 328/343 (95.6%)
+  AF8 hard passes: 0/343 (0.0%)
+  Paired hard passes: 0/343 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (15), boundary_values (4), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (343), boundary_values (104)
+  Overall hard flags: amplitude_exceeds_limit_uv:358, boundary_values:108, constant_run:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:355, abrupt_step_possible_contact_artifact:345, possible_ocular_or_slow_artifact:16, unusual_beta:12, unusual_alpha:2
 
 Subject 024 | POST-VR
   Recording: 024_post_vr_eeg.csv
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 15.1% is below 50%
-  Total 4-second positions: 166
-  AF7 hard passes: 162/166 (97.6%)
-  AF8 hard passes: 25/166 (15.1%)
-  Paired hard passes: 25/166 (15.1%)
-  AF7 hard-rejection reasons: boundary_values (4)
-  AF8 hard-rejection reasons: boundary_values (141), constant_run (8)
-  Overall hard flags: boundary_values:145, constant_run:8
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:204, large_filtered_peak_to_peak:202
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 333
+  AF7 hard passes: 205/333 (61.6%)
+  AF8 hard passes: 0/333 (0.0%)
+  Paired hard passes: 0/333 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (128), boundary_values (7)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (333), boundary_values (252), constant_run (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:461, boundary_values:259, constant_run:8
+  Additional warnings (not automatic exclusions): large_peak_to_peak:405, abrupt_step_possible_contact_artifact:403, possible_ocular_or_slow_artifact:2
 
 Subject 024 | RECOVERY
   Recording: 024_recovery_eeg.csv
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 21.8% is below 50%
-  Total 4-second positions: 193
-  AF7 hard passes: 173/193 (89.6%)
-  AF8 hard passes: 44/193 (22.8%)
-  Paired hard passes: 42/193 (21.8%)
-  AF7 hard-rejection reasons: boundary_values (20)
-  AF8 hard-rejection reasons: boundary_values (149), constant_run (40)
-  Overall hard flags: boundary_values:169, constant_run:40
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:261, large_filtered_peak_to_peak:253
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 388
+  AF7 hard passes: 197/388 (50.8%)
+  AF8 hard passes: 0/388 (0.0%)
+  Paired hard passes: 0/388 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (191), boundary_values (24)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (388), boundary_values (276), constant_run (43)
+  Overall hard flags: amplitude_exceeds_limit_uv:579, boundary_values:300, constant_run:43
+  Additional warnings (not automatic exclusions): large_peak_to_peak:512, abrupt_step_possible_contact_artifact:489, possible_ocular_or_slow_artifact:17
 
 Subject 025 | BASELINE
   Recording: 025_baseline_eeg.csv
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 39.2% is below 50%
-  Total 4-second positions: 153
-  AF7 hard passes: 144/153 (94.1%)
-  AF8 hard passes: 60/153 (39.2%)
-  Paired hard passes: 60/153 (39.2%)
-  AF7 hard-rejection reasons: boundary_values (9)
-  AF8 hard-rejection reasons: boundary_values (93), constant_run (2)
-  Overall hard flags: boundary_values:102, constant_run:2
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:201, large_filtered_peak_to_peak:178, unusual_beta:11, unusual_alpha:4
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 307
+  AF7 hard passes: 78/307 (25.4%)
+  AF8 hard passes: 0/307 (0.0%)
+  Paired hard passes: 0/307 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (229), boundary_values (19)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (307), boundary_values (157), constant_run (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:536, boundary_values:176, constant_run:3
+  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:383, large_peak_to_peak:357, possible_ocular_or_slow_artifact:3
 
 Subject 025 | PRE-VR
   Recording: 025_pre_vr_eeg.csv
   Decision: FAILS PROVISIONAL QC SCREEN
   Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
-  Total 4-second positions: 171
-  AF7 hard passes: 41/171 (24.0%)
-  AF8 hard passes: 0/171 (0.0%)
-  Paired hard passes: 0/171 (0.0%)
-  AF7 hard-rejection reasons: boundary_values (130), constant_run (6)
-  AF8 hard-rejection reasons: boundary_values (171), constant_run (9)
-  Overall hard flags: boundary_values:301, constant_run:15
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:342, large_filtered_peak_to_peak:342
+  Total 2-second positions: 344
+  AF7 hard passes: 0/344 (0.0%)
+  AF8 hard passes: 0/344 (0.0%)
+  Paired hard passes: 0/344 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (344), boundary_values (246), constant_run (7)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (344), boundary_values (344), constant_run (10)
+  Overall hard flags: amplitude_exceeds_limit_uv:688, boundary_values:590, constant_run:17
+  Additional warnings (not automatic exclusions): large_peak_to_peak:688, abrupt_step_possible_contact_artifact:688
 
 Subject 025 | POST-VR
   Recording: 025_post_vr_eeg.csv
   Decision: FAILS PROVISIONAL QC SCREEN
   Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
-  Total 4-second positions: 156
-  AF7 hard passes: 0/156 (0.0%)
-  AF8 hard passes: 0/156 (0.0%)
-  Paired hard passes: 0/156 (0.0%)
-  AF7 hard-rejection reasons: boundary_values (156), constant_run (4)
-  AF8 hard-rejection reasons: boundary_values (156)
-  Overall hard flags: boundary_values:312, constant_run:4
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:312, large_filtered_peak_to_peak:312
+  Total 2-second positions: 314
+  AF7 hard passes: 0/314 (0.0%)
+  AF8 hard passes: 0/314 (0.0%)
+  Paired hard passes: 0/314 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (314), boundary_values (314), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (314), boundary_values (314)
+  Overall hard flags: amplitude_exceeds_limit_uv:628, boundary_values:628, constant_run:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:628, abrupt_step_possible_contact_artifact:628
 
 Subject 025 | RECOVERY
   Recording: 025_recovery_eeg.csv
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 0.6% is below 50%; only 1 paired passing windows (minimum 5)
-  Total 4-second positions: 157
-  AF7 hard passes: 1/157 (0.6%)
-  AF8 hard passes: 1/157 (0.6%)
-  Paired hard passes: 1/157 (0.6%)
-  AF7 hard-rejection reasons: boundary_values (156), constant_run (2)
-  AF8 hard-rejection reasons: boundary_values (156), constant_run (3)
-  Overall hard flags: boundary_values:312, constant_run:5
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:312, large_filtered_peak_to_peak:307
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 316
+  AF7 hard passes: 0/316 (0.0%)
+  AF8 hard passes: 4/316 (1.3%)
+  Paired hard passes: 0/316 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (316), boundary_values (312), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (312), constant_run (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:628, boundary_values:624, constant_run:5
+  Additional warnings (not automatic exclusions): large_peak_to_peak:628, abrupt_step_possible_contact_artifact:624
 
 Subject 027 | BASELINE
   Recording: 027_baseline_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 24.2% is below 50%
-  Total 4-second positions: 157
-  AF7 hard passes: 38/157 (24.2%)
-  AF8 hard passes: 144/157 (91.7%)
-  Paired hard passes: 38/157 (24.2%)
-  AF7 hard-rejection reasons: boundary_values (119), constant_run (3)
-  AF8 hard-rejection reasons: boundary_values (13), constant_run (2)
-  Overall hard flags: boundary_values:132, constant_run:5
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:314, large_filtered_peak_to_peak:314, possible_ocular_or_slow_artifact:1
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 316
+  AF7 hard passes: 0/316 (0.0%)
+  AF8 hard passes: 0/316 (0.0%)
+  Paired hard passes: 0/316 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (316), boundary_values (234), constant_run (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (316), boundary_values (25)
+  Overall hard flags: amplitude_exceeds_limit_uv:632, boundary_values:259, constant_run:4
+  Additional warnings (not automatic exclusions): large_peak_to_peak:632, abrupt_step_possible_contact_artifact:632
 
 Subject 027 | PRE-VR
   Recording: 027_pre_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 11.0% is below 50%
-  Total 4-second positions: 154
-  AF7 hard passes: 88/154 (57.1%)
-  AF8 hard passes: 29/154 (18.8%)
-  Paired hard passes: 17/154 (11.0%)
-  AF7 hard-rejection reasons: boundary_values (66), constant_run (15)
-  AF8 hard-rejection reasons: boundary_values (125), constant_run (2)
-  Overall hard flags: boundary_values:191, constant_run:17
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:246, abrupt_step_possible_contact_artifact:230, possible_ocular_or_slow_artifact:1
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 310
+  AF7 hard passes: 82/310 (26.5%)
+  AF8 hard passes: 0/310 (0.0%)
+  Paired hard passes: 0/310 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (228), boundary_values (108), constant_run (17)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (310), boundary_values (251), constant_run (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:538, boundary_values:359, constant_run:19
+  Additional warnings (not automatic exclusions): large_peak_to_peak:484, abrupt_step_possible_contact_artifact:443, possible_ocular_or_slow_artifact:4
 
 Subject 027 | POST-VR
   Recording: 027_post_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
   Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
-  Total 4-second positions: 153
-  AF7 hard passes: 4/153 (2.6%)
-  AF8 hard passes: 39/153 (25.5%)
-  Paired hard passes: 0/153 (0.0%)
-  AF7 hard-rejection reasons: boundary_values (149)
-  AF8 hard-rejection reasons: boundary_values (114)
-  Overall hard flags: boundary_values:263
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:306, large_filtered_peak_to_peak:306
+  Total 2-second positions: 308
+  AF7 hard passes: 0/308 (0.0%)
+  AF8 hard passes: 0/308 (0.0%)
+  Paired hard passes: 0/308 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (308), boundary_values (294)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (308), boundary_values (207)
+  Overall hard flags: amplitude_exceeds_limit_uv:616, boundary_values:501
+  Additional warnings (not automatic exclusions): large_peak_to_peak:616, abrupt_step_possible_contact_artifact:616
 
 Subject 028 | BASELINE
   Recording: 028_baseline_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 41.0% is below 50%
-  Total 4-second positions: 156
-  AF7 hard passes: 156/156 (100.0%)
-  AF8 hard passes: 64/156 (41.0%)
-  Paired hard passes: 64/156 (41.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (92)
-  Overall hard flags: boundary_values:92
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:167, abrupt_step_possible_contact_artifact:156, unusual_alpha:10, unusual_beta:8, possible_ocular_or_slow_artifact:1
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 314
+  AF7 hard passes: 286/314 (91.1%)
+  AF8 hard passes: 0/314 (0.0%)
+  Paired hard passes: 0/314 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (28)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (314), boundary_values (178)
+  Overall hard flags: amplitude_exceeds_limit_uv:342, boundary_values:178
+  Additional warnings (not automatic exclusions): large_peak_to_peak:324, abrupt_step_possible_contact_artifact:314, possible_ocular_or_slow_artifact:18, unusual_alpha:2, unusual_beta:1
 
 Subject 029 | BASELINE
   Recording: 029_baseline_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
   Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
-  Total 4-second positions: 148
-  AF7 hard passes: 25/148 (16.9%)
-  AF8 hard passes: 0/148 (0.0%)
-  Paired hard passes: 0/148 (0.0%)
-  AF7 hard-rejection reasons: boundary_values (123), constant_run (36)
-  AF8 hard-rejection reasons: boundary_values (148), constant_run (17)
-  Overall hard flags: boundary_values:271, constant_run:53
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:282, abrupt_step_possible_contact_artifact:275
+  Total 2-second positions: 298
+  AF7 hard passes: 24/298 (8.1%)
+  AF8 hard passes: 0/298 (0.0%)
+  Paired hard passes: 0/298 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (274), boundary_values (233), constant_run (39)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (298), boundary_values (297), constant_run (20)
+  Overall hard flags: amplitude_exceeds_limit_uv:572, boundary_values:530, constant_run:59
+  Additional warnings (not automatic exclusions): large_peak_to_peak:565, abrupt_step_possible_contact_artifact:538
 
 Subject 029 | PRE-VR
   Recording: 029_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 156
-  AF7 hard passes: 142/156 (91.0%)
-  AF8 hard passes: 139/156 (89.1%)
-  Paired hard passes: 132/156 (84.6%)
-  AF7 hard-rejection reasons: boundary_values (14), constant_run (4)
-  AF8 hard-rejection reasons: boundary_values (17), constant_run (12)
-  Overall hard flags: boundary_values:31, constant_run:16
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:57, unusual_beta:6, abrupt_step_possible_contact_artifact:4, unusual_alpha:1
+  Total 2-second positions: 314
+  AF7 hard passes: 269/314 (85.7%)
+  AF8 hard passes: 246/314 (78.3%)
+  Paired hard passes: 232/314 (73.9%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (45), boundary_values (17), constant_run (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (68), boundary_values (20), constant_run (13)
+  Overall hard flags: amplitude_exceeds_limit_uv:113, boundary_values:37, constant_run:17
+  Additional warnings (not automatic exclusions): large_peak_to_peak:83, possible_ocular_or_slow_artifact:64, unusual_beta:4, abrupt_step_possible_contact_artifact:4
 
 Subject 029 | POST-VR
   Recording: 029_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 151
-  AF7 hard passes: 127/151 (84.1%)
-  AF8 hard passes: 115/151 (76.2%)
-  Paired hard passes: 114/151 (75.5%)
-  AF7 hard-rejection reasons: boundary_values (24), constant_run (6)
-  AF8 hard-rejection reasons: boundary_values (36), constant_run (26)
-  Overall hard flags: boundary_values:60, constant_run:32
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:105, abrupt_step_possible_contact_artifact:24, unusual_beta:15, unusual_alpha:11
+  Total 2-second positions: 303
+  AF7 hard passes: 220/303 (72.6%)
+  AF8 hard passes: 195/303 (64.4%)
+  Paired hard passes: 190/303 (62.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (83), boundary_values (29), constant_run (5)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (108), boundary_values (55), constant_run (29)
+  Overall hard flags: amplitude_exceeds_limit_uv:191, boundary_values:84, constant_run:34
+  Additional warnings (not automatic exclusions): large_peak_to_peak:164, possible_ocular_or_slow_artifact:48, abrupt_step_possible_contact_artifact:29, unusual_alpha:2, unusual_beta:1
 
 Subject 029 | RECOVERY
   Recording: 029_recovery_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 120/152 (78.9%)
-  AF8 hard passes: 91/152 (59.9%)
-  Paired hard passes: 89/152 (58.6%)
-  AF7 hard-rejection reasons: boundary_values (32), constant_run (7)
-  AF8 hard-rejection reasons: boundary_values (61), constant_run (39)
-  Overall hard flags: boundary_values:93, constant_run:46
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:150, abrupt_step_possible_contact_artifact:34, unusual_beta:6, unusual_alpha:2
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 38.4% is below 50%
+  Total 2-second positions: 305
+  AF7 hard passes: 218/305 (71.5%)
+  AF8 hard passes: 122/305 (40.0%)
+  Paired hard passes: 117/305 (38.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (87), boundary_values (43), constant_run (8)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (183), boundary_values (79), constant_run (40)
+  Overall hard flags: amplitude_exceeds_limit_uv:270, boundary_values:122, constant_run:48
+  Additional warnings (not automatic exclusions): large_peak_to_peak:206, abrupt_step_possible_contact_artifact:41, possible_ocular_or_slow_artifact:5, unusual_beta:4
 
 Subject 030 | BASELINE
   Recording: 030_baseline_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
-  AF7 hard passes: 143/155 (92.3%)
-  AF8 hard passes: 155/155 (100.0%)
-  Paired hard passes: 143/155 (92.3%)
-  AF7 hard-rejection reasons: boundary_values (12), constant_run (4)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:12, constant_run:4
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:157, large_filtered_peak_to_peak:47, unusual_beta:2, unusual_alpha:2
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 312
+  AF7 hard passes: 230/312 (73.7%)
+  AF8 hard passes: 0/312 (0.0%)
+  Paired hard passes: 0/312 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (82), boundary_values (13), constant_run (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (312)
+  Overall hard flags: amplitude_exceeds_limit_uv:394, boundary_values:13, constant_run:4
+  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:283, large_peak_to_peak:276
 
 Subject 030 | PRE-VR
   Recording: 030_pre_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 28.4% is below 50%
-  Total 4-second positions: 155
-  AF7 hard passes: 61/155 (39.4%)
-  AF8 hard passes: 54/155 (34.8%)
-  Paired hard passes: 44/155 (28.4%)
-  AF7 hard-rejection reasons: boundary_values (94)
-  AF8 hard-rejection reasons: boundary_values (101)
-  Overall hard flags: boundary_values:195
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:310, large_filtered_peak_to_peak:310
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 312
+  AF7 hard passes: 0/312 (0.0%)
+  AF8 hard passes: 0/312 (0.0%)
+  Paired hard passes: 0/312 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (177)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (167)
+  Overall hard flags: amplitude_exceeds_limit_uv:624, boundary_values:344
+  Additional warnings (not automatic exclusions): large_peak_to_peak:624, abrupt_step_possible_contact_artifact:624
 
 Subject 030 | POST-VR
   Recording: 030_post_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 1.3% is below 50%; only 2 paired passing windows (minimum 5)
-  Total 4-second positions: 154
-  AF7 hard passes: 2/154 (1.3%)
-  AF8 hard passes: 105/154 (68.2%)
-  Paired hard passes: 2/154 (1.3%)
-  AF7 hard-rejection reasons: boundary_values (152)
-  AF8 hard-rejection reasons: boundary_values (49), constant_run (1)
-  Overall hard flags: boundary_values:201, constant_run:1
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:308, large_filtered_peak_to_peak:308
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 310
+  AF7 hard passes: 0/310 (0.0%)
+  AF8 hard passes: 0/310 (0.0%)
+  Paired hard passes: 0/310 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (310), boundary_values (297)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (310), boundary_values (92)
+  Overall hard flags: amplitude_exceeds_limit_uv:620, boundary_values:389
+  Additional warnings (not automatic exclusions): large_peak_to_peak:620, abrupt_step_possible_contact_artifact:620
 
 Subject 030 | RECOVERY
   Recording: 030_recovery_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 161
-  AF7 hard passes: 120/161 (74.5%)
-  AF8 hard passes: 90/161 (55.9%)
-  Paired hard passes: 82/161 (50.9%)
-  AF7 hard-rejection reasons: boundary_values (41), constant_run (4)
-  AF8 hard-rejection reasons: boundary_values (71), constant_run (5)
-  Overall hard flags: boundary_values:112, constant_run:9
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:322, large_filtered_peak_to_peak:322, possible_muscle_artifact:1
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 323
+  AF7 hard passes: 0/323 (0.0%)
+  AF8 hard passes: 0/323 (0.0%)
+  Paired hard passes: 0/323 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (323), boundary_values (81), constant_run (5)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (323), boundary_values (128), constant_run (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:646, boundary_values:209, constant_run:9
+  Additional warnings (not automatic exclusions): large_peak_to_peak:646, abrupt_step_possible_contact_artifact:646
 
 Subject 031 | BASELINE
   Recording: 031_baseline_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
-  AF7 hard passes: 83/155 (53.5%)
-  AF8 hard passes: 97/155 (62.6%)
-  Paired hard passes: 79/155 (51.0%)
-  AF7 hard-rejection reasons: boundary_values (72)
-  AF8 hard-rejection reasons: boundary_values (58), constant_run (2)
-  Overall hard flags: boundary_values:130, constant_run:2
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:310, large_filtered_peak_to_peak:310
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 312
+  AF7 hard passes: 0/312 (0.0%)
+  AF8 hard passes: 0/312 (0.0%)
+  Paired hard passes: 0/312 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (119)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (97), constant_run (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:624, boundary_values:216, constant_run:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:624, abrupt_step_possible_contact_artifact:624
 
 Subject 031 | PRE-VR
   Recording: 031_pre_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 41.3% is below 50%
-  Total 4-second positions: 155
-  AF7 hard passes: 64/155 (41.3%)
-  AF8 hard passes: 91/155 (58.7%)
-  Paired hard passes: 64/155 (41.3%)
-  AF7 hard-rejection reasons: boundary_values (91), constant_run (25)
-  AF8 hard-rejection reasons: boundary_values (64), constant_run (10)
-  Overall hard flags: boundary_values:155, constant_run:35
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:310, large_filtered_peak_to_peak:310, possible_ocular_or_slow_artifact:1
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 312
+  AF7 hard passes: 0/312 (0.0%)
+  AF8 hard passes: 0/312 (0.0%)
+  Paired hard passes: 0/312 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (159), constant_run (25)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (312), boundary_values (94), constant_run (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:624, boundary_values:253, constant_run:33
+  Additional warnings (not automatic exclusions): large_peak_to_peak:624, abrupt_step_possible_contact_artifact:624
 
 Subject 031 | POST-VR
   Recording: 031_post_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 26.0% is below 50%
-  Total 4-second positions: 154
-  AF7 hard passes: 80/154 (51.9%)
-  AF8 hard passes: 40/154 (26.0%)
-  Paired hard passes: 40/154 (26.0%)
-  AF7 hard-rejection reasons: boundary_values (74), constant_run (31)
-  AF8 hard-rejection reasons: boundary_values (114), constant_run (31)
-  Overall hard flags: boundary_values:188, constant_run:62
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:263, abrupt_step_possible_contact_artifact:250, unusual_alpha:3, unusual_beta:2
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 309
+  AF7 hard passes: 36/309 (11.7%)
+  AF8 hard passes: 0/309 (0.0%)
+  Paired hard passes: 0/309 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (273), boundary_values (118), constant_run (33)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (309), boundary_values (200), constant_run (34)
+  Overall hard flags: amplitude_exceeds_limit_uv:582, boundary_values:318, constant_run:67
+  Additional warnings (not automatic exclusions): large_peak_to_peak:504, abrupt_step_possible_contact_artifact:478, possible_ocular_or_slow_artifact:2
 
 Subject 031 | RECOVERY
   Recording: 031_recovery_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 19.5% is below 50%
-  Total 4-second positions: 149
-  AF7 hard passes: 42/149 (28.2%)
-  AF8 hard passes: 32/149 (21.5%)
-  Paired hard passes: 29/149 (19.5%)
-  AF7 hard-rejection reasons: boundary_values (107), constant_run (20)
-  AF8 hard-rejection reasons: boundary_values (117), constant_run (35)
-  Overall hard flags: boundary_values:224, constant_run:55
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:298, large_filtered_peak_to_peak:298
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 300
+  AF7 hard passes: 0/300 (0.0%)
+  AF8 hard passes: 0/300 (0.0%)
+  Paired hard passes: 0/300 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (300), boundary_values (169), constant_run (20)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (300), boundary_values (191), constant_run (36)
+  Overall hard flags: amplitude_exceeds_limit_uv:600, boundary_values:360, constant_run:56
+  Additional warnings (not automatic exclusions): large_peak_to_peak:600, abrupt_step_possible_contact_artifact:600
 
 Subject 032 | BASELINE
   Recording: 032_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 147
-  AF7 hard passes: 145/147 (98.6%)
-  AF8 hard passes: 134/147 (91.2%)
-  Paired hard passes: 132/147 (89.8%)
-  AF7 hard-rejection reasons: boundary_values (2)
-  AF8 hard-rejection reasons: boundary_values (13), constant_run (4)
-  Overall hard flags: boundary_values:15, constant_run:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:50, abrupt_step_possible_contact_artifact:8
+  Total 2-second positions: 296
+  AF7 hard passes: 269/296 (90.9%)
+  AF8 hard passes: 224/296 (75.7%)
+  Paired hard passes: 222/296 (75.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (27), boundary_values (5)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (72), boundary_values (15), constant_run (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:99, boundary_values:20, constant_run:4
+  Additional warnings (not automatic exclusions): large_peak_to_peak:64, possible_ocular_or_slow_artifact:37, abrupt_step_possible_contact_artifact:10
 
 Subject 032 | PRE-VR
   Recording: 032_pre_vr_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 141/152 (92.8%)
-  AF8 hard passes: 81/152 (53.3%)
-  Paired hard passes: 81/152 (53.3%)
-  AF7 hard-rejection reasons: boundary_values (11), constant_run (6)
-  AF8 hard-rejection reasons: boundary_values (70), constant_run (31)
-  Overall hard flags: boundary_values:81, constant_run:37
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:115, abrupt_step_possible_contact_artifact:56, unusual_beta:1
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 37.7% is below 50%
+  Total 2-second positions: 305
+  AF7 hard passes: 252/305 (82.6%)
+  AF8 hard passes: 115/305 (37.7%)
+  Paired hard passes: 115/305 (37.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (53), boundary_values (15), constant_run (6)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (190), boundary_values (113), constant_run (34)
+  Overall hard flags: amplitude_exceeds_limit_uv:243, boundary_values:128, constant_run:40
+  Additional warnings (not automatic exclusions): large_peak_to_peak:185, abrupt_step_possible_contact_artifact:94, possible_ocular_or_slow_artifact:13
 
 Subject 032 | POST-VR
   Recording: 032_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
-  AF7 hard passes: 155/155 (100.0%)
-  AF8 hard passes: 124/155 (80.0%)
-  Paired hard passes: 124/155 (80.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (31), constant_run (22)
-  Overall hard flags: boundary_values:31, constant_run:22
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:61, abrupt_step_possible_contact_artifact:28, unusual_alpha:1
+  Total 2-second positions: 312
+  AF7 hard passes: 272/312 (87.2%)
+  AF8 hard passes: 212/312 (67.9%)
+  Paired hard passes: 203/312 (65.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (40), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (100), boundary_values (50), constant_run (24)
+  Overall hard flags: amplitude_exceeds_limit_uv:140, boundary_values:52, constant_run:24
+  Additional warnings (not automatic exclusions): large_peak_to_peak:92, abrupt_step_possible_contact_artifact:44, possible_ocular_or_slow_artifact:18
 
 Subject 032 | RECOVERY
   Recording: 032_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 145/150 (96.7%)
-  AF8 hard passes: 146/150 (97.3%)
-  Paired hard passes: 143/150 (95.3%)
-  AF7 hard-rejection reasons: boundary_values (5), constant_run (2)
-  AF8 hard-rejection reasons: boundary_values (4), constant_run (2)
-  Overall hard flags: boundary_values:9, constant_run:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:32, unusual_alpha:13, abrupt_step_possible_contact_artifact:9, unusual_beta:3
+  Total 2-second positions: 302
+  AF7 hard passes: 268/302 (88.7%)
+  AF8 hard passes: 271/302 (89.7%)
+  Paired hard passes: 260/302 (86.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (34), boundary_values (7), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (31), boundary_values (4), constant_run (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:65, boundary_values:11, constant_run:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:54, large_peak_to_peak:40, abrupt_step_possible_contact_artifact:10
 
 Subject 033 | BASELINE
   Recording: 033_baseline_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 160
-  AF7 hard passes: 160/160 (100.0%)
-  AF8 hard passes: 146/160 (91.2%)
-  Paired hard passes: 146/160 (91.2%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (14)
-  Overall hard flags: boundary_values:14
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:122, abrupt_step_possible_contact_artifact:54
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 21.5% is below 50%
+  Total 2-second positions: 321
+  AF7 hard passes: 304/321 (94.7%)
+  AF8 hard passes: 70/321 (21.8%)
+  Paired hard passes: 69/321 (21.5%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (17)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (251), boundary_values (23)
+  Overall hard flags: amplitude_exceeds_limit_uv:268, boundary_values:23
+  Additional warnings (not automatic exclusions): large_peak_to_peak:177, abrupt_step_possible_contact_artifact:83, possible_ocular_or_slow_artifact:2
 
 Subject 033 | PRE-VR
   Recording: 033_pre_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 19.2% is below 50%
-  Total 4-second positions: 151
-  AF7 hard passes: 29/151 (19.2%)
-  AF8 hard passes: 136/151 (90.1%)
-  Paired hard passes: 29/151 (19.2%)
-  AF7 hard-rejection reasons: boundary_values (122), constant_run (10)
-  AF8 hard-rejection reasons: boundary_values (15), constant_run (3)
-  Overall hard flags: boundary_values:137, constant_run:13
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:178, abrupt_step_possible_contact_artifact:159, unusual_alpha:15, unusual_beta:9, possible_ocular_or_slow_artifact:1
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 304
+  AF7 hard passes: 0/304 (0.0%)
+  AF8 hard passes: 247/304 (81.2%)
+  Paired hard passes: 0/304 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (304), boundary_values (229), constant_run (13)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (57), boundary_values (20), constant_run (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:361, boundary_values:249, constant_run:16
+  Additional warnings (not automatic exclusions): large_peak_to_peak:346, abrupt_step_possible_contact_artifact:314, possible_ocular_or_slow_artifact:12
 
 Subject 033 | POST-VR
   Recording: 033_post_vr_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 29.3% is below 50%
-  Total 4-second positions: 150
-  AF7 hard passes: 55/150 (36.7%)
-  AF8 hard passes: 65/150 (43.3%)
-  Paired hard passes: 44/150 (29.3%)
-  AF7 hard-rejection reasons: boundary_values (95), constant_run (7)
-  AF8 hard-rejection reasons: boundary_values (85), constant_run (4)
-  Overall hard flags: boundary_values:180, constant_run:11
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:300, large_filtered_peak_to_peak:300
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 302
+  AF7 hard passes: 0/302 (0.0%)
+  AF8 hard passes: 0/302 (0.0%)
+  Paired hard passes: 0/302 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (302), boundary_values (165), constant_run (8)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (302), boundary_values (145), constant_run (5)
+  Overall hard flags: amplitude_exceeds_limit_uv:604, boundary_values:310, constant_run:13
+  Additional warnings (not automatic exclusions): large_peak_to_peak:604, abrupt_step_possible_contact_artifact:604
 
 Subject 034 | BASELINE
   Recording: 034_baseline_eeg.zip
   Decision: FAILS PROVISIONAL QC SCREEN
-  Explanation: paired retention 25.8% is below 50%
-  Total 4-second positions: 151
-  AF7 hard passes: 118/151 (78.1%)
-  AF8 hard passes: 47/151 (31.1%)
-  Paired hard passes: 39/151 (25.8%)
-  AF7 hard-rejection reasons: boundary_values (33), constant_run (8)
-  AF8 hard-rejection reasons: boundary_values (104), constant_run (29)
-  Overall hard flags: boundary_values:137, constant_run:37
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:259, abrupt_step_possible_contact_artifact:214
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 304
+  AF7 hard passes: 103/304 (33.9%)
+  AF8 hard passes: 0/304 (0.0%)
+  Paired hard passes: 0/304 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (201), boundary_values (50), constant_run (9)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (304), boundary_values (189), constant_run (32)
+  Overall hard flags: amplitude_exceeds_limit_uv:505, boundary_values:239, constant_run:41
+  Additional warnings (not automatic exclusions): large_peak_to_peak:467, abrupt_step_possible_contact_artifact:386
 
 Subject 034 | PRE-VR
   Recording: 034_pre_vr_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 150/150 (100.0%)
-  AF8 hard passes: 132/150 (88.0%)
-  Paired hard passes: 132/150 (88.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (18), constant_run (6)
-  Overall hard flags: boundary_values:18, constant_run:6
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:88, abrupt_step_possible_contact_artifact:18
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 49.0% is below 50%
+  Total 2-second positions: 302
+  AF7 hard passes: 219/302 (72.5%)
+  AF8 hard passes: 175/302 (57.9%)
+  Paired hard passes: 148/302 (49.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (83)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (127), boundary_values (26), constant_run (6)
+  Overall hard flags: amplitude_exceeds_limit_uv:210, boundary_values:26, constant_run:6
+  Additional warnings (not automatic exclusions): large_peak_to_peak:110, abrupt_step_possible_contact_artifact:19
 
 Subject 034 | POST-VR
   Recording: 034_post_vr_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 153
-  AF7 hard passes: 140/153 (91.5%)
-  AF8 hard passes: 114/153 (74.5%)
-  Paired hard passes: 114/153 (74.5%)
-  AF7 hard-rejection reasons: boundary_values (13), constant_run (6)
-  AF8 hard-rejection reasons: boundary_values (39), constant_run (3)
-  Overall hard flags: boundary_values:52, constant_run:9
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:107, abrupt_step_possible_contact_artifact:53
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 44.2% is below 50%
+  Total 2-second positions: 308
+  AF7 hard passes: 198/308 (64.3%)
+  AF8 hard passes: 155/308 (50.3%)
+  Paired hard passes: 136/308 (44.2%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (110), boundary_values (21), constant_run (6)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (153), boundary_values (55), constant_run (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:263, boundary_values:76, constant_run:9
+  Additional warnings (not automatic exclusions): large_peak_to_peak:151, abrupt_step_possible_contact_artifact:64
 
 Subject 035 | BASELINE
   Recording: 035_baseline_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 158
-  AF7 hard passes: 138/158 (87.3%)
-  AF8 hard passes: 140/158 (88.6%)
-  Paired hard passes: 134/158 (84.8%)
-  AF7 hard-rejection reasons: boundary_values (20)
-  AF8 hard-rejection reasons: boundary_values (18), constant_run (2)
-  Overall hard flags: boundary_values:38, constant_run:2
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:316, large_filtered_peak_to_peak:287
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 0.0% is below 50%; only 0 paired passing windows (minimum 5)
+  Total 2-second positions: 317
+  AF7 hard passes: 0/317 (0.0%)
+  AF8 hard passes: 1/317 (0.3%)
+  Paired hard passes: 0/317 (0.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (317), boundary_values (36)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (316), boundary_values (30), constant_run (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:633, boundary_values:66, constant_run:2
+  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:627, large_peak_to_peak:581
 
 Subject 035 | PRE-VR
   Recording: 035_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 146
-  AF7 hard passes: 146/146 (100.0%)
-  AF8 hard passes: 132/146 (90.4%)
-  Paired hard passes: 132/146 (90.4%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (14), constant_run (8)
-  Overall hard flags: boundary_values:14, constant_run:8
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:51, abrupt_step_possible_contact_artifact:30
+  Total 2-second positions: 293
+  AF7 hard passes: 267/293 (91.1%)
+  AF8 hard passes: 178/293 (60.8%)
+  Paired hard passes: 170/293 (58.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (26)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (115), boundary_values (17), constant_run (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:141, boundary_values:17, constant_run:8
+  Additional warnings (not automatic exclusions): large_peak_to_peak:77, abrupt_step_possible_contact_artifact:33, possible_ocular_or_slow_artifact:2
 
 Subject 035 | POST-VR
   Recording: 035_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 154
-  AF7 hard passes: 154/154 (100.0%)
-  AF8 hard passes: 152/154 (98.7%)
-  Paired hard passes: 152/154 (98.7%)
+  Total 2-second positions: 309
+  AF7 hard passes: 309/309 (100.0%)
+  AF8 hard passes: 265/309 (85.8%)
+  Paired hard passes: 265/309 (85.8%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (2)
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:7, abrupt_step_possible_contact_artifact:2, unusual_beta:2, unusual_alpha:2
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (44), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:44, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:11, large_peak_to_peak:6, unusual_beta:3, abrupt_step_possible_contact_artifact:2
 
 Subject 036 | BASELINE
   Recording: 036_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 139
-  AF7 hard passes: 139/139 (100.0%)
-  AF8 hard passes: 139/139 (100.0%)
-  Paired hard passes: 139/139 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:2, unusual_alpha:1
+  Total 2-second positions: 283
+  AF7 hard passes: 279/283 (98.6%)
+  AF8 hard passes: 279/283 (98.6%)
+  Paired hard passes: 279/283 (98.6%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:8
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:17
 
 Subject 036 | PRE-VR
   Recording: 036_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 156
-  AF7 hard passes: 156/156 (100.0%)
-  AF8 hard passes: 156/156 (100.0%)
-  Paired hard passes: 156/156 (100.0%)
+  Total 2-second positions: 313
+  AF7 hard passes: 313/313 (100.0%)
+  AF8 hard passes: 310/313 (99.0%)
+  Paired hard passes: 310/313 (99.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:4, unusual_alpha:3, possible_ocular_or_slow_artifact:2, large_filtered_peak_to_peak:1
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:3
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:22, unusual_beta:6, large_peak_to_peak:1, unusual_alpha:1
 
 Subject 036 | POST-VR
   Recording: 036_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 145
-  AF7 hard passes: 145/145 (100.0%)
-  AF8 hard passes: 145/145 (100.0%)
-  Paired hard passes: 145/145 (100.0%)
+  Total 2-second positions: 292
+  AF7 hard passes: 292/292 (100.0%)
+  AF8 hard passes: 292/292 (100.0%)
+  Paired hard passes: 292/292 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:18
 
 Subject 036 | RECOVERY
   Recording: 036_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 151
-  AF7 hard passes: 151/151 (100.0%)
-  AF8 hard passes: 151/151 (100.0%)
-  Paired hard passes: 151/151 (100.0%)
+  Total 2-second positions: 303
+  AF7 hard passes: 303/303 (100.0%)
+  AF8 hard passes: 301/303 (99.3%)
+  Paired hard passes: 301/303 (99.3%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:2
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:22
 
 Subject 037 | BASELINE
   Recording: 037_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
-  AF7 hard passes: 153/155 (98.7%)
-  AF8 hard passes: 155/155 (100.0%)
-  Paired hard passes: 153/155 (98.7%)
-  AF7 hard-rejection reasons: boundary_values (2)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): unusual_beta:5, large_filtered_peak_to_peak:4, unusual_alpha:1
+  Total 2-second positions: 312
+  AF7 hard passes: 307/312 (98.4%)
+  AF8 hard passes: 310/312 (99.4%)
+  Paired hard passes: 305/312 (97.8%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (5), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:7, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:72, unusual_beta:16, large_peak_to_peak:4, unusual_alpha:1
 
 Subject 037 | PRE-VR
   Recording: 037_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
-  AF7 hard passes: 155/155 (100.0%)
-  AF8 hard passes: 155/155 (100.0%)
-  Paired hard passes: 155/155 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_alpha:3
+  Total 2-second positions: 311
+  AF7 hard passes: 303/311 (97.4%)
+  AF8 hard passes: 305/311 (98.1%)
+  Paired hard passes: 299/311 (96.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (8)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (6)
+  Overall hard flags: amplitude_exceeds_limit_uv:14
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:34, unusual_beta:2
 
 Subject 038 | BASELINE
   Recording: 038_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 162
-  AF7 hard passes: 162/162 (100.0%)
-  AF8 hard passes: 162/162 (100.0%)
-  Paired hard passes: 162/162 (100.0%)
+  Total 2-second positions: 326
+  AF7 hard passes: 326/326 (100.0%)
+  AF8 hard passes: 326/326 (100.0%)
+  Paired hard passes: 326/326 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:2, possible_ocular_or_slow_artifact:2, unusual_alpha:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:15, unusual_beta:1, unusual_alpha:1
 
 Subject 038 | PRE-VR
   Recording: 038_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 150/150 (100.0%)
-  AF8 hard passes: 150/150 (100.0%)
-  Paired hard passes: 150/150 (100.0%)
+  Total 2-second positions: 301
+  AF7 hard passes: 301/301 (100.0%)
+  AF8 hard passes: 301/301 (100.0%)
+  Paired hard passes: 301/301 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:4, unusual_beta:1
 
 Subject 038 | POST-VR
   Recording: 038_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 157
-  AF7 hard passes: 157/157 (100.0%)
-  AF8 hard passes: 157/157 (100.0%)
-  Paired hard passes: 157/157 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Total 2-second positions: 315
+  AF7 hard passes: 313/315 (99.4%)
+  AF8 hard passes: 315/315 (100.0%)
+  Paired hard passes: 313/315 (99.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:4, unusual_alpha:4, unusual_beta:3
+  Overall hard flags: amplitude_exceeds_limit_uv:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:16, unusual_alpha:3, unusual_beta:1, possible_muscle_artifact:1
 
 Subject 039 | BASELINE
   Recording: 039_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 190
-  AF7 hard passes: 190/190 (100.0%)
-  AF8 hard passes: 188/190 (98.9%)
-  Paired hard passes: 188/190 (98.9%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (2), constant_run (2)
-  Overall hard flags: boundary_values:2, constant_run:2
-  Additional warnings (not automatic exclusions): unusual_alpha:10, large_filtered_peak_to_peak:5, possible_ocular_or_slow_artifact:5, abrupt_step_possible_contact_artifact:1
+  Total 2-second positions: 183
+  AF7 hard passes: 179/183 (97.8%)
+  AF8 hard passes: 181/183 (98.9%)
+  Paired hard passes: 179/183 (97.8%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:6
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:29, unusual_alpha:2
 
 Subject 039 | PRE-VR
   Recording: 039_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 179
-  AF7 hard passes: 174/179 (97.2%)
-  AF8 hard passes: 175/179 (97.8%)
-  Paired hard passes: 172/179 (96.1%)
-  AF7 hard-rejection reasons: boundary_values (5), constant_run (2)
-  AF8 hard-rejection reasons: boundary_values (4), constant_run (2)
-  Overall hard flags: boundary_values:9, constant_run:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:21, unusual_alpha:8, abrupt_step_possible_contact_artifact:2, possible_ocular_or_slow_artifact:1, unusual_beta:1
+  Total 2-second positions: 176
+  AF7 hard passes: 154/176 (87.5%)
+  AF8 hard passes: 168/176 (95.5%)
+  Paired hard passes: 154/176 (87.5%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (22), boundary_values (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:30, boundary_values:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:30, large_peak_to_peak:16, unusual_beta:2, abrupt_step_possible_contact_artifact:2
 
 Subject 039 | POST-VR
   Recording: 039_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 152/152 (100.0%)
+  Total 2-second positions: 152
+  AF7 hard passes: 148/152 (97.4%)
   AF8 hard passes: 152/152 (100.0%)
-  Paired hard passes: 152/152 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Paired hard passes: 148/152 (97.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:8, unusual_alpha:7, possible_ocular_or_slow_artifact:1
+  Overall hard flags: amplitude_exceeds_limit_uv:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:13, unusual_alpha:3
 
 Subject 039 | RECOVERY
   Recording: 039_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 148/152 (97.4%)
-  AF8 hard passes: 152/152 (100.0%)
-  Paired hard passes: 148/152 (97.4%)
-  AF7 hard-rejection reasons: boundary_values (4)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:15, unusual_alpha:6, possible_ocular_or_slow_artifact:2
+  Total 2-second positions: 152
+  AF7 hard passes: 146/152 (96.1%)
+  AF8 hard passes: 150/152 (98.7%)
+  Paired hard passes: 146/152 (96.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (6), boundary_values (1)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:8, boundary_values:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:27, large_peak_to_peak:5, unusual_beta:2, unusual_alpha:1
 
 Subject 040 | BASELINE
   Recording: 040_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 152/152 (100.0%)
+  Total 2-second positions: 152
+  AF7 hard passes: 149/152 (98.0%)
   AF8 hard passes: 152/152 (100.0%)
-  Paired hard passes: 152/152 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Paired hard passes: 149/152 (98.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:4, unusual_alpha:4, possible_ocular_or_slow_artifact:1
+  Overall hard flags: amplitude_exceeds_limit_uv:3
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:19, large_peak_to_peak:1
 
 Subject 040 | PRE-VR
   Recording: 040_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 150/150 (100.0%)
-  AF8 hard passes: 150/150 (100.0%)
-  Paired hard passes: 150/150 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Total 2-second positions: 151
+  AF7 hard passes: 147/151 (97.4%)
+  AF8 hard passes: 151/151 (100.0%)
+  Paired hard passes: 147/151 (97.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:1
+  Overall hard flags: amplitude_exceeds_limit_uv:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:6
 
 Subject 040 | POST-VR
   Recording: 040_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 154
+  Total 2-second positions: 154
   AF7 hard passes: 154/154 (100.0%)
   AF8 hard passes: 154/154 (100.0%)
   Paired hard passes: 154/154 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:22, unusual_alpha:1
 
 Subject 040 | RECOVERY
   Recording: 040_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 153
-  AF7 hard passes: 153/153 (100.0%)
-  AF8 hard passes: 153/153 (100.0%)
-  Paired hard passes: 153/153 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:6, unusual_alpha:2
+  Total 2-second positions: 153
+  AF7 hard passes: 151/153 (98.7%)
+  AF8 hard passes: 151/153 (98.7%)
+  Paired hard passes: 150/153 (98.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:2
 
 Subject 041 | BASELINE
   Recording: 041_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
+  Total 2-second positions: 149
   AF7 hard passes: 149/149 (100.0%)
-  AF8 hard passes: 149/149 (100.0%)
-  Paired hard passes: 149/149 (100.0%)
+  AF8 hard passes: 146/149 (98.0%)
+  Paired hard passes: 146/149 (98.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:9, unusual_alpha:4, large_filtered_peak_to_peak:2, possible_ocular_or_slow_artifact:2
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:3
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:22, unusual_beta:7, large_peak_to_peak:2, unusual_alpha:1
 
 Subject 041 | PRE-VR
   Recording: 041_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 148
+  Total 2-second positions: 148
   AF7 hard passes: 148/148 (100.0%)
   AF8 hard passes: 148/148 (100.0%)
   Paired hard passes: 148/148 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:2, unusual_alpha:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:8
 
 Subject 041 | POST-VR
   Recording: 041_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 165
-  AF7 hard passes: 163/165 (98.8%)
-  AF8 hard passes: 155/165 (93.9%)
-  Paired hard passes: 155/165 (93.9%)
-  AF7 hard-rejection reasons: boundary_values (2)
-  AF8 hard-rejection reasons: boundary_values (10), constant_run (2)
-  Overall hard flags: boundary_values:12, constant_run:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:32, unusual_alpha:18, possible_ocular_or_slow_artifact:17, unusual_beta:16, abrupt_step_possible_contact_artifact:14
+  Total 2-second positions: 165
+  AF7 hard passes: 155/165 (93.9%)
+  AF8 hard passes: 154/165 (93.3%)
+  Paired hard passes: 153/165 (92.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (10)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (11), boundary_values (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:21, boundary_values:8
+  Additional warnings (not automatic exclusions): large_peak_to_peak:18, possible_ocular_or_slow_artifact:14, abrupt_step_possible_contact_artifact:8, unusual_alpha:2, unusual_beta:1
 
 Subject 041 | RECOVERY
   Recording: 041_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 179
+  Total 2-second positions: 179
   AF7 hard passes: 179/179 (100.0%)
   AF8 hard passes: 179/179 (100.0%)
   Paired hard passes: 179/179 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:2, large_filtered_peak_to_peak:2, unusual_beta:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:2
 
 Subject 042 | BASELINE
   Recording: 042_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 161
-  AF7 hard passes: 161/161 (100.0%)
+  Total 2-second positions: 161
+  AF7 hard passes: 159/161 (98.8%)
   AF8 hard passes: 161/161 (100.0%)
-  Paired hard passes: 161/161 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Paired hard passes: 159/161 (98.8%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:2, unusual_alpha:1
+  Overall hard flags: amplitude_exceeds_limit_uv:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:20
 
 Subject 042 | PRE-VR
   Recording: 042_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 87
+  Total 2-second positions: 87
   AF7 hard passes: 87/87 (100.0%)
   AF8 hard passes: 87/87 (100.0%)
   Paired hard passes: 87/87 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:5
 
 Subject 042 | POST-VR
   Recording: 042_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 160
-  AF7 hard passes: 156/160 (97.5%)
-  AF8 hard passes: 158/160 (98.8%)
-  Paired hard passes: 156/160 (97.5%)
-  AF7 hard-rejection reasons: boundary_values (4)
-  AF8 hard-rejection reasons: boundary_values (2)
-  Overall hard flags: boundary_values:6
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:22, abrupt_step_possible_contact_artifact:2
+  Total 2-second positions: 160
+  AF7 hard passes: 124/160 (77.5%)
+  AF8 hard passes: 142/160 (88.8%)
+  Paired hard passes: 120/160 (75.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (36), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (18), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:54, boundary_values:4
+  Additional warnings (not automatic exclusions): large_peak_to_peak:18, possible_ocular_or_slow_artifact:16, abrupt_step_possible_contact_artifact:2
 
 Subject 042 | RECOVERY
   Recording: 042_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
+  Total 2-second positions: 149
   AF7 hard passes: 149/149 (100.0%)
   AF8 hard passes: 149/149 (100.0%)
   Paired hard passes: 149/149 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:3
 
 Subject 043 | BASELINE
   Recording: 043_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
-  AF7 hard passes: 155/155 (100.0%)
-  AF8 hard passes: 154/155 (99.4%)
-  Paired hard passes: 154/155 (99.4%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (1)
-  Overall hard flags: boundary_values:1
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:1, large_filtered_peak_to_peak:1
-
-Subject 043 | PRE-VR
-  Recording: 043_pre_vr_eeg.zip
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 155
+  Total 2-second positions: 155
   AF7 hard passes: 155/155 (100.0%)
   AF8 hard passes: 155/155 (100.0%)
   Paired hard passes: 155/155 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:3, large_filtered_peak_to_peak:2, unusual_alpha:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:21
+
+Subject 043 | PRE-VR
+  Recording: 043_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 155
+  AF7 hard passes: 153/155 (98.7%)
+  AF8 hard passes: 149/155 (96.1%)
+  Paired hard passes: 147/155 (94.8%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (6)
+  Overall hard flags: amplitude_exceeds_limit_uv:8
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:22, large_peak_to_peak:2, unusual_beta:1
 
 Subject 043 | POST-VR
   Recording: 043_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 154
+  Total 2-second positions: 154
   AF7 hard passes: 154/154 (100.0%)
-  AF8 hard passes: 154/154 (100.0%)
-  Paired hard passes: 154/154 (100.0%)
+  AF8 hard passes: 151/154 (98.1%)
+  Paired hard passes: 151/154 (98.1%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:7, unusual_alpha:5, large_filtered_peak_to_peak:2, possible_ocular_or_slow_artifact:1
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:3
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:33, unusual_beta:5, large_peak_to_peak:2
 
 Subject 043 | RECOVERY
   Recording: 043_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 154
-  AF7 hard passes: 154/154 (100.0%)
-  AF8 hard passes: 140/154 (90.9%)
-  Paired hard passes: 140/154 (90.9%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (14)
-  Overall hard flags: boundary_values:14
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:50, abrupt_step_possible_contact_artifact:43, unusual_beta:1
+  Total 2-second positions: 154
+  AF7 hard passes: 152/154 (98.7%)
+  AF8 hard passes: 108/154 (70.1%)
+  Paired hard passes: 108/154 (70.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (46), boundary_values (22)
+  Overall hard flags: amplitude_exceeds_limit_uv:48, boundary_values:22
+  Additional warnings (not automatic exclusions): large_peak_to_peak:41, abrupt_step_possible_contact_artifact:37, possible_ocular_or_slow_artifact:24
 
 Subject 044 | BASELINE
   Recording: 044_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
+  Total 2-second positions: 152
   AF7 hard passes: 152/152 (100.0%)
-  AF8 hard passes: 152/152 (100.0%)
-  Paired hard passes: 152/152 (100.0%)
+  AF8 hard passes: 119/152 (78.3%)
+  Paired hard passes: 119/152 (78.3%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:2
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (33)
+  Overall hard flags: amplitude_exceeds_limit_uv:33
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:6, abrupt_step_possible_contact_artifact:2
 
 Subject 044 | PRE-VR
   Recording: 044_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 150/152 (98.7%)
+  Total 2-second positions: 152
+  AF7 hard passes: 146/152 (96.1%)
   AF8 hard passes: 152/152 (100.0%)
-  Paired hard passes: 150/152 (98.7%)
-  AF7 hard-rejection reasons: boundary_values (2)
+  Paired hard passes: 146/152 (96.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (6)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:2, large_filtered_peak_to_peak:2
+  Overall hard flags: amplitude_exceeds_limit_uv:6
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:16
 
 Subject 044 | POST-VR
   Recording: 044_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 154
+  Total 2-second positions: 154
   AF7 hard passes: 154/154 (100.0%)
-  AF8 hard passes: 152/154 (98.7%)
-  Paired hard passes: 152/154 (98.7%)
+  AF8 hard passes: 146/154 (94.8%)
+  Paired hard passes: 146/154 (94.8%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (2), constant_run (2)
-  Overall hard flags: boundary_values:2, constant_run:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:9, unusual_alpha:6, unusual_beta:4
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:8
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:6, large_peak_to_peak:4, unusual_beta:2
 
 Subject 044 | RECOVERY
   Recording: 044_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
+  Total 2-second positions: 149
   AF7 hard passes: 149/149 (100.0%)
   AF8 hard passes: 149/149 (100.0%)
   Paired hard passes: 149/149 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:3
 
 Subject 045 | BASELINE
   Recording: 045_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 150/152 (98.7%)
-  AF8 hard passes: 146/152 (96.1%)
-  Paired hard passes: 144/152 (94.7%)
-  AF7 hard-rejection reasons: boundary_values (2)
-  AF8 hard-rejection reasons: boundary_values (6), constant_run (4)
-  Overall hard flags: boundary_values:8, constant_run:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:30, unusual_alpha:4, unusual_beta:2
+  Total 2-second positions: 152
+  AF7 hard passes: 122/152 (80.3%)
+  AF8 hard passes: 129/152 (84.9%)
+  Paired hard passes: 113/152 (74.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (30), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (23), boundary_values (7), constant_run (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:53, boundary_values:9, constant_run:4
+  Additional warnings (not automatic exclusions): large_peak_to_peak:26, possible_ocular_or_slow_artifact:11
 
 Subject 045 | PRE-VR
   Recording: 045_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 166
-  AF7 hard passes: 148/166 (89.2%)
-  AF8 hard passes: 162/166 (97.6%)
-  Paired hard passes: 147/166 (88.6%)
-  AF7 hard-rejection reasons: boundary_values (18), constant_run (4)
-  AF8 hard-rejection reasons: boundary_values (4)
-  Overall hard flags: boundary_values:22, constant_run:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:56, abrupt_step_possible_contact_artifact:15
+  Total 2-second positions: 166
+  AF7 hard passes: 99/166 (59.6%)
+  AF8 hard passes: 143/166 (86.1%)
+  Paired hard passes: 95/166 (57.2%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (67), boundary_values (15), constant_run (1)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (23)
+  Overall hard flags: amplitude_exceeds_limit_uv:90, boundary_values:15, constant_run:1
+  Additional warnings (not automatic exclusions): large_peak_to_peak:50, abrupt_step_possible_contact_artifact:9, possible_ocular_or_slow_artifact:3
 
 Subject 045 | POST-VR
   Recording: 045_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 157
-  AF7 hard passes: 157/157 (100.0%)
-  AF8 hard passes: 153/157 (97.5%)
-  Paired hard passes: 153/157 (97.5%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (4)
-  Overall hard flags: boundary_values:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:29, unusual_alpha:3
+  Total 2-second positions: 157
+  AF7 hard passes: 110/157 (70.1%)
+  AF8 hard passes: 128/157 (81.5%)
+  Paired hard passes: 101/157 (64.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (47)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (29), boundary_values (5)
+  Overall hard flags: amplitude_exceeds_limit_uv:76, boundary_values:5
+  Additional warnings (not automatic exclusions): large_peak_to_peak:36, possible_ocular_or_slow_artifact:3
 
 Subject 045 | RECOVERY
   Recording: 045_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
-  AF7 hard passes: 149/149 (100.0%)
-  AF8 hard passes: 147/149 (98.7%)
-  Paired hard passes: 147/149 (98.7%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (2)
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:14, possible_muscle_artifact:2, unusual_alpha:1
+  Total 2-second positions: 149
+  AF7 hard passes: 146/149 (98.0%)
+  AF8 hard passes: 121/149 (81.2%)
+  Paired hard passes: 121/149 (81.2%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (28), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:31, boundary_values:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:12, possible_ocular_or_slow_artifact:3
 
 Subject 046 | BASELINE
   Recording: 046_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
-  AF7 hard passes: 149/149 (100.0%)
+  Total 2-second positions: 149
+  AF7 hard passes: 148/149 (99.3%)
   AF8 hard passes: 149/149 (100.0%)
-  Paired hard passes: 149/149 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Paired hard passes: 148/149 (99.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (1)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:1
+  Overall hard flags: amplitude_exceeds_limit_uv:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:13
 
 Subject 046 | PRE-VR
   Recording: 046_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 143/150 (95.3%)
+  Total 2-second positions: 150
+  AF7 hard passes: 118/150 (78.7%)
   AF8 hard passes: 150/150 (100.0%)
-  Paired hard passes: 143/150 (95.3%)
-  AF7 hard-rejection reasons: boundary_values (7)
+  Paired hard passes: 118/150 (78.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (32), boundary_values (12)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:7
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:23, possible_ocular_or_slow_artifact:7, abrupt_step_possible_contact_artifact:5, unusual_alpha:4
+  Overall hard flags: amplitude_exceeds_limit_uv:32, boundary_values:12
+  Additional warnings (not automatic exclusions): large_peak_to_peak:28, possible_ocular_or_slow_artifact:11, abrupt_step_possible_contact_artifact:7
 
 Subject 046 | POST-VR
   Recording: 046_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 148
-  AF7 hard passes: 144/148 (97.3%)
-  AF8 hard passes: 148/148 (100.0%)
-  Paired hard passes: 144/148 (97.3%)
-  AF7 hard-rejection reasons: boundary_values (4)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:4
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:8, unusual_alpha:3, abrupt_step_possible_contact_artifact:2
+  Total 2-second positions: 148
+  AF7 hard passes: 136/148 (91.9%)
+  AF8 hard passes: 144/148 (97.3%)
+  Paired hard passes: 136/148 (91.9%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (12), boundary_values (5)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:16, boundary_values:5
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:26, large_peak_to_peak:8, abrupt_step_possible_contact_artifact:2
 
 Subject 046 | RECOVERY
   Recording: 046_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 148/150 (98.7%)
+  Total 2-second positions: 150
+  AF7 hard passes: 146/150 (97.3%)
   AF8 hard passes: 150/150 (100.0%)
-  Paired hard passes: 148/150 (98.7%)
-  AF7 hard-rejection reasons: boundary_values (2)
+  Paired hard passes: 146/150 (97.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4), boundary_values (2)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:5, abrupt_step_possible_contact_artifact:3
+  Overall hard flags: amplitude_exceeds_limit_uv:4, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:20, large_peak_to_peak:3, abrupt_step_possible_contact_artifact:3
 
 Subject 047 | BASELINE
   Recording: 047_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 148
-  AF7 hard passes: 146/148 (98.6%)
+  Total 2-second positions: 148
+  AF7 hard passes: 130/148 (87.8%)
   AF8 hard passes: 148/148 (100.0%)
-  Paired hard passes: 146/148 (98.6%)
-  AF7 hard-rejection reasons: boundary_values (2)
+  Paired hard passes: 130/148 (87.8%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (18), boundary_values (2)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:8, abrupt_step_possible_contact_artifact:4, unusual_beta:1, unusual_alpha:1, possible_ocular_or_slow_artifact:1
+  Overall hard flags: amplitude_exceeds_limit_uv:18, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:17, large_peak_to_peak:9, abrupt_step_possible_contact_artifact:5
 
 Subject 047 | PRE-VR
   Recording: 047_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
+  Total 2-second positions: 150
   AF7 hard passes: 150/150 (100.0%)
   AF8 hard passes: 150/150 (100.0%)
   Paired hard passes: 150/150 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:19
 
 Subject 047 | POST-VR
   Recording: 047_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 152/152 (100.0%)
-  AF8 hard passes: 152/152 (100.0%)
-  Paired hard passes: 152/152 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:4, unusual_alpha:1
+  Total 2-second positions: 152
+  AF7 hard passes: 150/152 (98.7%)
+  AF8 hard passes: 146/152 (96.1%)
+  Paired hard passes: 146/152 (96.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (6)
+  Overall hard flags: amplitude_exceeds_limit_uv:8
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:32, large_peak_to_peak:4, unusual_beta:1
 
 Subject 047 | RECOVERY
   Recording: 047_recovery_eeg.CSV
   Decision: NOT ELIGIBLE / NOT AUDITED
-  Explanation: Audit status: ERROR. Recording did not complete full-rate EEG artifact QC.
+  Explanation: Audit status: PREPROCESSING_FAILED. Recording did not complete full-rate EEG artifact QC.
 
 Subject 047 | RECOVERY
   Recording: 047_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 153
-  AF7 hard passes: 153/153 (100.0%)
-  AF8 hard passes: 151/153 (98.7%)
-  Paired hard passes: 151/153 (98.7%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: boundary_values (2)
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:4
+  Total 2-second positions: 153
+  AF7 hard passes: 151/153 (98.7%)
+  AF8 hard passes: 138/153 (90.2%)
+  Paired hard passes: 136/153 (88.9%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (15), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:17, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:20, large_peak_to_peak:5
 
 Subject 048 | BASELINE
   Recording: 048_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
+  Total 2-second positions: 150
   AF7 hard passes: 150/150 (100.0%)
   AF8 hard passes: 150/150 (100.0%)
   Paired hard passes: 150/150 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:6
 
 Subject 048 | PRE-VR
   Recording: 048_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
+  Total 2-second positions: 152
   AF7 hard passes: 152/152 (100.0%)
   AF8 hard passes: 152/152 (100.0%)
   Paired hard passes: 152/152 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:7
 
 Subject 048 | POST-VR
   Recording: 048_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 151
+  Total 2-second positions: 151
   AF7 hard passes: 151/151 (100.0%)
   AF8 hard passes: 151/151 (100.0%)
   Paired hard passes: 151/151 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:11
 
 Subject 048 | RECOVERY
   Recording: 048_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
+  Total 2-second positions: 149
   AF7 hard passes: 149/149 (100.0%)
   AF8 hard passes: 149/149 (100.0%)
   Paired hard passes: 149/149 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:22
 
 Subject 049 | BASELINE
   Recording: 049_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 151
-  AF7 hard passes: 147/151 (97.4%)
-  AF8 hard passes: 151/151 (100.0%)
-  Paired hard passes: 147/151 (97.4%)
-  AF7 hard-rejection reasons: boundary_values (4), constant_run (2)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:4, constant_run:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:10, unusual_alpha:3, abrupt_step_possible_contact_artifact:3
+  Total 2-second positions: 151
+  AF7 hard passes: 138/151 (91.4%)
+  AF8 hard passes: 147/151 (97.4%)
+  Paired hard passes: 138/151 (91.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (13), boundary_values (4), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:17, boundary_values:4, constant_run:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:9, possible_ocular_or_slow_artifact:4, unusual_beta:2, abrupt_step_possible_contact_artifact:2
 
 Subject 049 | PRE-VR
   Recording: 049_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 153
-  AF7 hard passes: 153/153 (100.0%)
-  AF8 hard passes: 153/153 (100.0%)
-  Paired hard passes: 153/153 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_alpha:10, large_filtered_peak_to_peak:8, possible_ocular_or_slow_artifact:6, unusual_beta:2
+  Total 2-second positions: 153
+  AF7 hard passes: 150/153 (98.0%)
+  AF8 hard passes: 148/153 (96.7%)
+  Paired hard passes: 148/153 (96.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (5)
+  Overall hard flags: amplitude_exceeds_limit_uv:8
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:26, large_peak_to_peak:2, unusual_beta:2, unusual_alpha:1
 
 Subject 049 | POST-VR
   Recording: 049_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 150/150 (100.0%)
+  Total 2-second positions: 150
+  AF7 hard passes: 141/150 (94.0%)
   AF8 hard passes: 150/150 (100.0%)
-  Paired hard passes: 150/150 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
+  Paired hard passes: 141/150 (94.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (9)
   AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_beta:3, unusual_alpha:2, large_filtered_peak_to_peak:2, possible_ocular_or_slow_artifact:1
+  Overall hard flags: amplitude_exceeds_limit_uv:9
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:6, large_peak_to_peak:2, unusual_beta:1
 
 Subject 049 | RECOVERY
   Recording: 049_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
-  AF7 hard passes: 149/150 (99.3%)
-  AF8 hard passes: 149/150 (99.3%)
-  Paired hard passes: 149/150 (99.3%)
-  AF7 hard-rejection reasons: boundary_values (1), constant_run (1)
-  AF8 hard-rejection reasons: boundary_values (1), constant_run (1)
-  Overall hard flags: boundary_values:2, constant_run:2
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:5, large_filtered_peak_to_peak:4, unusual_beta:3, abrupt_step_possible_contact_artifact:1, unusual_alpha:1
+  Total 2-second positions: 150
+  AF7 hard passes: 143/150 (95.3%)
+  AF8 hard passes: 145/150 (96.7%)
+  Paired hard passes: 141/150 (94.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (7)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (5)
+  Overall hard flags: amplitude_exceeds_limit_uv:12
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:18, large_peak_to_peak:4, unusual_beta:2
 
 Subject 050 | BASELINE
   Recording: 050_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 153
+  Total 2-second positions: 153
   AF7 hard passes: 153/153 (100.0%)
-  AF8 hard passes: 153/153 (100.0%)
-  Paired hard passes: 153/153 (100.0%)
+  AF8 hard passes: 150/153 (98.0%)
+  Paired hard passes: 150/153 (98.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:1
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:3
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:7
 
 Subject 050 | PRE-VR
   Recording: 050_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 153
-  AF7 hard passes: 151/153 (98.7%)
-  AF8 hard passes: 153/153 (100.0%)
-  Paired hard passes: 151/153 (98.7%)
-  AF7 hard-rejection reasons: boundary_values (2)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:11, unusual_alpha:6, unusual_beta:1
+  Total 2-second positions: 153
+  AF7 hard passes: 149/153 (97.4%)
+  AF8 hard passes: 140/153 (91.5%)
+  Paired hard passes: 138/153 (90.2%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (13)
+  Overall hard flags: amplitude_exceeds_limit_uv:17, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:15, large_peak_to_peak:11
 
 Subject 050 | POST-VR
   Recording: 050_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 151
+  Total 2-second positions: 151
   AF7 hard passes: 151/151 (100.0%)
-  AF8 hard passes: 151/151 (100.0%)
-  Paired hard passes: 151/151 (100.0%)
+  AF8 hard passes: 148/151 (98.0%)
+  Paired hard passes: 148/151 (98.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_alpha:1
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (3)
+  Overall hard flags: amplitude_exceeds_limit_uv:3
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:11
 
 Subject 050 | RECOVERY
   Recording: 050_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 150
+  Total 2-second positions: 150
   AF7 hard passes: 150/150 (100.0%)
   AF8 hard passes: 150/150 (100.0%)
   Paired hard passes: 150/150 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:10
 
 Subject 051 | BASELINE
   Recording: 051_baseline_eeg.csv
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 162
+  Total 2-second positions: 162
   AF7 hard passes: 162/162 (100.0%)
-  AF8 hard passes: 162/162 (100.0%)
-  Paired hard passes: 162/162 (100.0%)
+  AF8 hard passes: 156/162 (96.3%)
+  Paired hard passes: 156/162 (96.3%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_alpha:7
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (6)
+  Overall hard flags: amplitude_exceeds_limit_uv:6
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:96
+
+Subject 051 | PRE-VR
+  Recording: 051_pre_VR_eeg.csv
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 156
+  AF7 hard passes: 154/156 (98.7%)
+  AF8 hard passes: 154/156 (98.7%)
+  Paired hard passes: 154/156 (98.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:4
+  Additional warnings (not automatic exclusions): large_peak_to_peak:4, abrupt_step_possible_contact_artifact:4
 
 Subject 051 | POST-VR
   Recording: 051_post_vr_eeg.csv
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 157
+  Total 2-second positions: 157
   AF7 hard passes: 157/157 (100.0%)
   AF8 hard passes: 157/157 (100.0%)
   Paired hard passes: 157/157 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_alpha:6, large_filtered_peak_to_peak:2
-
-Subject 051 | PRE-VR
-  Recording: 051_pre_VR_eeg.csv
-  Decision: PROVISIONAL PASS
-  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 156
-  AF7 hard passes: 156/156 (100.0%)
-  AF8 hard passes: 156/156 (100.0%)
-  Paired hard passes: 156/156 (100.0%)
-  AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): abrupt_step_possible_contact_artifact:4, large_filtered_peak_to_peak:4, unusual_alpha:1, unusual_beta:1
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:51, unusual_alpha:3
 
 Subject 052 | BASELINE
   Recording: 052_baseline_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 156
+  Total 2-second positions: 156
   AF7 hard passes: 156/156 (100.0%)
-  AF8 hard passes: 156/156 (100.0%)
-  Paired hard passes: 156/156 (100.0%)
+  AF8 hard passes: 148/156 (94.9%)
+  Paired hard passes: 148/156 (94.9%)
   AF7 hard-rejection reasons: No hard-rejection details available
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:7, unusual_alpha:6, abrupt_step_possible_contact_artifact:4, possible_ocular_or_slow_artifact:4
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (8), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:8, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:10, large_peak_to_peak:7, abrupt_step_possible_contact_artifact:4
 
 Subject 052 | PRE-VR
   Recording: 052_pre_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 149
-  AF7 hard passes: 147/149 (98.7%)
-  AF8 hard passes: 149/149 (100.0%)
-  Paired hard passes: 147/149 (98.7%)
-  AF7 hard-rejection reasons: boundary_values (2), constant_run (2)
-  AF8 hard-rejection reasons: No hard-rejection details available
-  Overall hard flags: boundary_values:2, constant_run:2
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:7, unusual_alpha:6, unusual_beta:5, possible_ocular_or_slow_artifact:4
+  Total 2-second positions: 149
+  AF7 hard passes: 146/149 (98.0%)
+  AF8 hard passes: 142/149 (95.3%)
+  Paired hard passes: 142/149 (95.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (3), boundary_values (3), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (7)
+  Overall hard flags: amplitude_exceeds_limit_uv:10, boundary_values:3, constant_run:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:10, possible_ocular_or_slow_artifact:9, unusual_beta:2, unusual_alpha:1
 
 Subject 052 | POST-VR
   Recording: 052_post_vr_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 152
-  AF7 hard passes: 149/152 (98.0%)
-  AF8 hard passes: 150/152 (98.7%)
-  Paired hard passes: 148/152 (97.4%)
-  AF7 hard-rejection reasons: boundary_values (3)
-  AF8 hard-rejection reasons: boundary_values (2)
-  Overall hard flags: boundary_values:5
-  Additional warnings (not automatic exclusions): large_filtered_peak_to_peak:17, unusual_beta:12, unusual_alpha:10, possible_ocular_or_slow_artifact:6, abrupt_step_possible_contact_artifact:4
+  Total 2-second positions: 152
+  AF7 hard passes: 141/152 (92.8%)
+  AF8 hard passes: 140/152 (92.1%)
+  Paired hard passes: 140/152 (92.1%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (11), boundary_values (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (12), boundary_values (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:23, boundary_values:8
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:20, large_peak_to_peak:19, abrupt_step_possible_contact_artifact:4, unusual_beta:2
 
 Subject 052 | RECOVERY
   Recording: 052_recovery_eeg.zip
   Decision: PROVISIONAL PASS
   Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
-  Total 4-second positions: 162
-  AF7 hard passes: 162/162 (100.0%)
-  AF8 hard passes: 162/162 (100.0%)
-  Paired hard passes: 162/162 (100.0%)
+  Total 2-second positions: 162
+  AF7 hard passes: 160/162 (98.8%)
+  AF8 hard passes: 155/162 (95.7%)
+  Paired hard passes: 155/162 (95.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (7), boundary_values (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:9, boundary_values:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:13, large_peak_to_peak:7, unusual_alpha:3, unusual_beta:2
+
+Subject 053 | BASELINE
+  Recording: 053_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 312
+  AF7 hard passes: 312/312 (100.0%)
+  AF8 hard passes: 312/312 (100.0%)
+  Paired hard passes: 312/312 (100.0%)
   AF7 hard-rejection reasons: No hard-rejection details available
   AF8 hard-rejection reasons: No hard-rejection details available
   Overall hard flags: None reported
-  Additional warnings (not automatic exclusions): unusual_alpha:11, large_filtered_peak_to_peak:7, unusual_beta:6, possible_ocular_or_slow_artifact:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:17
+
+Subject 053 | PRE-VR
+  Recording: 053_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 301
+  AF7 hard passes: 293/301 (97.3%)
+  AF8 hard passes: 287/301 (95.3%)
+  Paired hard passes: 287/301 (95.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (8)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (14)
+  Overall hard flags: amplitude_exceeds_limit_uv:22
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:40, large_peak_to_peak:8, unusual_beta:2, abrupt_step_possible_contact_artifact:2, possible_muscle_artifact:1
+
+Subject 053 | POST-VR
+  Recording: 053_post_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 310
+  AF7 hard passes: 310/310 (100.0%)
+  AF8 hard passes: 310/310 (100.0%)
+  Paired hard passes: 310/310 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:16, unusual_beta:1
+
+Subject 053 | RECOVERY
+  Recording: 053_recovery_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 298
+  AF7 hard passes: 298/298 (100.0%)
+  AF8 hard passes: 298/298 (100.0%)
+  Paired hard passes: 298/298 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:37, unusual_beta:2
+
+Subject 054 | BASELINE
+  Recording: 054_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 314
+  AF7 hard passes: 314/314 (100.0%)
+  AF8 hard passes: 314/314 (100.0%)
+  Paired hard passes: 314/314 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:27
+
+Subject 054 | PRE-VR
+  Recording: 054_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 315
+  AF7 hard passes: 315/315 (100.0%)
+  AF8 hard passes: 313/315 (99.4%)
+  Paired hard passes: 313/315 (99.4%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:27, unusual_beta:2, possible_muscle_artifact:1
+
+Subject 054 | POST-VR
+  Recording: 054_post_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 300
+  AF7 hard passes: 300/300 (100.0%)
+  AF8 hard passes: 300/300 (100.0%)
+  Paired hard passes: 300/300 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:24
+
+Subject 054 | RECOVERY
+  Recording: 054_recovery_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 314
+  AF7 hard passes: 314/314 (100.0%)
+  AF8 hard passes: 314/314 (100.0%)
+  Paired hard passes: 314/314 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:30
+
+Subject 055 | BASELINE
+  Recording: 055_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 295
+  AF7 hard passes: 295/295 (100.0%)
+  AF8 hard passes: 295/295 (100.0%)
+  Paired hard passes: 295/295 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:15
+
+Subject 055 | PRE-VR
+  Recording: 055_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 311
+  AF7 hard passes: 307/311 (98.7%)
+  AF8 hard passes: 311/311 (100.0%)
+  Paired hard passes: 307/311 (98.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: amplitude_exceeds_limit_uv:4
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:13, unusual_beta:4, unusual_alpha:3
+
+Subject 055 | POST-VR
+  Recording: 055_post_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 303
+  AF7 hard passes: 303/303 (100.0%)
+  AF8 hard passes: 303/303 (100.0%)
+  Paired hard passes: 303/303 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:17
+
+Subject 056 | BASELINE
+  Recording: 056_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 304
+  AF7 hard passes: 302/304 (99.3%)
+  AF8 hard passes: 304/304 (100.0%)
+  Paired hard passes: 302/304 (99.3%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (2)
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: amplitude_exceeds_limit_uv:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:41, unusual_alpha:1
+
+Subject 056 | PRE-VR
+  Recording: 056_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 301
+  AF7 hard passes: 281/301 (93.4%)
+  AF8 hard passes: 287/301 (95.3%)
+  Paired hard passes: 280/301 (93.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (20), boundary_values (12)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (14), boundary_values (4)
+  Overall hard flags: amplitude_exceeds_limit_uv:34, boundary_values:16
+  Additional warnings (not automatic exclusions): large_peak_to_peak:21, possible_ocular_or_slow_artifact:14, unusual_alpha:4
+
+Subject 056 | POST-VR
+  Recording: 056_post_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 301
+  AF7 hard passes: 294/301 (97.7%)
+  AF8 hard passes: 301/301 (100.0%)
+  Paired hard passes: 294/301 (97.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (7), boundary_values (5)
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: amplitude_exceeds_limit_uv:7, boundary_values:5
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:16, large_peak_to_peak:7, abrupt_step_possible_contact_artifact:2
+
+Subject 057 | BASELINE
+  Recording: 057_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 308
+  AF7 hard passes: 308/308 (100.0%)
+  AF8 hard passes: 308/308 (100.0%)
+  Paired hard passes: 308/308 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:16, unusual_beta:1, unusual_alpha:1
+
+Subject 057 | PRE-VR
+  Recording: 057_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 304
+  AF7 hard passes: 304/304 (100.0%)
+  AF8 hard passes: 304/304 (100.0%)
+  Paired hard passes: 304/304 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:31, unusual_beta:3
+
+Subject 057 | POST-VR
+  Recording: 057_post_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 301
+  AF7 hard passes: 297/301 (98.7%)
+  AF8 hard passes: 295/301 (98.0%)
+  Paired hard passes: 295/301 (98.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (4)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (6), constant_run (2), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:10, constant_run:2, boundary_values:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:25, large_peak_to_peak:7, abrupt_step_possible_contact_artifact:3
+
+Subject 057 | RECOVERY
+  Recording: 057_recovery_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 298
+  AF7 hard passes: 290/298 (97.3%)
+  AF8 hard passes: 284/298 (95.3%)
+  Paired hard passes: 283/298 (95.0%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (8), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (14), boundary_values (4), constant_run (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:22, boundary_values:6, constant_run:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:29, large_peak_to_peak:11
+
+Subject 058 | BASELINE
+  Recording: 058_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 306
+  AF7 hard passes: 306/306 (100.0%)
+  AF8 hard passes: 306/306 (100.0%)
+  Paired hard passes: 306/306 (100.0%)
+  AF7 hard-rejection reasons: No hard-rejection details available
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: None reported
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:36, unusual_alpha:2
+
+Subject 058 | PRE-VR
+  Recording: 058_pre_vr_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 310
+  AF7 hard passes: 305/310 (98.4%)
+  AF8 hard passes: 310/310 (100.0%)
+  Paired hard passes: 305/310 (98.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (5)
+  AF8 hard-rejection reasons: No hard-rejection details available
+  Overall hard flags: amplitude_exceeds_limit_uv:5
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:40, large_peak_to_peak:3
+
+Subject 058 | POST-VR
+  Recording: 058_post_vr_eeg.zip
+  Decision: FAILS PROVISIONAL QC SCREEN
+  Explanation: paired retention 18.4% is below 50%
+  Total 2-second positions: 413
+  AF7 hard passes: 79/413 (19.1%)
+  AF8 hard passes: 76/413 (18.4%)
+  Paired hard passes: 76/413 (18.4%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (334)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (337)
+  Overall hard flags: amplitude_exceeds_limit_uv:671
+  Additional warnings (not automatic exclusions): large_peak_to_peak:7, possible_ocular_or_slow_artifact:5, unusual_beta:5, abrupt_step_possible_contact_artifact:4, unusual_alpha:2
+
+Subject 059 | BASELINE
+  Recording: 059_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 293
+  AF7 hard passes: 284/293 (96.9%)
+  AF8 hard passes: 278/293 (94.9%)
+  Paired hard passes: 275/293 (93.9%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (9), boundary_values (5), constant_run (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (15), boundary_values (2)
+  Overall hard flags: amplitude_exceeds_limit_uv:24, boundary_values:7, constant_run:2
+  Additional warnings (not automatic exclusions): possible_ocular_or_slow_artifact:51, large_peak_to_peak:9, abrupt_step_possible_contact_artifact:4, unusual_beta:3
+
+Subject 060 | BASELINE
+  Recording: 060_baseline_eeg.zip
+  Decision: PROVISIONAL PASS
+  Explanation: Meets >=50% paired AF7/AF8 hard-pass retention and >=5 paired accepted windows.
+  Total 2-second positions: 300
+  AF7 hard passes: 287/300 (95.7%)
+  AF8 hard passes: 270/300 (90.0%)
+  Paired hard passes: 269/300 (89.7%)
+  AF7 hard-rejection reasons: amplitude_exceeds_limit_uv (13), constant_run (2), boundary_values (2)
+  AF8 hard-rejection reasons: amplitude_exceeds_limit_uv (30), boundary_values (8)
+  Overall hard flags: amplitude_exceeds_limit_uv:43, boundary_values:10, constant_run:2
+  Additional warnings (not automatic exclusions): large_peak_to_peak:35, abrupt_step_possible_contact_artifact:32, possible_ocular_or_slow_artifact:20, unusual_beta:7, unusual_alpha:1
 
 =================================================================
 PRE/POST ANALYSIS ELIGIBILITY
@@ -1599,9 +1901,9 @@ Subject 028: MISSING PRE OR POST RECORDING
 Subject 029: PROVISIONAL PRE/POST CANDIDATE
 Subject 030: NOT ELIGIBLE UNDER CURRENT QC SCREEN
 Subject 031: NOT ELIGIBLE UNDER CURRENT QC SCREEN
-Subject 032: PROVISIONAL PRE/POST CANDIDATE
+Subject 032: NOT ELIGIBLE UNDER CURRENT QC SCREEN
 Subject 033: NOT ELIGIBLE UNDER CURRENT QC SCREEN
-Subject 034: PROVISIONAL PRE/POST CANDIDATE
+Subject 034: NOT ELIGIBLE UNDER CURRENT QC SCREEN
 Subject 035: PROVISIONAL PRE/POST CANDIDATE
 Subject 036: PROVISIONAL PRE/POST CANDIDATE
 Subject 037: MISSING PRE OR POST RECORDING
@@ -1618,8 +1920,16 @@ Subject 047: PROVISIONAL PRE/POST CANDIDATE
 Subject 048: PROVISIONAL PRE/POST CANDIDATE
 Subject 049: PROVISIONAL PRE/POST CANDIDATE
 Subject 050: PROVISIONAL PRE/POST CANDIDATE
-Subject 051: MISSING PRE OR POST RECORDING
+Subject 051: PROVISIONAL PRE/POST CANDIDATE
 Subject 052: PROVISIONAL PRE/POST CANDIDATE
+Subject 053: PROVISIONAL PRE/POST CANDIDATE
+Subject 054: PROVISIONAL PRE/POST CANDIDATE
+Subject 055: PROVISIONAL PRE/POST CANDIDATE
+Subject 056: PROVISIONAL PRE/POST CANDIDATE
+Subject 057: PROVISIONAL PRE/POST CANDIDATE
+Subject 058: NOT ELIGIBLE UNDER CURRENT QC SCREEN
+Subject 059: MISSING PRE OR POST RECORDING
+Subject 060: MISSING PRE OR POST RECORDING
 
 NOTE: Flag counts are channel-window occurrences, not distinct
 artifact events. Overlapping windows and flags can count repeatedly.

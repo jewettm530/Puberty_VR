@@ -223,7 +223,7 @@ def write_eeg_usability_report() -> None:
             )
         elif total == 0:
             decision = "NOT ELIGIBLE"
-            explanation = "No complete, acceptable 4-second epochs."
+            explanation = "No complete, acceptable 2-second epochs."
         elif candidate:
             decision = "PROVISIONAL PASS"
             explanation = (
@@ -252,7 +252,7 @@ def write_eeg_usability_report() -> None:
 
         if is_audited and total:
             lines.extend([
-                f"  Total 4-second positions: {total}",
+                f"  Total 2-second positions: {total}",
                 f"  AF7 hard passes: {af7}/{total} ({af7/total*100:.1f}%)",
                 f"  AF8 hard passes: {af8}/{total} ({af8/total*100:.1f}%)",
                 f"  Paired hard passes: {paired}/{total} ({retention:.1f}%)",
@@ -298,10 +298,13 @@ def write_eeg_usability_report() -> None:
         "",
         "PASS CRITERIA",
         "  >=50% paired AF7/AF8 hard-pass window retention",
-        "  AND >=5 paired passing 4-second windows",
+        "  AND >=5 paired passing 2-second windows",
         "",
         "IMPORTANT:",
-        "  These are automated, provisional results.",
+        "  Fixed 2-s Hann Welch epochs, 1-s step, nominal 256 Hz, +/-200 µV rejection.",
+        "  Subjects 039-052 use only the second half of each recording.",
+        "  Matching BAD intervals from preprocessed manual reviews apply on audit rerun.",
+        "  Check preprocessing IDs and reviewer decisions before final interpretation.",
         "  Hard-pass does NOT mean artifact-free EEG.",
         "  Manual neuroscientist review is still required.",
         "",

@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""Report trial 1 versus trial 18 paired statistics separately for sessions 1 and 2.
+
+Learner groups are read from learning_rates.csv without reclassification.
+Only subjects with both endpoint observations contribute to each paired summary.
+"""
 
 import sys
 from pathlib import Path
@@ -83,42 +88,48 @@ def print_stats(label, stats):
 
 
 def main():
-    props_path = LEARNING_ANALYSIS_DATA_DIR / "individual_proportions_session1.csv"
     groups_path = LEARNING_ANALYSIS_DATA_DIR / "learning_rates.csv"
-
-    if not props_path.exists():
-        raise FileNotFoundError(f"Missing {props_path}. Run all_individuals_with_curve.py first.")
+    props_paths = {
+        session: LEARNING_ANALYSIS_DATA_DIR / f"individual_proportions_session{session}.csv"
+        for session in (1, 2)
+    }
+    for props_path in props_paths.values():
+        if not props_path.exists():
+            raise FileNotFoundError(
+                f"Missing {props_path}. Run all_individuals_with_curve.py first."
+            )
     if not groups_path.exists():
         raise FileNotFoundError(f"Missing {groups_path}. Run calculate_learning_rates.py first.")
 
-    props = pd.read_csv(props_path, dtype={"subject": str})
     groups = pd.read_csv(groups_path, dtype={"subjectId": str})
-    props["subject"] = props["subject"].astype(str).str.zfill(3)
-    props["trial"] = pd.to_numeric(props["trial"], errors="coerce")
-    groups["subjectId"] = groups["subjectId"].astype(str).str.zfill(3)
+    groups["subjectId"] = groups["subjectId"].str.zfill(3)
     groups["plearning_num"] = pd.to_numeric(groups["plearning_num"], errors="coerce")
 
-    session1_groups = groups[groups["plearning_num"] == 1].copy()
-    learner_group = session1_groups["learner_group"].astype(str).str.lower()
-    good_subjects = session1_groups.loc[learner_group == "good", "subjectId"].dropna().unique().tolist()
-    bad_subjects = session1_groups.loc[learner_group == "bad", "subjectId"].dropna().unique().tolist()
-    all_subjects = sorted(props["subject"].dropna().unique().tolist())
-
     summary_rows = []
-    for label, subject_list in [
-        ("Good learners", good_subjects),
-        ("Bad learners", bad_subjects),
-        ("All Session 1 subjects", all_subjects),
-    ]:
-        group_props = props[props["subject"].isin(subject_list)].copy()
-        paired = (
-            group_props[group_props["trial"].isin([1, 18])]
-            .pivot_table(index="subject", columns="trial", values="proportion_correct", aggfunc="first")
-            .reindex(columns=[1, 18])
-        )
-        stats = paired_stats(paired)
-        print_stats(label, stats)
-        summary_rows.append({"group": label, **stats, "sentence": manuscript_sentence(stats)})
+    for session, props_path in props_paths.items():
+        props = pd.read_csv(props_path, dtype={"subject": str})
+        props["subject"] = props["subject"].str.zfill(3)
+        props["trial"] = pd.to_numeric(props["trial"], errors="coerce")
+        session_groups = groups[groups["plearning_num"] == session].copy()
+        learner_group = session_groups["learner_group"].astype(str).str.strip().str.lower()
+        good_subjects = session_groups.loc[learner_group == "good", "subjectId"].dropna().unique().tolist()
+        bad_subjects = session_groups.loc[learner_group == "bad", "subjectId"].dropna().unique().tolist()
+        all_subjects = sorted(props["subject"].dropna().unique().tolist())
+
+        for label, subject_list in [
+            (f"Session {session} - Good learners", good_subjects),
+            (f"Session {session} - Bad learners", bad_subjects),
+            (f"All Session {session} subjects", all_subjects),
+        ]:
+            group_props = props[props["subject"].isin(subject_list)].copy()
+            paired = (
+                group_props[group_props["trial"].isin([1, 18])]
+                .pivot_table(index="subject", columns="trial", values="proportion_correct", aggfunc="first")
+                .reindex(columns=[1, 18])
+            )
+            stats = paired_stats(paired)
+            print_stats(label, stats)
+            summary_rows.append({"group": label, **stats, "sentence": manuscript_sentence(stats)})
 
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     output_path = REPORTS_DIR / "learning_summary_statistics.txt"

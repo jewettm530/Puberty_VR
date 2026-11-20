@@ -1,54 +1,54 @@
 subject,phase,recording,preprocessing_status,preprocessing_error,preprocessing_result_path
-sub005,baseline,005_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub005,plearning_1,005_plearning_1_eeg.csv,SKIPPED_LOW_RATE,,
-sub005,plearning_2,005_plearning_2_eeg.csv,SKIPPED_LOW_RATE,,
-sub005,post_vr,005_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub005,pre_vr,005_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub005,vr_math,005_vr_math_eeg.csv,SKIPPED_LOW_RATE,,
-sub005,vr_speech,005_vr_speech_eeg.csv,SKIPPED_LOW_RATE,,
-sub007,baseline,007_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub007,recovery,007_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub010,baseline,010_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub010,post_vr,010_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub010,pre_vr,010_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub010,recovery,010_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub012,baseline,012_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub012,pre_vr,012_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub012,recovery,012_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub013,baseline,013_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub013,post_vr,013_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub013,pre_vr,013_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub013,recovery,013_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub014,baseline,014_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub014,post_vr,014_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub014,pre_vr,014_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub014,recovery,014_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub015,baseline,015_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub015,post_vr,015_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub015,pre_vr,015_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub015,recovery,015_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub016,baseline,016_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub016,post_vr,016_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub016,pre_vr,016_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub016,recovery,016_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub018,baseline,018_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub018,post_vr,018_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub018,pre_vr,018_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub018,recovery,018_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub019,baseline,019_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub019,post_vr,019_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub019,pre_vr,019_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub020,baseline,020_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub020,post_vr,020_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub020,pre_vr,020_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub020,recovery,020_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub022,baseline,022_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub022,pre_vr,022_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub022,recovery,022_recovery_eeg.csv,SKIPPED_LOW_RATE,,
-sub023,baseline,023_baseline_eeg.csv,SKIPPED_LOW_RATE,,
-sub023,post_vr,023_post_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub023,pre_vr,023_pre_vr_eeg.csv,SKIPPED_LOW_RATE,,
-sub023,recovery,023_recovery_eeg.csv,SKIPPED_LOW_RATE,,
+sub005,baseline,005_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub005,plearning_1,005_plearning_1_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub005,plearning_2,005_plearning_2_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub005,post_vr,005_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub005,pre_vr,005_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub005,vr_math,005_vr_math_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub005,vr_speech,005_vr_speech_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub007,baseline,007_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub007,recovery,007_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 0.99 Hz",
+sub010,baseline,010_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub010,post_vr,010_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub010,pre_vr,010_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub010,recovery,010_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub012,baseline,012_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub012,pre_vr,012_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub012,recovery,012_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 0.98 Hz",
+sub013,baseline,013_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub013,post_vr,013_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub013,pre_vr,013_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub013,recovery,013_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub014,baseline,014_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub014,post_vr,014_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub014,pre_vr,014_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub014,recovery,014_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub015,baseline,015_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub015,post_vr,015_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub015,pre_vr,015_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub015,recovery,015_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub016,baseline,016_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub016,post_vr,016_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub016,pre_vr,016_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub016,recovery,016_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub018,baseline,018_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub018,post_vr,018_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub018,pre_vr,018_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub018,recovery,018_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub019,baseline,019_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub019,post_vr,019_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub019,pre_vr,019_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub020,baseline,020_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub020,post_vr,020_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub020,pre_vr,020_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub020,recovery,020_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub022,baseline,022_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub022,pre_vr,022_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub022,recovery,022_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub023,baseline,023_baseline_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub023,post_vr,023_post_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub023,pre_vr,023_pre_vr_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
+sub023,recovery,023_recovery_eeg.csv,SKIPPED_RATE_OR_LENGTH,"Not full-rate: median 1.00, average 1.00 Hz",
 sub024,post_vr,024_post_vr_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_024/024_post_vr_eeg_Result.csv
 sub024,pre_vr,024_pre_vr_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_024/024_pre_vr_eeg_Result.csv
 sub024,recovery,024_recovery_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_024/024_recovery_eeg_Result.csv
@@ -129,7 +129,7 @@ sub046,recovery,046_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outp
 sub047,baseline,047_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_047/047_baseline_eeg_Result.csv
 sub047,post_vr,047_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_047/047_post_vr_eeg_Result.csv
 sub047,pre_vr,047_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_047/047_pre_vr_eeg_Result.csv
-sub047,recovery,047_recovery_eeg.CSV,INPUT_ERROR,"ValueError: Missing columns: TimeStamp, RAW_AF7, RAW_AF8",
+sub047,recovery,047_recovery_eeg.CSV,FAILED,"ValueError: Missing EEG columns: ['RAW_AF7', 'RAW_AF8', 'TimeStamp']",
 sub047,recovery,047_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_047/047_recovery_eeg_Result.csv
 sub048,baseline,048_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_048/048_baseline_eeg_Result.csv
 sub048,post_vr,048_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_048/048_post_vr_eeg_Result.csv
@@ -145,8 +145,31 @@ sub050,pre_vr,050_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/
 sub050,recovery,050_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_050/050_recovery_eeg_Result.csv
 sub051,baseline,051_baseline_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_051/051_baseline_eeg_Result.csv
 sub051,post_vr,051_post_vr_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_051/051_post_vr_eeg_Result.csv
-sub051,pre_VR,051_pre_VR_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_051/051_pre_VR_eeg_Result.csv
+sub051,pre_vr,051_pre_VR_eeg.csv,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_051/051_pre_VR_eeg_Result.csv
 sub052,baseline,052_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_052/052_baseline_eeg_Result.csv
 sub052,post_vr,052_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_052/052_post_vr_eeg_Result.csv
 sub052,pre_vr,052_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_052/052_pre_vr_eeg_Result.csv
 sub052,recovery,052_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_052/052_recovery_eeg_Result.csv
+sub053,baseline,053_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_053/053_baseline_eeg_Result.csv
+sub053,post_vr,053_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_053/053_post_vr_eeg_Result.csv
+sub053,pre_vr,053_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_053/053_pre_vr_eeg_Result.csv
+sub053,recovery,053_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_053/053_recovery_eeg_Result.csv
+sub054,baseline,054_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_054/054_baseline_eeg_Result.csv
+sub054,post_vr,054_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_054/054_post_vr_eeg_Result.csv
+sub054,pre_vr,054_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_054/054_pre_vr_eeg_Result.csv
+sub054,recovery,054_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_054/054_recovery_eeg_Result.csv
+sub055,baseline,055_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_055/055_baseline_eeg_Result.csv
+sub055,post_vr,055_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_055/055_post_vr_eeg_Result.csv
+sub055,pre_vr,055_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_055/055_pre_vr_eeg_Result.csv
+sub056,baseline,056_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_056/056_baseline_eeg_Result.csv
+sub056,post_vr,056_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_056/056_post_vr_eeg_Result.csv
+sub056,pre_vr,056_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_056/056_pre_vr_eeg_Result.csv
+sub057,baseline,057_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_057/057_baseline_eeg_Result.csv
+sub057,post_vr,057_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_057/057_post_vr_eeg_Result.csv
+sub057,pre_vr,057_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_057/057_pre_vr_eeg_Result.csv
+sub057,recovery,057_recovery_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_057/057_recovery_eeg_Result.csv
+sub058,baseline,058_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_058/058_baseline_eeg_Result.csv
+sub058,post_vr,058_post_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_058/058_post_vr_eeg_Result.csv
+sub058,pre_vr,058_pre_vr_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_058/058_pre_vr_eeg_Result.csv
+sub059,baseline,059_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_059/059_baseline_eeg_Result.csv
+sub060,baseline,060_baseline_eeg.zip,COMPLETED,,/Users/maddiemac/Puberty_VR/outputs/eeg/bandpower/sub_060/060_baseline_eeg_Result.csv

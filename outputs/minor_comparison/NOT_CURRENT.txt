@@ -1,0 +1,6 @@
+AGE COMPARISON OUTPUTS ARE NOT CURRENT
+Last pipeline attempt: 2026-11-20T21:34:12+00:00
+Reason: Missing age-workbook classifications for analyzed subjects: 053, 054, 055, 056, 057, 058. Add them to the exported workbook.
+
+Files in outputs/minor_comparison/ and data/analysis_data/minor_comparison/ may be from an older run.
+Correct the workbook and rerun run_all_analyses.py.

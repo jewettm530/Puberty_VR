@@ -1,0 +1,51 @@
+{
+  "version": "4.2-eyes-open-welch2s-original-layout",
+  "subject_id": "044",
+  "phase": "pre_vr",
+  "recording": "044_pre_vr_eeg.zip",
+  "recording_stem": "044_pre_vr_eeg",
+  "fs_hz": 256,
+  "window_s": 2.0,
+  "step_s": 1.0,
+  "nfft": 1024,
+  "taper": "fixed periodic Hann",
+  "detrend": false,
+  "diagnostic_channels": [
+    "RAW_TP9",
+    "RAW_AF7",
+    "RAW_AF8",
+    "RAW_TP10"
+  ],
+  "aux_channels": [
+    "AUX_1",
+    "AUX_2",
+    "AUX_3",
+    "AUX_4"
+  ],
+  "psd_units": "uV^2/Hz",
+  "raw_offset_uv": 725.0,
+  "amplitude_limit_uv": 200.0,
+  "gap_factor": 3.5,
+  "timing_tolerance": 0.08,
+  "flat_std": 0.05,
+  "flat_run_ms": 125.0,
+  "bound_fraction": 0.01,
+  "selection": "second_half_eyes_open",
+  "selection_cutoff_s": 153.393953125,
+  "analysis_start_s": 153.395,
+  "analysis_end_s": 306.78790625,
+  "original_duration_s": 306.78790625,
+  "estimated_median_hz": 250.00000000013856,
+  "observed_average_hz": 256.5811776363826,
+  "raw_export_rows": 78798,
+  "raw_sample_rows": 78716,
+  "selected_sample_rows": 39362,
+  "out_of_order_or_duplicate_rows": 0,
+  "timestamp_gaps": 0,
+  "preprocessing_id": "9457783fe096d27675e4c62dcc80c0ecd26b89f2c0ed02f2638d77ab94a2a018",
+  "ignored_annotation_files": [
+    "044_pre_vr_eeg_AF7_AF8_span1_intervals.csv"
+  ],
+  "manual_bad_intervals": 0,
+  "analysis_id": "c7a597f53ffb9af01124f9b74b00776d8436932331d05d0116c51fc41cb57d98"
+}

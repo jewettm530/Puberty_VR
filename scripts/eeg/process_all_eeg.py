@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -23,6 +24,7 @@ PHASE_TO_TIMEPOINT = {
 }
 CHANNELS = ('AF7', 'AF8')
 BANDS = ('theta', 'alpha', 'beta')
+PIPELINE_VERSION = '4.2-eyes-open-welch2s-original-layout'
 
 
 def collect(project: Path, *, include_unverified: bool = False) -> int:
@@ -32,8 +34,8 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
     target = project / 'data' / 'analysis_data' / 'eeg'
     # Honor installed project's existing analysis-data path when available.
     target.mkdir(parents=True, exist_ok=True)
-    if not band_root.is_dir():
-        raise FileNotFoundError(f'No preprocessing outputs found: {band_root}. Run EEG_Audit.py first.')
+    if not band_root.is_dir() and not audit_file.is_file():
+        raise FileNotFoundError(f'No preprocessing outputs or audit found: {band_root}. Run EEG_Audit.py first.')
 
     if audit_file.exists():
         audit = pd.read_csv(audit_file, dtype={'subject': str}).fillna('')
@@ -63,7 +65,7 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
             # confirm that preprocessing completed for this recording.
             if audit_lookup and audit_rec is None:
                 continue
-            if not include_unverified and audit_lookup and processing_status != 'COMPLETED':
+            if not include_unverified and processing_status != 'COMPLETED':
                 continue
             row = {'subject_id': sid, 'phase': phase,
                    'timepoint': PHASE_TO_TIMEPOINT[phase],
@@ -72,6 +74,18 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
                    'processing_status': processing_status}
             try:
                 data = pd.read_csv(path)
+                if 'pipeline_version' not in data or not data.pipeline_version.eq(PIPELINE_VERSION).all():
+                    raise ValueError('Outdated EEG export. Rerun EEG_Audit.py with the updated scripts.')
+                metadata_path = path.with_name(path.name.replace('_FrontalLogPower.csv','_Processing.json'))
+                metadata = json.loads(metadata_path.read_text())
+                if metadata['version'] != PIPELINE_VERSION or not data.preprocessing_id.eq(metadata['preprocessing_id']).all():
+                    raise ValueError('Mismatched EEG preprocessing metadata')
+                if not data.analysis_id.eq(metadata['analysis_id']).all():
+                    raise ValueError('Band table has a different manual exclusion set')
+                if audit_rec is not None and str(getattr(audit_rec,'analysis_id','')) != metadata['analysis_id']:
+                    raise ValueError('Export does not match the latest audit manual exclusion set')
+                if audit_rec is not None and str(getattr(audit_rec,'preprocessing_id','')) != metadata['preprocessing_id']:
+                    raise ValueError('Export does not match the latest audit preprocessing ID')
                 required = {'channel', 'band', 'power', 'log10_power', 'n_windows'}
                 if not required.issubset(data.columns):
                     raise ValueError(f'Missing columns: {sorted(required - set(data.columns))}')
@@ -81,7 +95,10 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
                     raise ValueError('Expected 6 rows: AF7/AF8 x theta/alpha/beta')
                 for v in data.itertuples(index=False):
                     power, logpower = float(v.power), float(v.log10_power)
-                    if not np.isfinite(power) or power <= 0 or not np.isfinite(logpower):
+                    if int(v.n_windows) == 0:
+                        if not np.isnan(power) or not np.isnan(logpower):
+                            raise ValueError('Zero accepted windows must have missing power')
+                    elif not np.isfinite(power) or power < 0 or (power > 0 and not np.isclose(np.log10(power),logpower)):
                         raise ValueError(f'Invalid {v.channel} {v.band} power')
                     key = f'{v.channel.lower()}_{v.band}_log10_power'
                     row[key] = logpower
@@ -91,8 +108,18 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
                                  'power': power, 'log10_power': logpower,
                                  'n_windows': int(v.n_windows),
                                  'measurement_timing': 'after_vr_task' if phase == 'post_vr' else phase,
-                                 'spectral_source': 'preprocessing (whole recording; no artifact selection)'})
-                row['summary_status'] = 'COLLECTED'
+                                  'spectral_source': 'fixed 2-s Welch; automatic and matching manual BAD exclusions',
+                                 'pipeline_version': PIPELINE_VERSION,
+                                 'preprocessing_id': metadata['preprocessing_id'],
+                                 'analysis_id': metadata['analysis_id'],
+                                 'selection': metadata['selection'],
+                                 'analysis_start_s': metadata['analysis_start_s'],
+                                 'analysis_end_s': metadata['analysis_end_s'],
+                                 'psd_units': 'uV^2/Hz' })
+                counts = data.groupby('channel').n_windows.first()
+                row['summary_status'] = ('COLLECTED' if counts.gt(0).all()
+                                         else 'COLLECTED_PARTIAL' if counts.gt(0).any()
+                                         else 'NO_ACCEPTED_WINDOWS')
                 row['error'] = ''
             except Exception as exc:
                 row['summary_status'] = 'ERROR'
@@ -101,10 +128,15 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
             report.append(row)
 
     if not report:
-        raise RuntimeError('No eligible preprocessing outputs found. Run EEG_Audit.py first; '
-                           'verify preprocessing completed successfully.')
-    report_df = pd.DataFrame(report)
-    long_df = pd.DataFrame(long)
+        print('No eligible preprocessing exports. Writing empty aggregate tables.')
+    report_df = pd.DataFrame(report,columns=['subject_id','phase','timepoint','file_path',
+                                            'qc_status','processing_status',
+                                            'summary_status','error']) if not report else pd.DataFrame(report)
+    long_columns = ['subject_id','phase','timepoint','file_path','qc_status',
+                    'processing_status','channel','band','power','log10_power','n_windows',
+                    'measurement_timing','spectral_source','pipeline_version','preprocessing_id',
+                    'analysis_id','selection','analysis_start_s','analysis_end_s','psd_units']
+    long_df = pd.DataFrame(long,columns=long_columns)
     columns = ['subject_id','phase','timepoint','file_path','qc_status','processing_status',
                'summary_status','error'] + [f'{ch.lower()}_{band}_log10_power'
                                           for ch in CHANNELS for band in BANDS]
@@ -125,7 +157,7 @@ def collect(project: Path, *, include_unverified: bool = False) -> int:
     print(f'Collected {len(long_df)} spectral measurements from '
           f'{(report_df.summary_status == "COLLECTED").sum()} recordings.')
     print(f'Reports written to: {target}')
-    print('NOTE: Whole-recording spectral powers are not QC-selected or manually approved.')
+    print('Powers use selected eyes-open periods, 2-s epochs, +/-200 µV QC and matching manual BAD exclusions.')
     return 0
 
 

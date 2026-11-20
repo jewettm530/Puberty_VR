@@ -1,184 +1,98 @@
-PUBERTY & VR — MNE MANUAL EEG REVIEW (FOUR CHANNELS)
-===================================================
+MANUAL REVIEW OF SAVED PREPROCESSED EEG
 
-PURPOSE
--------
-Use all four original full-rate Muse/Mind Monitor channels (TP9, AF7, AF8,
-TP10) for visual artifact investigation. AF7 and AF8 remain the ONLY primary
-channels for alpha (8–13 Hz), beta (13–30 Hz) and ln(beta/alpha) analysis.
-TP9 and TP10 provide context; do not include them in the primary frontal ratio.
+Run these commands from your Puberty_VR project root.
 
-INSTALL / FIRST RUN
--------------------
-Place EEG_Manual_Review.py in Puberty_VR/scripts/eeg and, in VS Code, choose
-its Python environment. From the Puberty_VR project root:
+1. Generate the preprocessed recording, automatic decisions and PSD outputs.
 
-  python3 -c "import mne; print(mne.__version__)"
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr
+   python3 scripts/eeg/EEG_Audit.py
 
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel ALL --start 20 --duration 12
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --list-flags
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel AF8 --start 20
+   Subjects 039–052 use the second half of every recording by elapsed time.
+   Each channel uses complete 2-second epochs stepped every second.
+   Automatic rejection uses +/-200 µV on offset-corrected input and
+   notch-filtered EEG. The default raw offset is 725 µV for Muse exports.
 
-The audit --list-flags feature currently lists flags only for AF7 and AF8,
-even though the MNE browser displays all four channels.
+2. Open the actual saved preprocessing.
 
-HOW TO REVIEW
--------------
-1. Inspect all four channels together to see whether suspicious changes happen
-   at the same time and whether they are localized to a frontal sensor.
-2. Look at 5–12 seconds at a time; zoom for suspicious intervals. Compare
-   amplitude, waveform shape, continuity, and timing among the channels.
-3. Press A in the active MNE waveform browser to enter annotation mode.
-   Create/select a descriptive label, then drag over the affected time span.
-4. For a disturbance affecting only AF8, run --channel AF8 to annotate it:
-   the CSV/FIF from single-channel mode marks affected_channels=AF8. Repeat
-   separately for AF7 as needed. Do NOT mark all channels for an AF8-only issue.
-5. Annotations made in ALL view are global to the four displayed channels.
-   Use ALL for truly shared disturbances or for non-excluding REVIEW labels;
-   use single-channel mode for final channel-specific exclusion decisions.
-6. Close the MNE window to save; re-run the same command to reopen the marks.
-   Different selections (ALL, AF7, AF8, etc.) are saved in distinct files.
-7. Record rationale and uncertainty in the exported CSV reviewer_note column.
-   Before final analysis, a separate consolidation step must reconcile
-   annotations from ALL and individual-channel review files.
+   python3 scripts/eeg/EEG_Manual_Review.py --subject 039 --phase pre_vr
 
-ARTIFACT EXAMPLES — WHAT TO LOOK FOR AND HOW TO LABEL
-----------------------------------------------------
-These are visual patterns/suspected sources, NOT confirmed clinical diagnoses.
-Do not exclude merely because alpha or beta changes as hypothesized.
+   The viewer loads data/processed/eeg/sub039/039_pre_vr_eeg_Preprocessed.npz.
+   It preserves the selected timeline, shows the filtered waveform and shades
+   automatically rejected windows. Rejected epochs are excluded from spectral
+   summaries and remain available for review on their original time axis.
 
-A. BAD_flatline
-   Trace becomes abnormally straight/unchanging for a sustained period;
-   may mean contact failure, frozen values, or acquisition dropout. EEG has
-   not 'stopped' in the brain. Mark only channels actually affected.
+   For an existing saved NPZ anywhere else, use --input /full/path/file.npz.
+   Missing preprocessing is an error. The viewer does not process the raw file
+   again as a substitute.
 
-B. BAD_clipping_suspected
-   Repeated exact ceiling/floor values or flattened tops/bottoms, often with
-   sudden transitions. Can reflect saturation or device data coding. Verify
-   native units and any device-specific limits before claiming saturation.
-   Example to examine: subject 029 pre-VR AF8 near 22.8–23.7 seconds, where
-   earlier review figures suggested plateaus near 0 and 1450; visually check
-   the ORIGINAL data and refine boundaries before applying an exclusion.
+3. Inspect a particular time or channel.
 
-C. BAD_contact_step
-   Sudden, disproportionately large baseline step/pop, possibly followed by
-   gradual recovery. Could be electrode contact or movement. When ambiguous,
-   use REVIEW_uncertain until confirmed by inspection.
+   python3 scripts/eeg/EEG_Manual_Review.py --subject 039 --phase pre_vr --start 180
+   python3 scripts/eeg/EEG_Manual_Review.py --subject 039 --phase pre_vr --channel AF8
 
-D. BAD_ocular_suspected
-   Large, rounded, relatively slow frontal deflection suggestive of blink or
-   eye movement. Compare AF7/AF8 and TP9/TP10; frontal prominence supports
-   suspicion but is NOT proof, particularly without dedicated EOG.
+   --start is ORIGINAL recording elapsed seconds. The program reports the
+   original time range of the selected continuous span. The GUI x-axis is
+   time within that span. Gaps separate review spans; use --start to open the
+   other spans. Without --start the longest eligible span is shown.
 
-E. BAD_muscle_suspected
-   Sustained burst of dense, fast, irregular oscillations, possibly EMG from
-   forehead, jaw or facial motion. Check context in TP9/TP10; jaw/ear-area
-   muscles can contaminate them too. This matters especially for beta power.
+   --scale-uv 200 sets the amplitude display range. Display scaling does not
+   change the saved samples or exclusion thresholds.
 
-F. BAD_motion_suspected
-   Irregular high-amplitude signal disturbance across one or multiple
-   channels near a likely headband motion event. Shared disturbances could
-   also result from common reference effects; do not assume true movement.
+4. Add human annotations and close the window to save.
 
-G. BAD_electrical_noise
-   Unusually regular, often narrow-band oscillation; check PSD for narrow
-   peaks (such as 60 Hz). A 60-Hz component alone is not necessarily a reason
-   to reject alpha/beta when filtering adequately suppresses it; use this
-   label for severe unresolved contamination affecting the useful signal.
+   Press A in the MNE browser. Add labels such as BAD_blink, BAD_muscle,
+   BAD_contact or BAD_clipping_suspected. Drag over the visible disturbance.
+   Use REVIEW_uncertain to record uncertainty without excluding that interval.
 
-H. BAD_missing_raw_sample
-   Missing raw samples interpolated solely for visualization. The script
-   inserts these annotations automatically, channel by channel. Interpolated
-   viewer values MUST NOT enter the final PSD calculations as valid EEG.
+   BAD_auto_ labels identify automatic rejections. Their automatic decisions
+   remain in the saved epoch ledger. They are recreated on each review run.
+   Choose AF7 or AF8 for channel-specific human decisions. An unscoped label
+   in the paired viewer applies to AF7 and AF8.
 
-I. REVIEW_uncertain
-   A pattern is suspicious but type, source, or exclusion decision is not
-   justified. This label is a review queue, not an automatic rejection.
-   Ask the neuroscientist collaborator for adjudication.
+5. Find the review files in outputs/eeg/manual_annotations/sub039/.
 
-GENERAL DECISION RULES
-----------------------
-- Obvious and consequential signal loss: annotate BAD_[specific_reason].
-- Plausible artifact but unclear source/extent: REVIEW_uncertain first.
-- No convincing abnormality: leave unannotated; visual pass is not proof of
-  artifact-free signal.
-- An event in TP9 alone does not require exclusion of AF7 or AF8.
-- A shared event might reflect a reference disturbance; simultaneous events
-  across channels are clues, not a definitive artifact classification.
-- Only exclude the period actually compromised, with sensible boundaries.
-- Never 'clean' by altering original raw CSV/ZIP files.
+   Filenames include the recording, channel selection, processing identity
+   and continuous span. The FIF reopens the labels. The intervals CSV includes
+   display seconds, original recording seconds, source timestamps, channel
+   scope, reviewer notes and the full preprocessing ID. The PDF shows the
+   annotated filtered traces in microvolts.
 
-IMPORTANT: MNE ANNOTATIONS AND OUTPUTS
---------------------------------------
-Saved in outputs/eeg/manual_annotations/sub###/:
-  <recording>_ALL_span1-annot.fif
-  <recording>_ALL_span1_intervals.csv
-  <recording>_AF8_span1-annot.fif
-  <recording>_AF8_span1_intervals.csv
+   Existing notes are preserved when reopening the same review. The default
+   output folder is also the folder scanned by the preprocessing pipeline.
+   If using a custom --output-dir, copy its intervals CSV into the default
+   subject annotation folder before the next audit.
 
-The CSV includes label, affected_channels, display-relative onset/offset,
-recording-relative onset/offset, source timestamps and reviewer_note.
-Labels beginning BAD_ can be excluded by MNE processes configured with
-reject_by_annotation; REVIEW_uncertain is NOT automatically excluded.
+6. Apply the human BAD_ intervals to final PSD and band estimates.
 
-The annotation viewer uses nominal FS=256 sample positions; actual source
-CSV timestamp spacing may be rounded. Use exported recording_start_s and
-recording_end_s when aligning with the audit windows. Timestamp gaps split
-recordings into continuous spans. The display assumes raw values are in
-microvolts; confirm original device units before interpreting magnitude.
+   python3 scripts/eeg/EEG_Audit.py
+   python3 scripts/eeg/process_all_eeg.py
+   python3 scripts/eeg/summarize_eeg.py
 
-The script DOES NOT automatically integrate annotated BAD intervals into
-EEG_Audit.py. Final validated AF7/AF8 alpha/beta and log(beta/alpha)
-measurements require a later annotation-aware spectral recalculation and
-sensitivity review. Expert review is needed for uncertain artifact classes.
+   Each full epoch overlapping a matching human BAD_ interval is rejected for
+   its affected channel. Paired power requires both channels to pass. The
+   collector uses these same decisions. Recording approvals and manual notes
+   are tracked separately in outputs/eeg/audit/eeg_manual_review.csv.
 
-HANDOFF CHECKLIST FOR THE NEUROSCIENTIST
-----------------------------------------
-[ ] Source filename, subject, experimental phase and channel are identified
-[ ] Every suspicious interval has exact onset/end (recording-relative seconds)
-[ ] Determine: confirmed acquisition fault, likely physiological artifact,
-    uncertain finding, or acceptable-looking EEG
-[ ] Verify/channel-scope AF7 and AF8 independently; use TP9/TP10 for context
-[ ] Correct/extend/reduce interval boundaries when needed
-[ ] Document why each segment should be retained, rejected or reviewed again
-[ ] Recalculate PSD and log beta-to-alpha after adjudication, preserving logs
-    of every exclusion and percentage of usable duration
+   A changed source, crop or processing setting creates a new preprocessing
+   ID. The viewer opens a new review filename. Old IDs and raw-based reviews
+   are reported as ignored rather than moved to a different time coordinate.
+   The analysis ID additionally tracks the human interval exclusion set.
 
-DISPLAY FIX — OCTOBER 2026
-===========================
-If all four traces are black/thick or extend beyond their rows, the visual display
-scale is too small for the extremely large values in some channels. In subject
-029 pre-VR, exact 0/1450 readings occur in 39.3% of TP9 and 35.9% of TP10
-samples, versus 0.3% AF7 and 0.9% AF8. These are suspicious apparent
-measurement-boundary values (not independently confirmed as clipping).
+READING THE PLOTS
 
-Use the updated script (default --scale-uv 1600, --duration 5):
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr
-For a more compressed overall four-channel view:
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --scale-uv 2400
-For a focused frontal view:
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel AF7 --scale-uv 600
-  python3 scripts/eeg/EEG_Manual_Review.py --subject 029 --phase pre_vr --channel AF8 --scale-uv 600
+The spectrogram shows frequency versus original recording time. Color is
+PSD in dB relative to 1 µV²/Hz. Each estimate covers a fixed two-second epoch.
+Epoch starts are separated by one second. Blank cells are excluded epochs.
+Use the waveform to set event boundaries, because a short artifact can
+affect multiple overlapping epochs. The fixed shared color scale allows
+comparisons between the two frontal panels.
 
-Changing --scale-uv adjusts the DISPLAY ONLY. It neither alters source raw EEG
-samples nor repairs saturated signals. Large swings may still indicate genuine
-acquisition problems. Do not confuse an MNE visual display-scale problem with
-a failed recording: inspect channel distributions and zoomed waveforms.
+Check the native acquisition units and offset before interpreting the
+amplitude threshold. For already signed µV data, generate preprocessing
+with EEG_Audit.py --raw-offset-uv 0. The reviewer uses the units and offset
+recorded in the saved metadata.
 
-Open EEG_Artifact_Visual_Examples.png for eight SCHEMATIC examples (not real EEG).
-Open EEG_029_Real_Trace_Example.png for actual example from subject 029.
-Flatline = near-constant series, possible dropout (BAD_flatline).
-Clipping = flat-top or boundary saturation (BAD_clipping_suspected).
-Step = sudden persistent level shift (BAD_contact_step or REVIEW_uncertain).
-Ocular = large slow smooth frontal deflection (BAD_ocular_suspected / REVIEW_uncertain).
-Muscle = burst of rapid dense irregular fluctuations (BAD_muscle_suspected / REVIEW_uncertain).
-Spike = sharp transient (BAD_contact_step / REVIEW_uncertain).
-Electrical noise = persistent unusually regular oscillation (BAD_electrical_noise if severe).
-Unremarkable looking signal = do not label BAD solely because it fluctuates.
+Install dependencies if needed.
 
-Artifact classes are interpretations, not confirmed physiological sources.
-Review simultaneous TP9/AF7/AF8/TP10 timing, retaining AF7/AF8 as the primary
-spectral channels. Annotations labeled BAD_ are rejection decisions; use
-REVIEW_uncertain when source or eligibility is unresolved. NEVER call the
-illustrative examples actual participant data.
+   python3 -m pip install numpy pandas scipy matplotlib mne
+
+See EEG_Audit_README.md for the full output definitions and methods.
