@@ -54,6 +54,7 @@ outputs/learning_rates/reports/**
 *.log
 *.tmp
 *.bak
+*.zip
 
 # =========================
 # Presentations

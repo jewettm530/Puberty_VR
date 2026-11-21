@@ -6,6 +6,8 @@ per trial (2‑18), per subject, per session. Produces a CSV summary and graphs:
 - Group average bar graphs (overall and trial‑by‑trial)
 - Good vs bad learner comparisons on stay after gain / switch after loss
 - Subject vs group comparison bar graphs (subject vs group averages)
+- Paired pre/post statistics and subject-level changes in
+  outputs/learning_rates/reports/learning_strategy_statistics.txt
 
 All proportions are conditional on the preceding feedback.
 Input: subject CSV files (name pattern: *_{id}_plearning_{session}.csv) from project_paths.PLEARNING_DIR
@@ -29,7 +31,186 @@ import sys
 
 sys.path.append(str(Path(__file__).resolve().parents[1])) 
 from file_naming import parse_plearning_csv_name
-from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR, TABLES_DIR
+from project_paths import PLEARNING_DIR, LEARNING_ANALYSIS_DATA_DIR, FIGURES_DIR, TABLES_DIR, REPORTS_DIR
+from scipy import stats
+
+# ---------- PRE/POST TEXT REPORT HELPERS ----------
+STRATEGIES = (("winstay", "Win-stay"), ("loseswitch", "Lose-switch"))
+
+
+def normalize_ids(series):
+    values = series.astype("string").str.strip()
+    if values.isna().any() or values.eq("").any():
+        raise ValueError("Missing subject ID in input.")
+    return values.str.replace(r"\.0$", "", regex=True).str.zfill(3)
+
+
+def load_inputs(strategy_path, groups_path):
+    for path in (strategy_path, groups_path):
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Missing {path}. Run calculate_learning_rates.py and "
+                "winstay_loseswitch_analysis.py first."
+            )
+    data = pd.read_csv(strategy_path, dtype={"subject": str})
+    if "subject" not in data:
+        raise ValueError(f"{strategy_path}: missing subject column.")
+    data["subject"] = normalize_ids(data["subject"])
+    if data["subject"].duplicated().any():
+        raise ValueError("Strategy CSV must have exactly one row per subject.")
+    notes = []
+    for strategy, _ in STRATEGIES:
+        for session in (1, 2):
+            col = f"overall_{strategy}_sess{session}"
+            if col not in data:
+                # Upstream omits columns if nobody has the relevant session.
+                data[col] = np.nan
+                notes.append(f"Missing column {col}: treated as unavailable for all subjects.")
+            numeric = pd.to_numeric(data[col], errors="coerce")
+            if (data[col].notna() & numeric.isna()).any():
+                raise ValueError(f"Nonnumeric strategy rate in {col}.")
+            if (numeric.notna() & (~np.isfinite(numeric) | ~numeric.between(0, 1))).any():
+                raise ValueError(f"Rates in {col} must be in [0, 1] or missing.")
+            data[col] = numeric
+    groups = pd.read_csv(groups_path, dtype={"subjectId": str})
+    required = {"subjectId", "plearning_num", "learner_group"}
+    if not required.issubset(groups.columns):
+        raise ValueError(f"Learning rates CSV is missing: {sorted(required - set(groups.columns))}")
+    groups = groups[pd.to_numeric(groups["plearning_num"], errors="coerce") == 1].copy()
+    groups["subject"] = normalize_ids(groups["subjectId"])
+    if groups["subject"].duplicated().any():
+        raise ValueError("Duplicate Session 1 learner classifications.")
+    groups["learner_group"] = groups["learner_group"].astype("string").str.strip().str.lower()
+    data = data.merge(groups[["subject", "learner_group"]], on="subject", how="left", validate="one_to_one")
+    data["learner_group"] = data["learner_group"].fillna("unclassified")
+    return data.sort_values("subject"), notes
+
+
+def paired_stats(data, strategy):
+    pre_col, post_col = (f"overall_{strategy}_sess{s}" for s in (1, 2))
+    pair = data[[pre_col, post_col]].dropna()
+    pre, post = pair[pre_col].to_numpy(), pair[post_col].to_numpy()
+    delta = post - pre
+    n = len(pair)
+    result = dict(n=n, available_pre=int(data[pre_col].notna().sum()),
+                  available_post=int(data[post_col].notna().sum()),
+                  excluded=len(data) - n, df=n - 1 if n >= 2 else np.nan,
+                  pre_mean=np.mean(pre) if n else np.nan,
+                  post_mean=np.mean(post) if n else np.nan,
+                  delta_mean=np.mean(delta) if n else np.nan,
+                  pre_sd=np.std(pre, ddof=1) if n >= 2 else np.nan,
+                  post_sd=np.std(post, ddof=1) if n >= 2 else np.nan,
+                  increased=int((delta > 1e-12).sum()),
+                  decreased=int((delta < -1e-12).sum()),
+                  unchanged=int((np.abs(delta) <= 1e-12).sum()),
+                  t=np.nan, p=np.nan, d=np.nan, ci_low=np.nan, ci_high=np.nan,
+                  test_note="Insufficient paired subjects for inference.")
+    if n >= 2:
+        sd = np.std(delta, ddof=1)
+        if sd > 0:
+            t, p = stats.ttest_rel(post, pre)
+            margin = stats.t.ppf(.975, n - 1) * sd / np.sqrt(n)
+            result.update(t=t, p=p, d=np.mean(delta) / sd,
+                          ci_low=np.mean(delta) - margin, ci_high=np.mean(delta) + margin,
+                          test_note="Two-sided paired t-test; Cohen's dz uses SD of within-subject changes.")
+        else:
+            result["test_note"] = "All paired changes are identical; t, p, dz and inferential CI are undefined."
+    return result
+
+
+def holm_adjust(values):
+    """Holm adjustment, keeping the planned family size even if a test is NA."""
+    out = np.full(len(values), np.nan)
+    valid = [i for i, p in enumerate(values) if np.isfinite(p)]
+    running = 0.0
+    for rank, index in enumerate(sorted(valid, key=lambda i: values[i])):
+        running = max(running, (len(values) - rank) * values[index])
+        out[index] = min(1.0, running)
+    return out
+
+
+def fmt(value, decimals=4):
+    return "NA" if pd.isna(value) else f"{value:.{decimals}f}"
+
+
+def p_text(value):
+    if pd.isna(value):
+        return "NA"
+    return "< .001" if value < .001 else f"= {value:.3f}"
+
+
+def section(label, strategy_label, r):
+    lines = [label, "-" * len(label),
+             f"Available pre / post: {r['available_pre']} / {r['available_post']}",
+             f"n (paired): {r['n']}", f"Excluded from paired analysis: {r['excluded']}",
+             f"Pre mean: {fmt(r['pre_mean'])}", f"Pre SD: {fmt(r['pre_sd'])}",
+             f"Post mean: {fmt(r['post_mean'])}", f"Post SD: {fmt(r['post_sd'])}",
+             f"Mean change (post - pre): {fmt(r['delta_mean'])}",
+             f"95% CI of change: [{fmt(r['ci_low'])}, {fmt(r['ci_high'])}]",
+             f"df: {fmt(r['df'], 0)}", f"t: {fmt(r['t'])}",
+             f"p (unadjusted): {fmt(r['p'], 8)}",
+             f"p (Holm adjusted): {fmt(r['p_holm'], 8)}", f"d_z: {fmt(r['d'])}",
+             f"Subjects increased / decreased / unchanged: {r['increased']} / {r['decreased']} / {r['unchanged']}",
+             r['test_note']]
+    if r['n']:
+        lines.append(
+            f"{strategy_label} was {r['pre_mean'] * 100:.1f}% (SD = {r['pre_sd'] * 100:.1f}%) "
+            f"before VR and {r['post_mean'] * 100:.1f}% (SD = {r['post_sd'] * 100:.1f}%) after VR "
+            f"among {r['n']} paired subjects; mean change = {r['delta_mean'] * 100:+.1f} percentage points."
+            .replace("nan%", "NA")
+        )
+    if np.isfinite(r['p_holm']):
+        finding = "Evidence of a pre/post difference" if r['p_holm'] < .05 else "No statistically significant pre/post difference detected"
+        lines.append(f"{finding} (Holm p {p_text(r['p_holm'])}; unadjusted p {p_text(r['p'])}).")
+    return "\n".join(lines)
+
+
+def write_report(data, notes, output_path):
+    results = []
+    for group, subset in [("All subjects", data),
+                          ("Good learners", data[data['learner_group'] == 'good']),
+                          ("Bad learners", data[data['learner_group'] == 'bad'])]:
+        for strategy, strategy_label in STRATEGIES:
+            results.append((group, strategy_label, paired_stats(subset, strategy)))
+    # Primary: two all-subject tests. Exploratory: four subgroup tests.
+    for start, end in [(0, 2), (2, 6)]:
+        adjusted = holm_adjust([row[2]['p'] for row in results[start:end]])
+        for row, p in zip(results[start:end], adjusted):
+            row[2]['p_holm'] = p
+    lines = ["Learning strategies: pre vs post VR stressor", "=" * 44,
+             "Session 1 = pre-VR; Session 2 = post-VR.",
+             "Win-stay = P(repeat choice | previous feedback was gain).",
+             "Lose-switch = P(change choice | previous feedback was loss).",
+             "The two rates condition on different feedback and do not sum to one.",
+             "Rates are taken from the winstay_loseswitch_summary.csv generated during this run.",
+             "The existing producer pools eligible transitions within subjects and sessions, within complete 18-trial blocks only.",
+             "Group means weight subjects equally, not individual transitions.",
+             "Each strategy uses only subjects with valid rates in BOTH sessions; means and SDs use that same paired sample.",
+             "Zero eligible gains/losses yields an unavailable rate, not zero use of that strategy.",
+             "Good/bad labels are read from Session 1 in learning_rates.csv and held fixed across sessions.",
+             "Unclassified subjects remain in the all-subject analysis only.",
+             "Holm correction: 2 primary all-subject tests; 4 exploratory subgroup tests in a separate family.",
+             "Subgroup results do not test whether good and bad learners differ in their pre/post change.",
+             "Pre/post differences alone do not establish that stress caused a change.",
+             f"Subjects in strategy CSV: {len(data)}",
+             f"Subjects outside good/bad groups: {int((~data['learner_group'].isin(['good', 'bad'])).sum())}", ""]
+    lines.extend(notes)
+    for group, strategy_label, r in results:
+        lines.extend(["", section(f"{group} - {strategy_label}", strategy_label, r)])
+    lines.extend(["", "Subject-level rates and changes", "-" * 31,
+                  "Rates shown as percentages; changes are percentage points (post - pre).",
+                  "Subject | Group | Win-stay pre | post | change | Lose-switch pre | post | change"])
+    for _, row in data.iterrows():
+        cells = [row['subject'], row['learner_group']]
+        for strategy, _ in STRATEGIES:
+            pre, post = (row[f'overall_{strategy}_sess{s}'] for s in (1, 2))
+            cells.extend([fmt(pre * 100, 1), fmt(post * 100, 1), fmt((post - pre) * 100, 1)])
+        lines.append(" | ".join(cells))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return results
+
+
 
 # ---------- PATHS ----------
 RESULTS_DIR = PLEARNING_DIR
@@ -443,6 +624,12 @@ for subj in subjects:
     plt.tight_layout()
     plt.savefig(OUTPUT_BASE / REQ_FOLDERS[6] / f'subject_{subj}_vs_group.png', dpi=150)
     plt.close()
+
+# ---------- 7. PAIRED PRE/POST VR TEXT REPORT ----------
+strategy_report_data, strategy_report_notes = load_inputs(csv_path, learning_rates_csv)
+strategy_report_path = REPORTS_DIR / "learning_strategy_statistics.txt"
+write_report(strategy_report_data, strategy_report_notes, strategy_report_path)
+print(f"Saved learning strategy statistics: {strategy_report_path}")
 
 print("\nAll win‑stay / lose‑switch analyses completed.")
 print(f"Outputs saved in {OUTPUT_BASE}")
