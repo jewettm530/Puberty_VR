@@ -39,14 +39,8 @@ data/metadata/**
 !data/metadata/.gitkeep
 
 # Generated outputs
-outputs/learning_rates/figures/**
-!outputs/learning_rates/figures/.gitkeep
-
-outputs/learning_rates/tables/**
-!outputs/learning_rates/tables/.gitkeep
-
-outputs/learning_rates/reports/**
-!outputs/learning_rates/reports/.gitkeep
+outputs/learning_rates/**
+!outputs/learning_rates/.gitkeep
 
 outputs/eeg/**
 !outputs/eeg/.gitkeep
