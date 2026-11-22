@@ -48,6 +48,22 @@ outputs/learning_rates/tables/**
 outputs/learning_rates/reports/**
 !outputs/learning_rates/reports/.gitkeep
 
+outputs/eeg/**
+!outputs/eeg/.gitkeep
+
+outputs/heart_rate/**
+!outputs/heart_rate/.gitkeep
+
+outputs/minor_comparison/**
+!outputs/minor_comparison/.gitkeep
+
+outputs/multimodal/**
+!outputs/multimodal/.gitkeep
+
+outputs/saliva/**
+!outputs/saliva/.gitkeep
+
+
 # =========================
 # Optional logs / temp files
 # =========================

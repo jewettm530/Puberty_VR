@@ -1,7 +1,0 @@
-channel,band,power,log10_power,n_windows,pipeline_version,preprocessing_id,analysis_id,selection,analysis_start_s,analysis_end_s,window_s,psd_units
-AF7,theta,,,0,4.2-eyes-open-welch2s-original-layout,a0351a617328be422035998f02c593d0521c65d1c4e1c98bc2e9f60e74d18263,2a4c17b4dc29dc63a75b9bb977210bc5554362fb60fee4c3403f3fd9b744695a,whole_recording,0.0,312.91490625,2.0,uV^2/Hz
-AF7,alpha,,,0,4.2-eyes-open-welch2s-original-layout,a0351a617328be422035998f02c593d0521c65d1c4e1c98bc2e9f60e74d18263,2a4c17b4dc29dc63a75b9bb977210bc5554362fb60fee4c3403f3fd9b744695a,whole_recording,0.0,312.91490625,2.0,uV^2/Hz
-AF7,beta,,,0,4.2-eyes-open-welch2s-original-layout,a0351a617328be422035998f02c593d0521c65d1c4e1c98bc2e9f60e74d18263,2a4c17b4dc29dc63a75b9bb977210bc5554362fb60fee4c3403f3fd9b744695a,whole_recording,0.0,312.91490625,2.0,uV^2/Hz
-AF8,theta,,,0,4.2-eyes-open-welch2s-original-layout,a0351a617328be422035998f02c593d0521c65d1c4e1c98bc2e9f60e74d18263,2a4c17b4dc29dc63a75b9bb977210bc5554362fb60fee4c3403f3fd9b744695a,whole_recording,0.0,312.91490625,2.0,uV^2/Hz
-AF8,alpha,,,0,4.2-eyes-open-welch2s-original-layout,a0351a617328be422035998f02c593d0521c65d1c4e1c98bc2e9f60e74d18263,2a4c17b4dc29dc63a75b9bb977210bc5554362fb60fee4c3403f3fd9b744695a,whole_recording,0.0,312.91490625,2.0,uV^2/Hz
-AF8,beta,,,0,4.2-eyes-open-welch2s-original-layout,a0351a617328be422035998f02c593d0521c65d1c4e1c98bc2e9f60e74d18263,2a4c17b4dc29dc63a75b9bb977210bc5554362fb60fee4c3403f3fd9b744695a,whole_recording,0.0,312.91490625,2.0,uV^2/Hz
